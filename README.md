@@ -1,8 +1,8 @@
 # HanCoffee_AndroidApp
 # Technology used
-Language: Java
-DMS: SQLite
-IDE: Android Studio
+1. Language: Java
+2. DMS: SQLite
+3. IDE: Android Studio
 # Main funcion
 1. Sign in/ Sign up, OTP
 2. Search product by name
