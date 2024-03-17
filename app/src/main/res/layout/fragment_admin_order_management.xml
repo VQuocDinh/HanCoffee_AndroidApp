@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".Admin.OrderAdminFragment">
+
+    <com.example.hancafe.Custom.CustomTabLayout
+        android:id="@+id/tlOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="50dp"
+        android:background="@android:color/transparent"
+        app:tabTextColor="@color/white"
+        app:tabSelectedTextColor="@color/white"
+        app:tabBackground="@color/red"
+        app:tabIndicatorColor="@android:color/transparent"
+        app:tabIndicatorFullWidth="true"
+        app:tabMode="scrollable">
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_confirm" />
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_delivery"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_complete"/>
+        <com.google.android.material.tabs.TabItem
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/title_cancel"/>
+    </com.example.hancafe.Custom.CustomTabLayout>
+
+    <androidx.viewpager2.widget.ViewPager2
+        android:id="@+id/vpOrder"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/tlOrder"
+        android:saveEnabled="false"
+        android:contentDescription="Chi tiết đặt hàng" />
+
+</RelativeLayout>
