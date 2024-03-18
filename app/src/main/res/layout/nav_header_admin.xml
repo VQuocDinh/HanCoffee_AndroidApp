@@ -10,14 +10,13 @@
         android:layout_height="wrap_content"
         android:text="@string/title_txt_logo"
         android:textSize="30sp"
-        android:gravity="start"
         android:textColor="@color/black"
+        android:gravity="start"
         android:layout_marginBottom="10dp"/>
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="Welcome, Handsome Boy"
-        android:textColor="@color/black"
         android:textSize="20dp"/>
 
 </LinearLayout>

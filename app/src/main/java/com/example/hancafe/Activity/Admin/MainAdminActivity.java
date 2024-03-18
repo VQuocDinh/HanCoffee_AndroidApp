@@ -1,4 +1,4 @@
-package com.example.hancafe.Admin;
+package com.example.hancafe.Activity.Admin;
 
 
 
@@ -72,7 +72,7 @@ public class MainAdminActivity extends AppCompatActivity {
                     textView.setText("Đặt hàng");
                 } else if (itemId == R.id.nav_information_person) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, informationPersonAdminFragment).commit();
-                    textView.setText("Thông tin khách hàng");
+                    textView.setText("Thông tin cá nhân");
                 } else if (itemId == R.id.nav_statistic_report) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin,  statisticReportAdminFragment).commit();
                     textView.setText("Báo cáo thống kê");

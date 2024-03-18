@@ -1,4 +1,4 @@
-package com.example.hancafe.Admin;
+package com.example.hancafe.Activity.Admin;
 
 import android.os.Bundle;
 

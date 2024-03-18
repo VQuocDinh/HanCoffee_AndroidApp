@@ -1,4 +1,4 @@
-package com.example.hancafe.User;
+package com.example.hancafe.Activity.User;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;

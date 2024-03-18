@@ -17,7 +17,7 @@
             android:icon="@drawable/baseline_person_outline_24"
             android:title="@string/title_nav_information_person"/>
         <item android:id="@+id/nav_statistic_report"
-            android:icon="@drawable/baseline_star_outline_24"
+            android:icon="@drawable/baseline_equalizer_24"
             android:title="@string/title_nav_statistic_report"/>
     </group>
 

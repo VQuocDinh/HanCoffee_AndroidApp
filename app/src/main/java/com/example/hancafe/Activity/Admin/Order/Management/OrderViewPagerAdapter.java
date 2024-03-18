@@ -1,10 +1,10 @@
-package com.example.hancafe.Admin.Order.Management;
+package com.example.hancafe.Activity.Admin.Order.Management;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
 import androidx.viewpager2.adapter.FragmentStateAdapter;
 
-import com.example.hancafe.Admin.OrderAdminFragment;
+import com.example.hancafe.Activity.Admin.OrderAdminFragment;
 
 public class OrderViewPagerAdapter extends FragmentStateAdapter {
 

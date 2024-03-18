@@ -1,4 +1,4 @@
-package com.example.hancafe.User;
+package com.example.hancafe.Activity.User;
 
 import android.content.Intent;
 import android.net.Uri;
@@ -11,7 +11,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageButton;
 
-import com.example.hancafe.User.Order.Management.MainOrderActivity;
+import com.example.hancafe.Activity.User.Order.Management.MainOrderActivity;
 import com.example.hancafe.R;
 
 public class OtherFragment extends Fragment {

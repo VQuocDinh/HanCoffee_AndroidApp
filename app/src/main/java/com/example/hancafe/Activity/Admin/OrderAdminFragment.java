@@ -1,4 +1,4 @@
-package com.example.hancafe.Admin;
+package com.example.hancafe.Activity.Admin;
 
 import android.os.Bundle;
 
@@ -9,7 +9,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 
-import com.example.hancafe.Admin.Order.Management.OrderViewPagerAdapter;
+import com.example.hancafe.Activity.Admin.Order.Management.OrderViewPagerAdapter;
 import com.example.hancafe.R;
 import com.google.android.material.tabs.TabLayout;
 

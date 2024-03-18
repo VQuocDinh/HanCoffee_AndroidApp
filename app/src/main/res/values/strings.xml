@@ -13,7 +13,7 @@
 
     <!-- Giao diện Admin -->
     <string name="title_activity_main_admin">Han Cafe</string>
-    <string name="title_txt_logo"> <font color='#FF000000'>Han</font><font color='#8B0305'>Cafe</font></string>
+    <string name="title_txt_logo">Han<font color='#8B0305'>Cafe</font></string>
     <string name="open_nav">Open Navigation</string>
     <string name="close_nav">Close Navigation</string>
     <string name="title_nav_user">Khách hàng</string>

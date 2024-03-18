@@ -4,9 +4,9 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context=".Admin.OrderAdminFragment">
+    tools:context=".Activity.Admin.OrderAdminFragment">
 
-    <com.example.hancafe.Custom.CustomTabLayout
+    <com.example.hancafe.Activity.Custom.CustomTabLayout
         android:id="@+id/tlOrder"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
@@ -34,7 +34,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/title_cancel"/>
-    </com.example.hancafe.Custom.CustomTabLayout>
+    </com.example.hancafe.Activity.Custom.CustomTabLayout>
 
     <androidx.viewpager2.widget.ViewPager2
         android:id="@+id/vpOrder"
