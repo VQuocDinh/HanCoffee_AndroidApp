@@ -228,7 +228,15 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Đặt hàng" />
+                android:text="Thanh toán" />
+
+            <Button
+                android:id="@+id/btnOrderPaymentZalo"
+                style="@style/h2_bold_white"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="center"
+                android:text="Thanh toán qua Zalo" />
 
 
         </LinearLayout>
