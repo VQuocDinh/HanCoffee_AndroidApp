@@ -11,9 +11,13 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 
+import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
 import com.example.hancafe.Activity.Adapter.OrderStatusConfirmAdapter;
+import com.example.hancafe.Domain.OrderDetail;
 import com.example.hancafe.Domain.Order_Management;
 import com.example.hancafe.R;
+import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
@@ -26,9 +30,11 @@ import java.util.List;
 
 public class ConfirmOrderFragment extends Fragment {
     RecyclerView rvProduct;
-    List<Order_Management> data;
-    OrderStatusConfirmAdapter orderStatusConfirmAdapter;
-
+    List<Order_Management> orderManagements;
+    List<OrderDetail> orderDetails;
+    OrderStatusAdapter orderStatusAdapter;
+    int countOrderDetail =0;
+    private static final int confirm = 1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
@@ -39,46 +45,66 @@ public class ConfirmOrderFragment extends Fragment {
     }
 
     private void initData() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+        String idUser = currentUser != null ? currentUser.getUid() : "";
         LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvProduct.setLayoutManager(linearLayoutManagerProduct);
-
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference myRef = database.getReference("Order_Management");
-        Query query = myRef.orderByChild("idCategory").equalTo(1);
+        DatabaseReference orderManagementRef = database.getReference("Order_Management");
+        Query query = orderManagementRef.orderByChild("idUser").equalTo(idUser);
+
         query.addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
-                data = new ArrayList<>();
+                orderManagements = new ArrayList<>();
+
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                    int status = dataSnapshot.child("idCategory").getValue(Integer.class);
+                    if (status == confirm) {
+                        String date = dataSnapshot.child("dateTime").getValue(String.class);
+                        String idOrder = dataSnapshot.child("id").getValue(String.class);
+                        int totalPrice = dataSnapshot.child("price").getValue(Integer.class);
+                        String idUser = dataSnapshot.child("idUser").getValue(String.class);
+                        Order_Management orderManagement = new Order_Management(status, totalPrice, date, idOrder, idUser);
 
-                    String date = dataSnapshot.child("dateTime").getValue(String.class);
-                    String id = dataSnapshot.child("id").getValue(String.class);
-                    int idCategory = dataSnapshot.child("idCategory").getValue(Integer.class);
-                    String productName = dataSnapshot.child("name").getValue(String.class);
-                    String productImg = dataSnapshot.child("picure").getValue(String.class);
-                    int productPrice = dataSnapshot.child("price").getValue(Integer.class);
-                    String idUser = dataSnapshot.child("idUser").getValue(String.class);
+                        FirebaseDatabase database = FirebaseDatabase.getInstance();
+                        DatabaseReference orderDetailRef = database.getReference("OrderDetail");
+                        Query query = orderDetailRef.orderByChild("idOrder").equalTo(idOrder);
+                        query.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                orderDetails = new ArrayList<>();
+                                for (DataSnapshot orderDetailSnaphot: snapshot.getChildren()){
+                                    int size = orderDetailSnaphot.child("idSize").getValue(Integer.class);
+                                    int priceProduct = orderDetailSnaphot.child("priceProduct").getValue(Integer.class);
+                                    int quantity = orderDetailSnaphot.child("quantity").getValue(Integer.class);
 
-                    Order_Management product = new Order_Management(idCategory, productPrice, productName, productImg, date, id , idUser);
-                    data.add(product);
+                                    String idOrder = orderDetailSnaphot.child("idOrder").getValue(String.class);
+                                    String imgProduct = orderDetailSnaphot.child("imgProduct").getValue(String.class);
+                                    String nameProduct = orderDetailSnaphot.child("nameProduct").getValue(String.class);
+                                    String idOrderDetail = orderDetailSnaphot.child("idOrderDetail").getValue(String.class);
+                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail,idOrder,imgProduct,nameProduct,size,quantity,priceProduct);
+                                    orderDetails.add(orderDetail);
+                                }
+                                orderManagement.setOrderDetails(orderDetails);
+                                orderManagements.add(orderManagement);
+                                orderStatusAdapter.notifyDataSetChanged();
+                            }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                            }
+                        });
 
+                    }
                 }
-                orderStatusConfirmAdapter = new OrderStatusConfirmAdapter(data);
-                rvProduct.setAdapter(orderStatusConfirmAdapter);
-//                orderStatusConfirmAdapter.notifyDataSetChanged();
-
-
-//                productsAdapter.setOnItemProductClickListener(HomeFragment.this);
-
+                orderStatusAdapter = new OrderStatusAdapter(orderManagements,  getActivity().getApplicationContext());
+                rvProduct.setAdapter(orderStatusAdapter);
             }
-
             @Override
             public void onCancelled(@NonNull DatabaseError error) {
-
             }
         });
 
-
     }
-
 }

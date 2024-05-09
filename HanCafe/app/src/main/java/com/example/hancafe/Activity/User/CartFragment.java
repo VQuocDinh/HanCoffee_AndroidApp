@@ -39,7 +39,6 @@ import java.util.List;
 
 public class CartFragment extends Fragment implements ProductsAdapter.OnItemClickListener {
     private ImageView btnBack;
-    private TextView tvCartEmpty;
     private Button btnOrderProceed;
     private RecyclerView rvProduct;
     private CheckBox cbSelectAll;
@@ -56,10 +55,8 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
         btnBack = view.findViewById(R.id.btnBack);
         rvProduct = view.findViewById(R.id.rvProduct);
         cbSelectAll = view.findViewById(R.id.cbSelectAll);
-        tvCartEmpty = view.findViewById(R.id.tvCartEmpty);
         initCartDetail();
         setEvent();
-
         return view;
     }
 
@@ -69,7 +66,6 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
             @Override
             public void onClick(View v) {
                 int count = 0;
-                boolean isChecked = true;
                 for (int i = 0; i < rvProduct.getChildCount(); i++) {
                     View view = rvProduct.getChildAt(i);
                     CheckBox checkBox = view.findViewById(R.id.cbProduct);
@@ -108,11 +104,7 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
                 }
             }
         });
-//        if (countItem == 0 ){
-//            tvCartEmpty.setText("Giỏ hàng trống");
-//        } else {
-//            tvCartEmpty.setText("");
-//        }
+
     }
 
     private void initCartDetail() {

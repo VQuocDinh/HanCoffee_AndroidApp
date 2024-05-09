@@ -1,20 +1,29 @@
 package com.example.hancafe.Domain;
 
+import java.util.List;
+
 public class Order_Management {
     int idCategory, price;
-    String name, picure, date, id, idUser;
+    String date, id, idUser;
+    List<OrderDetail> orderDetails;
 
     public Order_Management() {
     }
 
-    public Order_Management(int idCategory, int price, String name, String picure, String date, String id, String idUser) {
+    public Order_Management(int idCategory, int price, String date, String id, String idUser) {
         this.idCategory = idCategory;
         this.price = price;
-        this.name = name;
-        this.picure = picure;
         this.date = date;
         this.id = id;
         this.idUser = idUser;
+    }
+
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
     }
 
     public String getIdUser() {
@@ -57,19 +66,4 @@ public class Order_Management {
         this.price = price;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getPicure() {
-        return picure;
-    }
-
-    public void setPicure(String picure) {
-        this.picure = picure;
-    }
 }

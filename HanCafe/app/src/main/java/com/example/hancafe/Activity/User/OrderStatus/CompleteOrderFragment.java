@@ -53,15 +53,15 @@ public class CompleteOrderFragment extends Fragment {
                     int idCategory = dataSnapshot.child("idCategory").getValue(Integer.class);
                     String productName = dataSnapshot.child("name").getValue(String.class);
                     String productImg = dataSnapshot.child("picure").getValue(String.class);
-                    int productPrice = dataSnapshot.child("price").getValue(Integer.class);
+                    int totalPrice = dataSnapshot.child("price").getValue(Integer.class);
                     String idUser = dataSnapshot.child("idUser").getValue(String.class);
 
-                    Order_Management product = new Order_Management(idCategory, productPrice, productName, productImg, date, id , idUser);
+                    Order_Management product = new Order_Management(idCategory, totalPrice, date, id, idUser);
                     data.add(product);
 
                 }
 
-                orderStatusAdapter = new OrderStatusAdapter(data);
+                orderStatusAdapter = new OrderStatusAdapter(data,  getActivity().getApplicationContext());
                 rvProduct.setAdapter(orderStatusAdapter);
 
 //                productsAdapter.setOnItemProductClickListener(HomeFragment.this);
