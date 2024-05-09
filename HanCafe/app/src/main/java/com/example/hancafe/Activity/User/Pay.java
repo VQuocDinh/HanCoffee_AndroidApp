@@ -64,7 +64,8 @@ public class Pay extends AppCompatActivity {
     private PayAdapter payAdapter;
     List<CartItem> receivedList;
     private List<Promotion> promotions = new ArrayList<>();
-
+ int totalPriceAfterDiscount = 0;
+    int totalPriceAfterKM = 0;
     int totalPrice = 0;
     private Spinner spnDelivery, spnPay;
     List<String> shipMethod = new ArrayList<>();
@@ -241,7 +242,7 @@ public class Pay extends AppCompatActivity {
 
                         DatabaseReference newRef = orderManagementRef.push();
                         String id = newRef.getKey();
-                        Order_Management orderManagement = new Order_Management(1, totalPrice, curentDay,id, idUser);
+                        Order_Management orderManagement = new Order_Management(1, totalPriceAfterDiscount, curentDay, id, idUser);
                         orderManagementRef.child(id).setValue(orderManagement);
                         for (CartItem cartItem : receivedList) {
                             FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -252,7 +253,7 @@ public class Pay extends AppCompatActivity {
                                     int totalPriceProduct = cartItem.getProductPrice() * cartItem.getQuantity();
                                     DatabaseReference newRef = orderDetailRef.push();
                                     String idOrderDetail = newRef.getKey();
-                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail, id,cartItem.getProductImg(),cartItem.getProductName(),cartItem.getSizeId(),cartItem.getQuantity(),totalPriceProduct);
+                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail, id, cartItem.getProductImg(), cartItem.getProductName(), cartItem.getSizeId(), cartItem.getQuantity(), totalPriceProduct);
                                     orderDetailRef.child(idOrderDetail).setValue(orderDetail);
                                 }
 
@@ -325,7 +326,7 @@ public class Pay extends AppCompatActivity {
                 CreateOrder orderApi = new CreateOrder();
 
                 try {
-                    JSONObject data = orderApi.createOrder(String.valueOf(totalPrice));
+                    JSONObject data = orderApi.createOrder(String.valueOf(totalPriceAfterDiscount));
                     String code = data.getString("return_code");
 
                     if (code.equals("1")) {
@@ -335,7 +336,7 @@ public class Pay extends AppCompatActivity {
                             @Override
                             public void onPaymentSucceeded(String s, String s1, String s2) {
                                 Toast.makeText(Pay.this, "Thanh toán thành công", Toast.LENGTH_SHORT);
-                                paymentSuccess();
+                                paymentSuccess(Pay.this);
                             }
 
                             @Override
@@ -359,7 +360,7 @@ public class Pay extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 String selectedPromotion = parent.getItemAtPosition(position).toString();
-                int totalPriceAfterDiscount = payAdapter.calculateTotalPriceAfterDiscount(selectedPromotion);
+                totalPriceAfterDiscount = payAdapter.calculateTotalPriceAfterDiscount(selectedPromotion);
                 tvTotalPrice.setText(String.valueOf(totalPriceAfterDiscount));
                 if (!selectedPromotion.equals("Chưa chọn mã")) {
                     for (Promotion promotion : promotions) {
@@ -378,8 +379,8 @@ public class Pay extends AppCompatActivity {
         });
 
 
-
     }
+
     private void showPromotionDetailDialog(Promotion promotion) {
         AlertDialog.Builder builder = new AlertDialog.Builder(Pay.this);
         builder.setTitle(promotion.getName());
@@ -429,7 +430,7 @@ public class Pay extends AppCompatActivity {
     }
 
 
-    private void paymentSuccess() {
+    private void paymentSuccess(Context context) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -449,11 +450,28 @@ public class Pay extends AppCompatActivity {
                 int day = calendar.get(Calendar.DAY_OF_MONTH);
                 String curentDay = day + "/" + month + "/" + year;
 
+                DatabaseReference newRef = orderManagementRef.push();
+                String id = newRef.getKey();
+                Order_Management orderManagement = new Order_Management(1, totalPriceAfterDiscount, curentDay, id, idUser);
+                orderManagementRef.child(id).setValue(orderManagement);
                 for (CartItem cartItem : receivedList) {
-                    DatabaseReference newRef = orderManagementRef.push();
-                    String id = newRef.getKey();
-                    Order_Management orderManagement = new Order_Management(1, cartItem.getProductPrice(), cartItem.getProductName(), cartItem.getProductImg(), curentDay,id, idUser);
-                    orderManagementRef.child(id).setValue(orderManagement);
+                    FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                    DatabaseReference orderDetailRef = firebaseDatabase.getReference("OrderDetail");
+                    orderDetailRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                        @Override
+                        public void onDataChange(@NonNull DataSnapshot snapshot) {
+                            int totalPriceProduct = cartItem.getProductPrice() * cartItem.getQuantity();
+                            DatabaseReference newRef = orderDetailRef.push();
+                            String idOrderDetail = newRef.getKey();
+                            OrderDetail orderDetail = new OrderDetail(idOrderDetail, id, cartItem.getProductImg(), cartItem.getProductName(), cartItem.getSizeId(), cartItem.getQuantity(), totalPriceProduct);
+                            orderDetailRef.child(idOrderDetail).setValue(orderDetail);
+                        }
+
+                        @Override
+                        public void onCancelled(@NonNull DatabaseError error) {
+
+                        }
+                    });
                 }
             }
 
@@ -488,8 +506,25 @@ public class Pay extends AppCompatActivity {
                 }
             });
         }
-        Intent intent = new Intent(Pay.this, Orders.class);
-        startActivity(intent);
+//        Intent intent = new Intent(Pay.this, Orders.class);
+//        startActivity(intent);
+        AlertDialog.Builder builder = new android.app.AlertDialog.Builder(context);
+        builder.setMessage("Đặt hàng thành công")
+                .setPositiveButton("Xem đơn hàng", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent intent = new Intent(Pay.this, Orders.class);
+                        startActivity(intent);
+                    }
+                })
+                .setNegativeButton("Tiếp tục mua hàng", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void showBottomSheetDialog() {
@@ -540,7 +575,7 @@ public class Pay extends AppCompatActivity {
         spnPromotionCode = findViewById(R.id.spnPromotionCode);
     }
 
-    private double calculateTotalPriceAfterDiscount(double totalPrice, String promotionCode) {
+    private double calculateTotalPriceAfterDiscount(int totalPrice, String promotionCode) {
         // Kiểm tra nếu chưa chọn mã khuyến mãi
         if (promotionCode.equals("Chưa chọn mã")) {
             // Trả về tổng tiền ban đầu
@@ -557,18 +592,21 @@ public class Pay extends AppCompatActivity {
                     return totalPrice * (1 - discountPercentage / 100);
                 } else if (promotion.getDiscount().endsWith("đ")) {
                     // Giảm giá cố định
-                    double discountAmount = Double.parseDouble(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
-                    return totalPrice - discountAmount;
+                    int discountAmount = Integer.parseInt(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
+                    return totalPriceAfterKM = totalPrice - discountAmount;
                 }
             }
         }
-    @Override
-    protected void onNewIntent(Intent intent) {
-        super.onNewIntent(intent);
-        ZaloPaySDK.getInstance().onResult(intent);
-    }
+
+
+
 
         // Trả về tổng tiền ban đầu nếu không tìm thấy mã khuyến mãi
         return totalPrice;
+    }
+    @Override
+    protected void onNewIntent (Intent intent){
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
     }
 }

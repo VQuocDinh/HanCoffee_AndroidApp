@@ -226,7 +226,6 @@
                     android:layout_height="wrap_content"
                     android:layout_weight="2"
                     android:gravity="end"
-                    android:text="Tổng tiền"
                     android:textColor="@color/black"
                     android:layout_marginRight="4dp"
                     android:textSize="14dp" />
