@@ -3,6 +3,7 @@ package com.example.hancafe.Activity.Admin;
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Environment;
 import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -15,7 +16,6 @@ import android.widget.LinearLayout;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
-
 import androidx.annotation.NonNull;
 import androidx.cardview.widget.CardView;
 import androidx.fragment.app.Fragment;
@@ -38,6 +38,7 @@ import com.google.firebase.database.ValueEventListener;
 import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
+
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -52,7 +53,7 @@ public class StatisticReportAdminFragment extends Fragment {
     List<String> data_listTime = new ArrayList<>();
     ArrayAdapter<String> adapter_listTime;
     DatePickerDialog datePickerDialog;
-    Button dateButton;
+    Button dateButton,btnExport ;
     BarDataSet dataSet;
     LinearLayout chartLayout, lengend_layout;
     CardView cardViewChart;
@@ -74,7 +75,6 @@ public class StatisticReportAdminFragment extends Fragment {
         setSpinnerEvent();
         dateButton.setText(getTodaysDate());
         getDataFromRealtimeDB(getTodaysDate());
-
         return view;
     }
 
@@ -91,7 +91,7 @@ public class StatisticReportAdminFragment extends Fragment {
         tvtitleDay = view.findViewById(R.id.tvtitleDay);
         tvtitle = view.findViewById(R.id.tvtitle);
         thongke = view.findViewById(R.id.thongke);
-
+        btnExport = view.findViewById(R.id.btnExport);
     }
 
     private void initLayoutManager() {
@@ -103,61 +103,56 @@ public class StatisticReportAdminFragment extends Fragment {
     }
     private void getDataFromRealtimeDB(String selectedDate) {
         FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference productRef = database.getReference("Products");
-        DatabaseReference billRef = database.getReference("Bill");
-        DatabaseReference billDetailRef = database.getReference("BillDetal");
+        DatabaseReference orderManagementRef = database.getReference("Order_Management");
+        DatabaseReference orderDetailRef = database.getReference("OrderDetail");
 
-        billRef.orderByChild("Date").equalTo(selectedDate).addListenerForSingleValueEvent(new ValueEventListener() {
+        orderManagementRef.orderByChild("date").equalTo(selectedDate).addValueEventListener(new ValueEventListener() {
+
             @Override
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 listCTHD.clear(); // Xóa danh sách cũ trước khi cập nhật
 
-                // Tạo một mảng một phần tử để lưu giá trị của totalAmount
-                final int[] totalAmount = {0};
+                 final int [] totalAmount = {0};
 
                 if (snapshot.exists()) {
                     for (DataSnapshot billSnapshot : snapshot.getChildren()) {
-                        // Lấy ID hóa đơn
-                        int idBill = billSnapshot.child("IDHD").getValue(Integer.class);
+                        String idBill = billSnapshot.getKey(); // Lấy ID của hóa đơn
+                        int totalPrice = billSnapshot.child("price").getValue(Integer.class); // Lấy tổng tiền từ hóa đơn
+                        totalAmount[0] += totalPrice; // Cộng tổng tiền
 
-                        // Lấy tổng số tiền từ hóa đơn
-                        int totalPrice = billSnapshot.child("TotalPrice").getValue(Integer.class);
-                        totalAmount[0] += totalPrice;
 
-                        // Lấy thông tin chi tiết hóa đơn từ bảng BillDetail
-                        billDetailRef.orderByChild("IDHD").equalTo(idBill).addListenerForSingleValueEvent(new ValueEventListener() {
+                        orderDetailRef.orderByChild("idOrder").equalTo(idBill).addListenerForSingleValueEvent(new ValueEventListener() {
                             @Override
                             public void onDataChange(@NonNull DataSnapshot detailSnapshot) {
                                 for (DataSnapshot detail : detailSnapshot.getChildren()) {
-                                    int productId = detail.child("IDSP").getValue(Integer.class);
-                                    int SL = detail.child("SL").getValue(Integer.class);
-                                    int Total = detail.child("Total").getValue(Integer.class);
+                                    String productId = detail.getKey(); // Lấy ID của sản phẩm
+                                    String nameProduct = detail.child("nameProduct").getValue(String.class);
+                                    int quantity = detail.child("quantity").getValue(Integer.class);
+                                    int priceProduct = detail.child("priceProduct").getValue(Integer.class);
 
-                                    // Truy vấn tên sản phẩm từ "Product" sử dụng productId
-                                    productRef.child(String.valueOf(productId)).addListenerForSingleValueEvent(new ValueEventListener() {
-                                        @Override
-                                        public void onDataChange(@NonNull DataSnapshot productSnapshot) {
-                                            String nameProduct = productSnapshot.child("name").getValue(String.class);
-
-                                            // Tạo đối tượng CTHD và thêm vào danh sách
-                                            CTHD cthd = new CTHD(nameProduct, SL, Total);
-                                            listCTHD.add(cthd);
-
-                                            // Nếu đã thêm tất cả các sản phẩm vào danh sách, cập nhật TextView
-                                            if (listCTHD.size() == detailSnapshot.getChildrenCount()) {
-                                                pieChart.setVisibility(View.VISIBLE);
-                                                tvtotal.setText(String.valueOf(totalAmount[0]));
-                                                SetDataPieChart(totalAmount[0], listCTHD);
-                                                CTHDAdapter.notifyDataSetChanged();
-                                            }
+                                    // Kiểm tra xem sản phẩm đã tồn tại trong danh sách chưa, nếu có thì cộng dồn quantity và priceProduct
+                                    boolean found = false;
+                                    for (CTHD cthd : listCTHD) {
+                                        if (cthd.getNameProduct().equals(nameProduct)) {
+                                            cthd.setQuantity(cthd.getQuantity() + quantity);
+                                            cthd.setPriceProduct(cthd.getPriceProduct() + priceProduct);
+                                            found = true;
+                                            break;
                                         }
+                                    }
 
-                                        @Override
-                                        public void onCancelled(@NonNull DatabaseError error) {
-                                            Toast.makeText(getContext(), "Failed to get product details", Toast.LENGTH_SHORT).show();
-                                        }
-                                    });
+                                    // Nếu sản phẩm chưa tồn tại trong danh sách, thêm mới vào danh sách
+                                    if (!found) {
+                                        CTHD cthd = new CTHD(nameProduct, quantity, priceProduct);
+                                        listCTHD.add(cthd);
+                                    }
                                 }
+
+                                // Cập nhật giao diện sau khi đã duyệt qua tất cả chi tiết hóa đơn
+                                pieChart.setVisibility(View.VISIBLE);
+                                tvtotal.setText(String.valueOf( totalAmount[0]));
+                                SetDataPieChart( totalAmount[0], listCTHD);
+                                CTHDAdapter.notifyDataSetChanged();
                                 tvtitleDay.setText("Thống kê các sản phẩm đã bán trong ngày:");
                             }
 
@@ -168,10 +163,9 @@ public class StatisticReportAdminFragment extends Fragment {
                         });
                     }
                 } else {
+                    // Nếu không có dữ liệu, hiển thị thông báo tương ứng
                     tvtitleDay.setText("Không có Doanh Thu trong ngày");
-                    // Clear any existing data in the pie chart
                     pieChart.setVisibility(View.GONE);
-                    // Clear any existing legend items
                     lengend_layout.removeAllViews();
                     tvtotal.setText("0");
                 }
@@ -183,6 +177,7 @@ public class StatisticReportAdminFragment extends Fragment {
             }
         });
     }
+
 
     private String getTodaysDate() {
         Calendar cal = Calendar.getInstance();
@@ -297,7 +292,7 @@ public class StatisticReportAdminFragment extends Fragment {
         String[] legends = new String[listCTHD.size()]; // Chú thích
         // Tính phần trăm của từng loại sản phẩm
         for (int i = 0; i < listCTHD.size(); i++) {
-            int amount = listCTHD.get(i).getTotal();
+            int amount = listCTHD.get(i).getPriceProduct();
             percentages[i] = ((float) amount / totalAmount) * 100; // Tính phần trăm
             legends[i] = listCTHD.get(i).getNameProduct();
             // Gán màu sắc cho từng loại sản phẩm (có thể thay đổi hoặc mở rộng)
@@ -318,11 +313,12 @@ public class StatisticReportAdminFragment extends Fragment {
                     colors[i] = Color.parseColor("#333333");
                     break;
                 case 5:
-                    colors[i] = Color.parseColor("#F98F00");
+                    colors[i] = Color.parseColor("#47f900");
                     break;
                 case 6:
-                    colors[i] = Color.parseColor("#EF5350");
+                    colors[i] = Color.parseColor("#8d00f9");
                     break;
+
             }
             addLegendItem(legends[i], colors[i]);
         }
