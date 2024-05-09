@@ -53,7 +53,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
         Product model = productList.get(position);
 
         holder.name.setText(model.getName());
-        holder.price.setText(String.valueOf(model.getPrice()) + " đ");
+        holder.price.setText(String.valueOf(model.getPrice()));
         holder.describe.setText(model.getDescribe());
         Glide.with(holder.itemView.getContext())
                 .load(model.getPurl())

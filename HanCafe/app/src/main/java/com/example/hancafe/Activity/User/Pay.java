@@ -5,6 +5,7 @@ import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
+import android.os.StrictMode;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
@@ -24,6 +25,7 @@ import com.example.hancafe.Activity.Adapter.PayAdapter;
 import com.example.hancafe.Domain.CartItem;
 import com.example.hancafe.Domain.OrderDetail;
 import com.example.hancafe.Domain.Order_Management;
+import com.example.hancafe.Payment.Zalo.Api.CreateOrder;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -38,15 +40,22 @@ import com.google.firebase.database.ValueEventListener;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
+import org.json.JSONObject;
+
 import java.lang.reflect.Type;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 
+import vn.zalopay.sdk.Environment;
+import vn.zalopay.sdk.ZaloPayError;
+import vn.zalopay.sdk.ZaloPaySDK;
+import vn.zalopay.sdk.listeners.PayOrderListener;
+
 public class Pay extends AppCompatActivity {
     private ImageView btnBack;
     private TextView btnUpdateAddress, tvTotalPrice, tvTen, tvSdt, tvDiaChi;
-    private Button btnOrder;
+    private Button btnOrder, btnOrderPaymentZalo;
     private RecyclerView rvProduct;
     private PayAdapter payAdapter;
     List<CartItem> receivedList;
@@ -60,9 +69,20 @@ public class Pay extends AppCompatActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_pay);
+
+        paymentWithZalo();
+
         setControl();
         initData();
         setEvent();
+    }
+
+    private void paymentWithZalo() {
+        StrictMode.ThreadPolicy policy = new StrictMode.ThreadPolicy.Builder().permitAll().build();
+        StrictMode.setThreadPolicy(policy);
+
+        // ZaloPay SDK Init
+        ZaloPaySDK.init(2554, Environment.SANDBOX);
     }
 
     private void initData() {
@@ -253,7 +273,107 @@ public class Pay extends AppCompatActivity {
             }
         });
 
+        btnOrderPaymentZalo.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                CreateOrder orderApi = new CreateOrder();
 
+                try {
+                    JSONObject data = orderApi.createOrder(String.valueOf(totalPrice));
+                    String code = data.getString("return_code");
+
+                    if (code.equals("1")) {
+
+                        String token = data.getString("zp_trans_token");
+                        ZaloPaySDK.getInstance().payOrder(Pay.this, token, "demozpdk://app", new PayOrderListener() {
+                            @Override
+                            public void onPaymentSucceeded(String s, String s1, String s2) {
+                                Toast.makeText(Pay.this, "Thanh toán thành công", Toast.LENGTH_SHORT);
+                                paymentSuccess();
+                            }
+
+                            @Override
+                            public void onPaymentCanceled(String s, String s1) {
+                                Toast.makeText(Pay.this, "Thanh toán thất bại", Toast.LENGTH_SHORT);
+                            }
+
+                            @Override
+                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                Toast.makeText(Pay.this, "Đã xảy ra sự cố trong quá trình thanh toán", Toast.LENGTH_SHORT);
+                            }
+                        });
+                    }
+
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            }
+        });
+
+
+    }
+
+    private void paymentSuccess() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+        DatabaseReference orderManagementRef = firebaseDatabase.getReference("Order_Management");
+
+        orderManagementRef.addListenerForSingleValueEvent(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                String idUser = "";
+                if (currentUser != null) {
+                    idUser = currentUser.getUid();
+                }
+                Calendar calendar = Calendar.getInstance();
+                int year = calendar.get(Calendar.YEAR);
+                int month = calendar.get(Calendar.MONTH) + 1;
+                int day = calendar.get(Calendar.DAY_OF_MONTH);
+                String curentDay = day + "/" + month + "/" + year;
+
+                for (CartItem cartItem : receivedList) {
+                    DatabaseReference newRef = orderManagementRef.push();
+                    String id = newRef.getKey();
+                    Order_Management orderManagement = new Order_Management(1, cartItem.getProductPrice(), cartItem.getProductName(), cartItem.getProductImg(), curentDay,id, idUser);
+                    orderManagementRef.child(id).setValue(orderManagement);
+                }
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+
+            }
+        });
+
+        for (CartItem cartItem : receivedList) {
+            DatabaseReference cartDetailRef = FirebaseDatabase.getInstance().getReference("CartDetail");
+            cartDetailRef.orderByChild("idCartItem").equalTo(cartItem.getIdCartItem()).addListenerForSingleValueEvent(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
+                            @Override
+                            public void onSuccess(Void unused) {
+                            }
+                        }).addOnFailureListener(new OnFailureListener() {
+                            @Override
+                            public void onFailure(@NonNull Exception e) {
+
+                            }
+                        });
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+
+                }
+            });
+        }
+        Intent intent = new Intent(Pay.this, Orders.class);
+        startActivity(intent);
     }
 
     private void showBottomSheetDialog() {
@@ -293,6 +413,7 @@ public class Pay extends AppCompatActivity {
         btnUpdateAddress = findViewById(R.id.btnUpdateAddress);
         btnBack = findViewById(R.id.btnBack);
         btnOrder = findViewById(R.id.btnOrder);
+        btnOrderPaymentZalo = findViewById(R.id.btnOrderPaymentZalo);
         rvProduct = findViewById(R.id.rvProduct);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         spnDelivery = findViewById(R.id.spnDelivery);
@@ -302,5 +423,10 @@ public class Pay extends AppCompatActivity {
         tvDiaChi = findViewById(R.id.tvDiaChi);
     }
 
+    @Override
+    protected void onNewIntent(Intent intent) {
+        super.onNewIntent(intent);
+        ZaloPaySDK.getInstance().onResult(intent);
+    }
 
 }

@@ -68,6 +68,10 @@ dependencies {
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.activity:activity:1.8.0")
+    implementation(fileTree(mapOf(
+        "dir" to "C:\\Users\\Admin\\Desktop\\HanCoffee_AndroidApp\\HanCafe\\Payment",
+        "include" to listOf("*.aar", "*.jar")
+    )))
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
