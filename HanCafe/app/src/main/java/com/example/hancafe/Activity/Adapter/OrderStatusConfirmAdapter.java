@@ -35,17 +35,17 @@ public class OrderStatusConfirmAdapter extends RecyclerView.Adapter<OrderStatusC
         @NonNull
         @Override
         public ViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_order_status_confirm,parent,false);
+                View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.viewholder_order_detail,parent,false);
                 return new ViewHolder(view);
         }
 
         @Override
         public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
                 Order_Management orderManagement = data.get(position);
-                Glide.with(holder.itemView.getContext())
-                        .load(orderManagement.getPicure())
-                        .into(holder.imgProduct);
-                holder.tvNameProduct.setText(orderManagement.getName());
+//                Glide.with(holder.itemView.getContext())
+//                        .load(orderManagement.getPicure())
+//                        .into(holder.imgProduct);
+//                holder.tvNameProduct.setText(orderManagement.getName());
                 holder.tvPriceProduct.setText(String.valueOf(orderManagement.getPrice()));
                 holder.mainLayout.setOnClickListener(new View.OnClickListener() {
                         @Override

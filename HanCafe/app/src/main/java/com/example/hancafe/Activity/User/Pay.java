@@ -1,5 +1,6 @@
 package com.example.hancafe.Activity.User;
 
+import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
@@ -14,7 +15,6 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
-import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
@@ -22,6 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
 import com.example.hancafe.Activity.Adapter.PayAdapter;
 import com.example.hancafe.Domain.CartItem;
+import com.example.hancafe.Domain.OrderDetail;
 import com.example.hancafe.Domain.Order_Management;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -109,7 +110,6 @@ public class Pay extends AppCompatActivity {
                 return view;
             }
         };
-
         ArrayAdapter<String> adapterPayMethod = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, payMethod) {
             @Override
             public View getView(int position, View convertView, ViewGroup parent) {
@@ -172,20 +172,29 @@ public class Pay extends AppCompatActivity {
                         int month = calendar.get(Calendar.MONTH) + 1;
                         int day = calendar.get(Calendar.DAY_OF_MONTH);
                         String curentDay = day + "/" + month + "/" + year;
-//
-//                        int maxId = 0;
-//                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                            int id = dataSnapshot.child("id").getValue(Integer.class);
-//                            if (id > maxId) {
-//                                maxId = id;
-//                            }
-//                        }
-//                        int newId = maxId + 1;
+
+                        DatabaseReference newRef = orderManagementRef.push();
+                        String id = newRef.getKey();
+                        Order_Management orderManagement = new Order_Management(1, totalPrice, curentDay,id, idUser);
+                        orderManagementRef.child(id).setValue(orderManagement);
                         for (CartItem cartItem : receivedList) {
-                            DatabaseReference newRef = orderManagementRef.push();
-                            String id = newRef.getKey();
-                            Order_Management orderManagement = new Order_Management(1, cartItem.getProductPrice(), cartItem.getProductName(), cartItem.getProductImg(), curentDay,id, idUser);
-                            orderManagementRef.child(id).setValue(orderManagement);
+                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
+                            DatabaseReference orderDetailRef = firebaseDatabase.getReference("OrderDetail");
+                            orderDetailRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    int totalPriceProduct = cartItem.getProductPrice() * cartItem.getQuantity();
+                                    DatabaseReference newRef = orderDetailRef.push();
+                                    String idOrderDetail = newRef.getKey();
+                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail, id,cartItem.getProductImg(),cartItem.getProductName(),cartItem.getSizeId(),cartItem.getQuantity(),totalPriceProduct);
+                                    orderDetailRef.child(idOrderDetail).setValue(orderDetail);
+                                }
+
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+
+                                }
+                            });
                         }
                     }
 
@@ -220,9 +229,27 @@ public class Pay extends AppCompatActivity {
                         }
                     });
                 }
-                Toast.makeText(Pay.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
-                Intent intent = new Intent(Pay.this, Orders.class);
-                startActivity(intent);
+
+                AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
+                builder.setMessage("Đặt hàng thành công")
+                        .setPositiveButton("Xem đơn hàng", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                Intent intent = new Intent(Pay.this, Orders.class);
+                                startActivity(intent);
+                            }
+                        })
+                        .setNegativeButton("Tiếp tục mua hàng", new DialogInterface.OnClickListener() {
+                            @Override
+                            public void onClick(DialogInterface dialog, int which) {
+                                dialog.cancel();
+                            }
+                        });
+                AlertDialog alertDialog = builder.create();
+                alertDialog.show();
+
+//                Toast.makeText(Pay.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
+
             }
         });
 
@@ -261,30 +288,8 @@ public class Pay extends AppCompatActivity {
 //        orderStatusAdapter.notifyDataSetChanged();
 
     }
-//
-//    private void showBottomSheetAddressPlus(){
-//        BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
-//        View bottomSheetView = getLayoutInflater().inflate(R.layout.bottom_sheet_add_address, null);
-//        bottomSheetDialog.setContentView(bottomSheetView);
-//        bottomSheetDialog.show();
-//    }
-
-    public void showAlert(Context context, String title, String message) {
-        AlertDialog.Builder builder = new AlertDialog.Builder(context);
-        builder.setTitle(title);
-        builder.setMessage(message);
-        builder.setPositiveButton("OK", new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                dialog.dismiss();
-            }
-        });
-        AlertDialog dialog = builder.create();
-        dialog.show();
-    }
 
     private void setControl() {
-
         btnUpdateAddress = findViewById(R.id.btnUpdateAddress);
         btnBack = findViewById(R.id.btnBack);
         btnOrder = findViewById(R.id.btnOrder);
