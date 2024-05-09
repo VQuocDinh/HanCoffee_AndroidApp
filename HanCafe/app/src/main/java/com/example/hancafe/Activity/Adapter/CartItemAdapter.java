@@ -154,9 +154,6 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         }
         return totalPrice;
     }
-    private void deleteProductFromCart(String idCartItem) {
-
-    }
 
     @Override
     public int getItemCount() {
@@ -187,7 +184,4 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         }
     }
 
-    public void setOnItemProductClickListener(ProductsAdapter.OnItemClickListener listener) {
-        this.listener = listener;
-    }
 }

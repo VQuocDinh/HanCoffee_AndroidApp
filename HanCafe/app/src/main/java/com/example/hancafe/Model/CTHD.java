@@ -2,31 +2,15 @@ package com.example.hancafe.Model;
 
 public class CTHD {
     private String nameProduct;
-    private int SL, total;
+    private int quantity, priceProduct;
 
     public CTHD() {
     }
 
-    public CTHD(String nameProduct, int SL, int total) {
-        this.SL = SL;
-        this.total = total;
+    public CTHD(String nameProduct, int quantity, int priceProduct) {
+        this.quantity = quantity;
+        this.priceProduct = priceProduct;
         this.nameProduct = nameProduct;
-    }
-
-    public int getSL() {
-        return SL;
-    }
-
-    public void setSL(int SL) {
-        this.SL = SL;
-    }
-
-    public int getTotal() {
-        return total;
-    }
-
-    public void setTotal(int total) {
-        this.total = total;
     }
 
     public String getNameProduct() {
@@ -35,5 +19,21 @@ public class CTHD {
 
     public void setNameProduct(String nameProduct) {
         this.nameProduct = nameProduct;
+    }
+
+    public int getQuantity() {
+        return quantity;
+    }
+
+    public void setQuantity(int quantity) {
+        this.quantity = quantity;
+    }
+
+    public int getPriceProduct() {
+        return priceProduct;
+    }
+
+    public void setPriceProduct(int priceProduct) {
+        this.priceProduct = priceProduct;
     }
 }

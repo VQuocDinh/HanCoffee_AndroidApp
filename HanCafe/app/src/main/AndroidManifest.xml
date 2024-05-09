@@ -88,7 +88,17 @@
         <activity android:name=".Activity.User.Orders" />
         <activity android:name=".Activity.User.CategoryDetail" />
         <activity android:name=".Activity.User.ProductDetail" />
-        <activity android:name=".Activity.User.Pay" />
+        <activity android:name=".Activity.User.Pay"
+            android:launchMode="singleTask"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+                <data android:scheme="demozpdk"
+                    android:host="app" />
+            </intent-filter>
+        </activity>
 
 
 

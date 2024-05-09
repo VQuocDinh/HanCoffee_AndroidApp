@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8B0305"
     android:orientation="vertical"
-    tools:context=".Activity.Pay">
+    tools:context=".Activity.User.Bill">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -24,7 +24,7 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_gravity="center"
-            android:text="Thanh toán"
+            android:text="Thông tin đơn hàng"
             style="@style/h1_bold_white" />
     </androidx.appcompat.widget.Toolbar>
 
@@ -46,82 +46,48 @@
             <TextView
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:text="Chờ xác nhận"
+                android:layout_marginBottom="4dp"
+                style="@style/h2_bold" />
+
+
+            <TextView
+                style="@style/h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Đơn hàng sẽ được giao sau 2 tiếng. Vui lòng chú điện thoại để nhận hàng" />
+
+        </LinearLayout>
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="16dp"
+            android:layout_marginHorizontal="8dp"
+            android:orientation="vertical">
+
+            <TextView
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
                 android:text="Thông tin nhận hàng"
                 android:layout_marginBottom="4dp"
                 style="@style/h2_bold" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:padding="8dp"
-                android:background="@drawable/gray_background"
-                android:orientation="vertical">
-
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/h3"
-                        android:text="Họ và tên: "/>
-                    <TextView
-                        android:id="@+id/tvTen"
-                        android:layout_width="match_parent"
-                        android:text="Võ Quốc Dinh"
-                        style="@style/h3"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/h3"
-                        android:text="Số điện thoại: "/>
-                    <TextView
-                        android:id="@+id/tvSdt"
-                        android:text="0399967453"
-                        style="@style/h3"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-                <LinearLayout
-                    android:layout_width="match_parent"
-                    android:layout_marginTop="8dp"
-                    android:layout_height="wrap_content"
-                    android:orientation="horizontal">
-
-                    <TextView
-                        android:layout_width="wrap_content"
-                        android:layout_height="wrap_content"
-                        style="@style/h3"
-                        android:text="Địa chỉ: "/>
-                    <TextView
-                        android:id="@+id/tvDiaChi"
-                        style="@style/h3"
-                        android:text="a8, hẻm 60, phường Tăng Nhơn Phú A, TP. Thủ Đức, TP. Hồ Chí Minh"
-                        android:layout_width="match_parent"
-                        android:layout_height="wrap_content"/>
-                </LinearLayout>
-
-
-            </LinearLayout>
 
             <TextView
-                android:id="@+id/btnUpdateAddress"
-                style="@style/h2_bold"
+                style="@style/h2"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
-                android:padding="4dp"
-                android:text="Chỉnh sửa" />
+                android:text="Võ Quốc Dinh"/>
+            <TextView
+                style="@style/h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="0399967453"/>
+            <TextView
+                style="@style/h2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="a8, hẻm 60, phường Tăng Nhơn Phú A, TP. Thủ Đức"/>
 
         </LinearLayout>
 
@@ -148,63 +114,6 @@
             android:layout_margin="8dp"
             android:orientation="vertical">
 
-
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Chọn khuyến mãi"
-                    style="@style/h2_bold"/>
-
-                <Spinner
-                    android:id="@+id/spnPromotionCode"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Phương thức vận chuyển"
-                    style="@style/h2_bold"/>
-
-                <Spinner
-                    android:id="@+id/spnDelivery"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="16dp"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="Phương thức thanh toán"
-                    style="@style/h2_bold" />
-
-                <Spinner
-                    android:id="@+id/spnPay"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"/>
-            </LinearLayout>
 
 
             <LinearLayout
@@ -248,15 +157,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="center"
-                android:text="Thanh toán" />
-
-            <Button
-                android:id="@+id/btnOrderPaymentZalo"
-                style="@style/h2_bold_white"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Thanh toán qua Zalo Pay" />
+                android:text="Xác nhận hủy" />
 
 
         </LinearLayout>
