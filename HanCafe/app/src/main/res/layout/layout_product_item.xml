@@ -33,7 +33,7 @@
             android:layout_marginLeft="20dp"/>
 
         <TextView
-            android:layout_width="match_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:id="@+id/pricetext"
             android:text="Giá sản phẩm"
@@ -42,6 +42,15 @@
             android:layout_toRightOf="@id/img1"
             android:layout_below="@id/nametext"
             android:layout_marginLeft="20dp"
+            android:layout_marginTop="5dp"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text=" đ"
+            android:textSize="16sp"
+            android:textColor="#000"
+            android:layout_toRightOf="@id/pricetext"
+            android:layout_below="@id/nametext"
             android:layout_marginTop="5dp"/>
 
         <TextView

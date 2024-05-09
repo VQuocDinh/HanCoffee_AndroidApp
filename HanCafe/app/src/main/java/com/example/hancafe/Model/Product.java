@@ -19,6 +19,7 @@ public class Product implements Parcelable {
         purl = in.readString();
         describe = in.readString();
         productId = in.readString();
+        idCategory = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -52,7 +53,7 @@ public class Product implements Parcelable {
         this.productId = productId;
     }
 
-    String name,purl,describe,productId;
+    String name,purl,describe,productId, idCategory;
     int price;
 
     public Product(EditText price, EditText name, EditText purl, EditText describe, String categoryId) {
@@ -67,11 +68,12 @@ public class Product implements Parcelable {
     }
 
 
-    public Product(int price, String name, String purl, String describe) {
+    public Product(int price, String name, String purl, String describe, String idCategory) {
         this.price = price;
         this.name = name;
         this.purl = purl;
         this.describe = describe;
+        this.idCategory = idCategory;
 
     }
 
@@ -107,6 +109,14 @@ public class Product implements Parcelable {
         this.describe = describe;
     }
 
+    public String getIdCategory() {
+        return idCategory;
+    }
+
+    public void setIdCategory(String idCategory) {
+        this.idCategory = idCategory;
+    }
+
     @Override
     public int describeContents() {
         return 0;
@@ -120,5 +130,6 @@ public class Product implements Parcelable {
         dest.writeString(describe);
         dest.writeString(purl);
         dest.writeInt(status);
+        dest.writeString(idCategory);
     }
 }

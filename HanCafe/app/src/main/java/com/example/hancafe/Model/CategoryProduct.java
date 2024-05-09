@@ -11,11 +11,24 @@ public class CategoryProduct implements Serializable, Parcelable {
     private String catName;
     private String catId;
     private String catImg;
+    int status;
+
+    public CategoryProduct(int status) {
+        this.status = status;
+    }
 
     public CategoryProduct() {
     }
 
-    public CategoryProduct(String catId, String catName,  String catImg) {
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public CategoryProduct(String catId, String catName, String catImg) {
         this.catName = catName;
         this.catId = catId;
         this.catImg = catImg;
@@ -28,6 +41,7 @@ public class CategoryProduct implements Serializable, Parcelable {
         catName = in.readString();
         catId = in.readString();
         catImg = in.readString();
+        status = in.readInt();
     }
 
     public static final Creator<CategoryProduct> CREATOR = new Creator<CategoryProduct>() {
@@ -76,5 +90,6 @@ public class CategoryProduct implements Serializable, Parcelable {
         dest.writeString(catName);
         dest.writeString(catId);
         dest.writeString(catImg);
+        dest.writeInt(status);
     }
 }
