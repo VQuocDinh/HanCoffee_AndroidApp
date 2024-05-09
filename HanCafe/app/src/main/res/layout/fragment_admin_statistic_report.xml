@@ -51,6 +51,13 @@
                 android:text="Xuất file"
                 android:id="@+id/btnExport"/>
 
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Xuất file"
+                android:id="@+id/btnExport"/>
+
         </LinearLayout>
         <LinearLayout
             android:id="@+id/chartBar"

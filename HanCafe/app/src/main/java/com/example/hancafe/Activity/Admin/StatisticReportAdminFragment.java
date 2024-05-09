@@ -53,7 +53,7 @@ public class StatisticReportAdminFragment extends Fragment {
     List<String> data_listTime = new ArrayList<>();
     ArrayAdapter<String> adapter_listTime;
     DatePickerDialog datePickerDialog;
-    Button dateButton,btnExport ;
+
     BarDataSet dataSet;
     LinearLayout chartLayout, lengend_layout;
     CardView cardViewChart;
@@ -70,6 +70,12 @@ public class StatisticReportAdminFragment extends Fragment {
                              Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_admin_statistic_report, container, false);
         setControl(view);
+        btnExport.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                exportDataToCSV();
+            }
+        });
         initLayoutManager();
         createSampleData();
         setSpinnerEvent();
@@ -77,6 +83,49 @@ public class StatisticReportAdminFragment extends Fragment {
         getDataFromRealtimeDB(getTodaysDate());
         return view;
     }
+
+    private void exportDataToCSV() {
+        // Kiểm tra xem danh sách CTHD có dữ liệu không
+        if (listCTHD.isEmpty()) {
+            Toast.makeText(getContext(), "Không có dữ liệu để xuất", Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        // Tạo tên tệp và đường dẫn lưu trữ
+        String csvFileName = "data.csv";
+        File csvFile = new File(getContext().getExternalFilesDir(null), csvFileName);
+
+        try {
+            // Tạo một FileWriter để ghi dữ liệu vào tệp CSV
+            FileWriter writer = new FileWriter(csvFile);
+
+            // Ghi tiêu đề của cột
+            writer.append("Tên sản phẩm, Số lượng, Tổng tiền");
+            writer.append("\n");
+
+            // Ghi dữ liệu từ danh sách vào tệp CSV
+            for (CTHD cthd : listCTHD) {
+                writer.append(cthd.getNameProduct());
+                writer.append(",");
+                writer.append(String.valueOf(cthd.getSL()));
+                writer.append(",");
+                writer.append(String.valueOf(cthd.getTotal()));
+                writer.append("\n");
+            }
+
+            // Đóng FileWriter sau khi ghi dữ liệu xong
+            writer.flush();
+            writer.close();
+
+            // Hiển thị thông báo xuất file thành công
+            Toast.makeText(getContext(), "Dữ liệu đã được xuất thành công vào " + csvFile.getAbsolutePath(), Toast.LENGTH_LONG).show();
+        } catch (IOException e) {
+            e.printStackTrace();
+            Toast.makeText(getContext(), "Xuất dữ liệu thất bại", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+
 
     private void setControl(View view) {
         listTime = view.findViewById(R.id.listtime);
@@ -92,6 +141,7 @@ public class StatisticReportAdminFragment extends Fragment {
         tvtitle = view.findViewById(R.id.tvtitle);
         thongke = view.findViewById(R.id.thongke);
         btnExport = view.findViewById(R.id.btnExport);
+
     }
 
     private void initLayoutManager() {
