@@ -34,11 +34,11 @@ public class CTHDAdapter extends RecyclerView.Adapter<CTHDAdapter.CTHDViewHolder
         if(cthd == null) {
             return;
         }
-        String SL = String.valueOf(cthd.getSL());
-        String Total = String.valueOf(cthd.getTotal());
+        String quantity = String.valueOf(cthd.getQuantity());
+        String price = String.valueOf(cthd.getPriceProduct());
         holder.tvNameSP.setText(cthd.getNameProduct());
-        holder.tvSL.setText(SL);
-        holder.tvTotalPrice.setText(Total);
+        holder.tvSL.setText(quantity);
+        holder.tvTotalPrice.setText(price);
 
     }
 

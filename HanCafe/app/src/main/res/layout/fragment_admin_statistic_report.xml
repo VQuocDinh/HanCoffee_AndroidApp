@@ -44,6 +44,12 @@
                 android:onClick="openDatePicker"
                 android:text="01/01/2002"
                 android:textColor="@color/red" />
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="Xuất file"
+                android:id="@+id/btnExport"/>
 
         </LinearLayout>
         <LinearLayout
