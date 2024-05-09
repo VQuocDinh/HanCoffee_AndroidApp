@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.ImageView;
@@ -23,6 +24,7 @@ import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
 import com.example.hancafe.Activity.Adapter.PayAdapter;
 import com.example.hancafe.Domain.CartItem;
 import com.example.hancafe.Domain.Order_Management;
+import com.example.hancafe.Domain.Promotion;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -43,12 +45,16 @@ import java.util.Calendar;
 import java.util.List;
 
 public class Pay extends AppCompatActivity {
+
     private ImageView btnBack;
     private TextView btnUpdateAddress, tvTotalPrice, tvTen, tvSdt, tvDiaChi;
     private Button btnOrder;
     private RecyclerView rvProduct;
+    private Spinner spnPromotionCode;
     private PayAdapter payAdapter;
     List<CartItem> receivedList;
+    private List<Promotion> promotions = new ArrayList<>();
+
     int totalPrice = 0;
     private Spinner spnDelivery, spnPay;
     List<String> shipMethod = new ArrayList<>();
@@ -76,13 +82,53 @@ public class Pay extends AppCompatActivity {
             Type listType = new TypeToken<ArrayList<CartItem>>() {
             }.getType();
             receivedList = gson.fromJson(jsonString, listType);
-            payAdapter = new PayAdapter(receivedList);
+            payAdapter = new PayAdapter(receivedList, promotions);
             rvProduct.setAdapter(payAdapter);
             receivedList.size();
         }
 
         totalPrice = payAdapter.calculateTotalPrice();
         tvTotalPrice.setText(String.valueOf(totalPrice));
+
+        // Khởi tạo danh sách chứa các tên khuyến mãi
+        List<String> promotionNames = new ArrayList<>();
+        promotionNames.add("Chưa chọn mã");
+
+        // Kết nối với Firebase Realtime Database
+        DatabaseReference promotionRef = FirebaseDatabase.getInstance().getReference().child("Promotion");
+
+        // Lắng nghe sự kiện khi có thay đổi trong dữ liệu
+        promotionRef.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+
+
+                // Lặp qua mỗi nút con trong dữ liệu Firebase
+                for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    // Lấy đối tượng Promotion từ dataSnapshot
+                    Promotion promotion = snapshot.getValue(Promotion.class);
+                    // Kiểm tra nếu promotion không null và có tên
+                    if (promotion != null && promotion.getName() != null) {
+                        // Thêm tên khuyến mãi vào danh sách
+                        promotionNames.add(promotion.getName());
+                        // Thêm khuyến mãi vào danh sách promotions
+                        promotions.add(promotion);
+                    }
+                }
+
+                // Tạo ArrayAdapter để hiển thị danh sách các tên khuyến mãi trong Spinner
+                ArrayAdapter<String> adapterPromotionNames = new ArrayAdapter<>(Pay.this, android.R.layout.simple_spinner_item, promotionNames);
+                adapterPromotionNames.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+                spnPromotionCode.setAdapter(adapterPromotionNames);
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError databaseError) {
+                // Xử lý khi có lỗi xảy ra
+            }
+        });
+
+
     }
 
     private void setEvent() {
@@ -225,9 +271,79 @@ public class Pay extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+        spnPromotionCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                String selectedPromotion = parent.getItemAtPosition(position).toString();
+                int totalPriceAfterDiscount = payAdapter.calculateTotalPriceAfterDiscount(selectedPromotion);
+                tvTotalPrice.setText(String.valueOf(totalPriceAfterDiscount));
+                if (!selectedPromotion.equals("Chưa chọn mã")) {
+                    for (Promotion promotion : promotions) {
+                        if (promotion.getName().equals(selectedPromotion)) {
+                            showPromotionDetailDialog(promotion);
+                            break;
+                        }
+                    }
+                }
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+                // Xử lý khi không có gì được chọn (nếu cần)
+            }
+        });
+
 
 
     }
+    private void showPromotionDetailDialog(Promotion promotion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Pay.this);
+        builder.setTitle(promotion.getName());
+        builder.setMessage("Mức khuyến mãi: " + promotion.getDiscount() + "\n"
+                + "Mô tả: " + promotion.getDescription() + "\n"
+                + "Thời gian: " + promotion.getStartTime() + " - " + promotion.getEndTime());
+        builder.setPositiveButton("Chọn", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Hiển thị hộp thoại xác nhận nếu người dùng chọn "Chọn"
+                showConfirmationDialog(promotion);
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Đặt lại giá trị của Spinner về chưa chọn mã
+                spnPromotionCode.setSelection(0);
+                // Đóng dialog nếu người dùng chọn "Hủy"
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
+    private void showConfirmationDialog(Promotion promotion) {
+        AlertDialog.Builder builder = new AlertDialog.Builder(Pay.this);
+        builder.setTitle("Xác nhận chọn mã khuyến mãi");
+        builder.setMessage("Bạn có muốn chọn mã khuyến mãi \"" + promotion.getName() + "\"?");
+        builder.setPositiveButton("Chọn", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Xử lý khi người dùng chọn "Chọn"
+                // Ví dụ: lưu mã khuyến mãi đã chọn vào biến hoặc thực hiện các hành động khác
+                Toast.makeText(Pay.this, "Đã chọn mã khuyến mãi: " + promotion.getName(), Toast.LENGTH_SHORT).show();
+                dialog.dismiss();
+            }
+        });
+        builder.setNegativeButton("Hủy", new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // Đóng dialog nếu người dùng chọn "Hủy"
+                dialog.dismiss();
+            }
+        });
+        builder.show();
+    }
+
 
     private void showBottomSheetDialog() {
         BottomSheetDialog bottomSheetDialog = new BottomSheetDialog(this);
@@ -295,7 +411,33 @@ public class Pay extends AppCompatActivity {
         tvTen = findViewById(R.id.tvTen);
         tvSdt = findViewById(R.id.tvSdt);
         tvDiaChi = findViewById(R.id.tvDiaChi);
+        spnPromotionCode = findViewById(R.id.spnPromotionCode);
     }
 
+    private double calculateTotalPriceAfterDiscount(double totalPrice, String promotionCode) {
+        // Kiểm tra nếu chưa chọn mã khuyến mãi
+        if (promotionCode.equals("Chưa chọn mã")) {
+            // Trả về tổng tiền ban đầu
+            return totalPrice;
+        }
 
+        // Tìm kiếm mã khuyến mãi được chọn trong danh sách promotions
+        for (Promotion promotion : promotions) {
+            if (promotion.getCode().equals(promotionCode)) {
+                // Áp dụng mức giảm giá tương ứng
+                if (promotion.getDiscount().endsWith("%")) {
+                    // Giảm giá phần trăm
+                    double discountPercentage = Double.parseDouble(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
+                    return totalPrice * (1 - discountPercentage / 100);
+                } else if (promotion.getDiscount().endsWith("đ")) {
+                    // Giảm giá cố định
+                    double discountAmount = Double.parseDouble(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
+                    return totalPrice - discountAmount;
+                }
+            }
+        }
+
+        // Trả về tổng tiền ban đầu nếu không tìm thấy mã khuyến mãi
+        return totalPrice;
+    }
 }

@@ -12,6 +12,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
 import com.example.hancafe.Domain.CartItem;
+import com.example.hancafe.Domain.Promotion;
 import com.example.hancafe.R;
 
 
@@ -19,9 +20,13 @@ import java.util.List;
 
 public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> {
     private List<CartItem> data;
+    private List<Promotion> promotions;
 
-    public PayAdapter(List<CartItem> data) {
+
+    public PayAdapter(List<CartItem> data, List<Promotion> promotions) {
         this.data = data;
+        this.promotions = promotions;
+
     }
 
     @NonNull
@@ -51,6 +56,30 @@ public class PayAdapter extends RecyclerView.Adapter<PayAdapter.ViewHolder> {
         }
         holder.tvPriceProduct.setText(String.valueOf(price));
     }
+    public int calculateTotalPriceAfterDiscount(String promotionCode) {
+        int totalPrice = 0;
+        for (CartItem cartItem : data) {
+            int price = cartItem.getQuantity() * cartItem.getProductPrice();
+            if (!promotionCode.equals("Chưa chọn mã")) {
+                // Áp dụng mã khuyến mãi nếu có
+                for (Promotion promotion : promotions) {
+                    if (promotion.getName().equals(promotionCode)) {
+                        if (promotion.getDiscount().endsWith("%")) {
+                            double discountPercentage = Double.parseDouble(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
+                            price *= (1 - discountPercentage / 100);
+                        } else if (promotion.getDiscount().endsWith("đ")) {
+                            double discountAmount = Double.parseDouble(promotion.getDiscount().substring(0, promotion.getDiscount().length() - 1));
+                            price -= discountAmount;
+                        }
+                        break;
+                    }
+                }
+            }
+            totalPrice += price;
+        }
+        return totalPrice;
+    }
+
     public int calculateTotalPrice() {
         int totalPrice = 0;
         for (CartItem cartItem : data) {

@@ -33,12 +33,14 @@ public class MainAdminActivity extends AppCompatActivity {
     InformationPersonAdminFragment informationPersonAdminFragment = new InformationPersonAdminFragment();
     StatisticReportAdminFragment statisticReportAdminFragment = new StatisticReportAdminFragment();
 
+    PromotionFragment promotionFragment = new PromotionFragment();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main_admin);
-
+        mAuth = FirebaseAuth.getInstance();
         setControl();
         setEvent();
     }
@@ -86,7 +88,10 @@ public class MainAdminActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_statistic_report) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin,  statisticReportAdminFragment).commit();
                     textView.setText("Báo cáo thống kê");
-                } else if (itemId == R.id.nav_logout) {
+                } else if (itemId == R.id.nav_promotion_management) {
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_admin,  promotionFragment).commit();
+                    textView.setText("Quản lý khuyến mãi");
+                }else if (itemId == R.id.nav_logout) {
                     mAuth.signOut();
                     Intent intent = new Intent(MainAdminActivity.this, Home.class);
                     startActivity(intent);

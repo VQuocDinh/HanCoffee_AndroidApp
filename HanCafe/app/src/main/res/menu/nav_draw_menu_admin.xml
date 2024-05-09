@@ -22,9 +22,12 @@
         <item android:id="@+id/nav_statistic_report"
             android:icon="@drawable/baseline_equalizer_24"
             android:title="@string/title_nav_statistic_report"/>
+        <item android:title="Quản lý khuyến mãi"
+            android:id="@+id/nav_promotion_management"
+            android:icon="@drawable/baseline_production_quantity_limits_24"/>
     </group>
 
-    <item android:title=""/>
+
     <item android:title=""/>
     <item android:title=""/>
     <item android:title=""/>
