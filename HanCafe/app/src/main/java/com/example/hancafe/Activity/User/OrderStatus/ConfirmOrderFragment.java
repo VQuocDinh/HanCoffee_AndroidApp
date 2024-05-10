@@ -62,7 +62,7 @@ public class ConfirmOrderFragment extends Fragment {
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
                     int status = dataSnapshot.child("idCategory").getValue(Integer.class);
                     if (status == confirm) {
-                        String date = dataSnapshot.child("dateTime").getValue(String.class);
+                        String date = dataSnapshot.child("date").getValue(String.class);
                         String idOrder = dataSnapshot.child("id").getValue(String.class);
                         int totalPrice = dataSnapshot.child("price").getValue(Integer.class);
                         String idUser = dataSnapshot.child("idUser").getValue(String.class);

@@ -4,6 +4,7 @@ import android.app.AlertDialog;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,6 +30,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.ViewHolder> {
@@ -55,59 +57,68 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(orderManagement.getOrderDetails());
         holder.chillRecycleView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.chillRecycleView.setAdapter(orderDetailAdapter);
-        holder.orderLayout.setOnClickListener(new View.OnClickListener() {
+//        holder.orderLayout.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+////                Pay.showBottomSheetDialog();
+////                Intent intent = new Intent(context, Bill.class);
+////                context.startActivity(intent);
+//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
+//                builder.setMessage("Xác nhận hủy đơn hàng!")
+//                        .setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//
+//                                String idOrder = orderManagement.getId();
+//                                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
+//                                orderRef.orderByChild("id").equalTo(idOrder).addListenerForSingleValueEvent(new ValueEventListener() {
+//                                    @Override
+//                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
+//                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+//                                            dataSnapshot.getRef().child("idCategory").setValue(4).addOnSuccessListener(new OnSuccessListener<Void>() {
+//                                                @Override
+//                                                public void onSuccess(Void unused) {
+//                                                    orderManagements.remove(position);
+//                                                    notifyDataSetChanged();
+//                                                }
+//                                            }).addOnFailureListener(new OnFailureListener() {
+//                                                @Override
+//                                                public void onFailure(@NonNull Exception e) {
+//
+//                                                }
+//                                            });
+//                                        }
+//                                    }
+//
+//                                    @Override
+//                                    public void onCancelled(@NonNull DatabaseError error) {
+//
+//                                    }
+//                                });
+//                            }
+//                        })
+//                        .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+//                            @Override
+//                            public void onClick(DialogInterface dialog, int which) {
+//                                dialog.cancel();
+//                            }
+//                        });
+//                AlertDialog alertDialog = builder.create();
+//                alertDialog.show();
+//                notifyDataSetChanged();
+//
+//            }
+//        });
+        holder.tvDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-//                Pay.showBottomSheetDialog();
-//                Intent intent = new Intent(context, Bill.class);
-//                context.startActivity(intent);
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Xác nhận hủy đơn hàng!")
-                        .setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-
-                                String idOrder = orderManagement.getId();
-                                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
-                                orderRef.orderByChild("id").equalTo(idOrder).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                            dataSnapshot.getRef().child("idCategory").setValue(4).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-                                                    orderManagements.remove(position);
-                                                    notifyDataSetChanged();
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-                notifyDataSetChanged();
-
+                Intent intent = new Intent(context, Bill.class);
+                intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+                intent.putExtra("orderManagement",orderManagement);
+                intent.putParcelableArrayListExtra("orderDetails", (ArrayList<? extends Parcelable>) orderManagement.getOrderDetails());
+                context.startActivity(intent);
             }
         });
-
     }
 
     @Override
@@ -116,7 +127,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     }
 
     public class ViewHolder extends RecyclerView.ViewHolder {
-        TextView tvTotalPrice;
+        TextView tvTotalPrice, tvDetail;
         RecyclerView chillRecycleView;
         LinearLayout orderLayout;
 
@@ -125,11 +136,11 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             tvTotalPrice = itemView.findViewById(R.id.tvTotalPrice);
             chillRecycleView = itemView.findViewById(R.id.chillRecycleView);
             orderLayout = itemView.findViewById(R.id.orderLayout);
-
+            tvDetail = itemView.findViewById(R.id.tvDetail);
         }
     }
 
-    public class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.ChildViewHolder> {
+    public static class OrderDetailAdapter extends RecyclerView.Adapter<OrderDetailAdapter.ChildViewHolder> {
         private List<OrderDetail> orderDetails;
 
         public OrderDetailAdapter(List<OrderDetail> orderDetails) {
