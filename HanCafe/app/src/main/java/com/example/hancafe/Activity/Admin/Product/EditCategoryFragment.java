@@ -128,9 +128,11 @@ public class EditCategoryFragment extends Fragment {
                                                             public void onSuccess(Void aVoid) {
                                                                 // Update image in the product list
                                                                 categoryProduct.setCatImg(imageUrl);
-                                                                // Notify the adapter about the change
-                                                                // Assuming you have access to the adapter instance
-                                                                // adapter.notifyDataSetChanged();
+
+                                                                Toast.makeText(requireContext(), "Chỉnh sửa danh mục thành công", Toast.LENGTH_SHORT).show();
+
+                                                                // Go back to previous fragment
+                                                                requireActivity().getSupportFragmentManager().popBackStack();
 
                                                             }
                                                         })
