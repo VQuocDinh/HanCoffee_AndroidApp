@@ -1,5 +1,7 @@
 package com.example.hancafe.Activity.Admin;
 
+import static android.os.Environment.getExternalStoragePublicDirectory;
+
 import android.app.DatePickerDialog;
 import android.graphics.Color;
 import android.os.Bundle;
@@ -39,6 +41,9 @@ import org.eazegraph.lib.charts.PieChart;
 import org.eazegraph.lib.models.PieModel;
 
 
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -48,12 +53,19 @@ import java.util.Random;
 import com.example.hancafe.Activity.Adapter.CTHDAdapter;
 import com.example.hancafe.Model.CTHD;
 
+
+import com.itextpdf.kernel.pdf.PdfDocument;
+import com.itextpdf.kernel.pdf.PdfWriter;
+import com.itextpdf.layout.Document;
+import com.itextpdf.layout.element.Paragraph;
+
+
 public class StatisticReportAdminFragment extends Fragment {
     Spinner listTime;
     List<String> data_listTime = new ArrayList<>();
     ArrayAdapter<String> adapter_listTime;
     DatePickerDialog datePickerDialog;
-Button dateButton;
+    Button dateButton, btnExportPDF;
     BarDataSet dataSet;
     LinearLayout chartLayout, lengend_layout;
     CardView cardViewChart;
@@ -95,7 +107,7 @@ Button dateButton;
         tvtitleDay = view.findViewById(R.id.tvtitleDay);
         tvtitle = view.findViewById(R.id.tvtitle);
         thongke = view.findViewById(R.id.thongke);
-
+        btnExportPDF = view.findViewById(R.id.btnExportPDF);
     }
 
     private void initLayoutManager() {
@@ -129,7 +141,6 @@ Button dateButton;
                             @Override
                             public void onDataChange(@NonNull DataSnapshot detailSnapshot) {
                                 for (DataSnapshot detail : detailSnapshot.getChildren()) {
-                                    String productId = detail.getKey(); // Lấy ID của sản phẩm
                                     String nameProduct = detail.child("nameProduct").getValue(String.class);
                                     int quantity = detail.child("quantity").getValue(Integer.class);
                                     int priceProduct = detail.child("priceProduct").getValue(Integer.class);
@@ -158,6 +169,12 @@ Button dateButton;
                                 SetDataPieChart( totalAmount[0], listCTHD);
                                 CTHDAdapter.notifyDataSetChanged();
                                 tvtitleDay.setText("Thống kê các sản phẩm đã bán trong ngày:");
+                                btnExportPDF.setOnClickListener(new View.OnClickListener() {
+                                    @Override
+                                    public void onClick(View v) {
+                                        exportToPDF( selectedDate, listCTHD, totalAmount[0]);
+                                    }
+                                });
                             }
 
                             @Override
@@ -462,11 +479,61 @@ Button dateButton;
         return yearLabels;
     }
 
-
-
-
     // Phương thức để xóa biểu đồ cũ khi cần thiết
     private void clearChart() {
         chartLayout.removeAllViews();
     }
+    private void exportToPDF( String selectedDate, List<CTHD> listCTHD, int totalAmount) {
+        if (listCTHD.isEmpty()) {
+            Toast.makeText(getContext(), "Không có doanh thu trong ngày", Toast.LENGTH_SHORT).show();
+            return; // Kết thúc phương thức nếu danh sách rỗng
+        }
+        // Kiểm tra xem thiết bị có hỗ trợ ghi file không
+        if (isExternalStorageWritable()) {
+            String formatDate =  selectedDate.replace("/", "-");
+            File file = Environment.getExternalStoragePublicDirectory(Environment.DIRECTORY_DOWNLOADS);
+            String fileName = "report_"+ formatDate +".pdf";
+            File f = new File(file, fileName);
+            PdfWriter writer;
+            try {
+                writer = new PdfWriter(new FileOutputStream(f));
+                PdfDocument pdf = new PdfDocument(writer);
+                Document document = new Document(pdf);
+
+                // Thêm tiêu đề
+                document.add(new Paragraph("Thống kê doanh thu trong ngày: " + selectedDate));
+
+                // Thêm danh sách các sản phẩm và thông tin liên quan
+                for (CTHD cthd : listCTHD) {
+                    document.add(new Paragraph("Tên sản phẩm: " + cthd.getNameProduct()));
+                    document.add(new Paragraph("Số lượng: " + cthd.getQuantity()));
+                    document.add(new Paragraph("Tổng tiền: " + cthd.getPriceProduct()));
+                    document.add(new Paragraph("--------------------------------------"));
+                }
+
+                // Thêm tổng doanh thu
+                document.add(new Paragraph("Tổng doanh thu: " + totalAmount));
+
+                // Đóng tài liệu
+                document.close();
+                ;
+                // Hiển thị thông báo thành công
+                Toast.makeText(getContext(), "Xuất file PDF thành công", Toast.LENGTH_SHORT).show();
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+                Toast.makeText(getContext(), "Lỗi khi tạo file PDF", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(getContext(), "Thiết bị không hỗ trợ ghi file", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    // Kiểm tra xem thiết bị có hỗ trợ ghi file không
+    private boolean isExternalStorageWritable() {
+        String state = Environment.getExternalStorageState();
+        return Environment.MEDIA_MOUNTED.equals(state);
+    }
+
+
+
 }

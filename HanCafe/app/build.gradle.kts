@@ -69,7 +69,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.activity:activity:1.8.0")
     implementation(fileTree(mapOf(
-        "dir" to "D:\\hk2-nam4\\lap-trinh-di-dong\\git\\HanCoffee_AndroidApp\\HanCafe\\Payment",
+        "dir" to "D:\\HanCoffee_AndroidApp\\HanCafe\\PAYMENT",
         "include" to listOf("*.aar", "*.jar")
     )))
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
@@ -82,4 +82,6 @@ dependencies {
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
+    implementation("com.itextpdf:itext7-core:7.1.15")
+
 }

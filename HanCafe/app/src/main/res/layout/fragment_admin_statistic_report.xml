@@ -45,7 +45,12 @@
                 android:text="01/01/2002"
                 android:textColor="@color/red" />
 
-
+            <Button
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Xuất file"
+                android:id="@+id/btnExportPDF"
+                />
         </LinearLayout>
         <LinearLayout
             android:id="@+id/chartBar"
