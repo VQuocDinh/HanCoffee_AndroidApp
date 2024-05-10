@@ -1,8 +1,11 @@
 package com.example.hancafe.Domain;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.util.List;
 
-public class Order_Management {
+public class Order_Management implements Parcelable {
     int idCategory, price;
     String date, id, idUser;
     List<OrderDetail> orderDetails;
@@ -17,6 +20,42 @@ public class Order_Management {
         this.id = id;
         this.idUser = idUser;
     }
+
+    protected Order_Management(Parcel in) {
+        idCategory = in.readInt();
+        price = in.readInt();
+        date = in.readString();
+        id = in.readString();
+        idUser = in.readString();
+        orderDetails = in.createTypedArrayList(OrderDetail.CREATOR);
+    }
+
+    @Override
+    public void writeToParcel(Parcel dest, int flags) {
+        dest.writeInt(idCategory);
+        dest.writeInt(price);
+        dest.writeString(date);
+        dest.writeString(id);
+        dest.writeString(idUser);
+        dest.writeTypedList(orderDetails);
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    public static final Creator<Order_Management> CREATOR = new Creator<Order_Management>() {
+        @Override
+        public Order_Management createFromParcel(Parcel in) {
+            return new Order_Management(in);
+        }
+
+        @Override
+        public Order_Management[] newArray(int size) {
+            return new Order_Management[size];
+        }
+    };
 
     public List<OrderDetail> getOrderDetails() {
         return orderDetails;

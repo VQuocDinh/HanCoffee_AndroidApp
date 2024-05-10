@@ -216,7 +216,7 @@ public class ProductDetail extends AppCompatActivity {
         btnBigSize.setBackgroundColor(btnBigSizeIsActive ? getResources().getColor(R.color.black) : getResources().getColor(R.color.mainColor));
     }
 
-    public void showAlert(Context context, String title, String message) {
+    public static void showAlert(Context context, String title, String message) {
         AlertDialog.Builder builder = new AlertDialog.Builder(context);
         builder.setTitle(title);
         builder.setMessage(message);

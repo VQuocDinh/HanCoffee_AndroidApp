@@ -33,6 +33,7 @@
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
+        android:paddingHorizontal="8dp"
         android:background="@drawable/body_background"
         android:orientation="vertical">
 
@@ -41,12 +42,32 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
             android:layout_marginHorizontal="8dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Ngày đặt"
+                android:layout_marginRight="4dp"
+                style="@style/h2_bold"/>
+            <TextView
+                android:id="@+id/tvDateOrder"
+                android:text="Ngày đặt"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="8dp"
             android:orientation="vertical">
 
             <TextView
+                android:id="@+id/tvStatus"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:text="Chờ xác nhận"
+                android:text="Trạng thái đơn hàng"
                 android:layout_marginBottom="4dp"
                 style="@style/h2_bold" />
 
@@ -61,7 +82,7 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginHorizontal="8dp"
             android:orientation="vertical">
 
@@ -93,10 +114,35 @@
 
         <LinearLayout
             android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:layout_marginHorizontal="8dp"
+            android:orientation="horizontal">
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Mã đơn hàng"
+                android:layout_marginRight="4dp"
+                style="@style/h2_bold"/>
+            <TextView
+                android:id="@+id/tvIdOrder"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"/>
+        </LinearLayout>
+
+        <LinearLayout
+            android:layout_width="match_parent"
             android:layout_height="0dp"
+            android:layout_marginTop="8dp"
             android:layout_weight="1"
             android:orientation="vertical">
 
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginHorizontal="8dp"
+                android:text="Sản phẩm có trong đơn hàng"
+                style="@style/h2_bold"/>
             <androidx.recyclerview.widget.RecyclerView
                 android:id="@+id/rvProduct"
                 android:layout_width="match_parent"
@@ -152,7 +198,7 @@
 
 
             <Button
-                android:id="@+id/btnOrder"
+                android:id="@+id/btnCancel"
                 style="@style/h2_bold_white"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"

@@ -64,7 +64,7 @@ public class Pay extends AppCompatActivity {
     private PayAdapter payAdapter;
     List<CartItem> receivedList;
     private List<Promotion> promotions = new ArrayList<>();
- int totalPriceAfterDiscount = 0;
+    int totalPriceAfterDiscount = 0;
     int totalPriceAfterKM = 0;
     int totalPrice = 0;
     private Spinner spnDelivery, spnPay;
@@ -177,30 +177,32 @@ public class Pay extends AppCompatActivity {
                 return view;
             }
         };
-        ArrayAdapter<String> adapterPayMethod = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, payMethod) {
-            @Override
-            public View getView(int position, View convertView, ViewGroup parent) {
-                View view = super.getView(position, convertView, parent);
-                TextView textView = view.findViewById(android.R.id.text1);
-                textView.setTextSize(14); // Đặt kích thước chữ là 16dp
-                return view;
-            }
-
-            @Override
-            public View getDropDownView(int position, View convertView, ViewGroup parent) {
-                View view = super.getDropDownView(position, convertView, parent);
-                TextView textView = view.findViewById(android.R.id.text1);
-                textView.setTextSize(14); // Đặt kích thước chữ là 16dp
-                return view;
-            }
-        };
+//        ArrayAdapter<String> adapterPayMethod = new ArrayAdapter<String>(this, android.R.layout.simple_spinner_item, payMethod) {
+//            @Override
+//            public View getView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getView(position, convertView, parent);
+//                TextView textView = view.findViewById(android.R.id.text1);
+//                textView.setTextSize(14); // Đặt kích thước chữ là 16dp
+//                return view;
+//            }
+//
+//            @Override
+//            public View getDropDownView(int position, View convertView, ViewGroup parent) {
+//                View view = super.getDropDownView(position, convertView, parent);
+//                TextView textView = view.findViewById(android.R.id.text1);
+//                textView.setTextSize(14); // Đặt kích thước chữ là 16dp
+//                return view;
+//            }
+//        };
 
         adapterShipMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-        adapterPayMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+//        adapterPayMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDelivery.setAdapter(adapterShipMethod);
-        spnPay.setAdapter(adapterPayMethod);
+        spnPromotionCode.setAdapter(adapterShipMethod);
+//        spnPay.setAdapter(adapterPayMethod);
 
         btnOrder.setBackgroundColor(getResources().getColor(R.color.mainColor));
+        btnOrderPaymentZalo.setBackgroundColor(getResources().getColor(R.color.zaloPay));
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -568,7 +570,7 @@ public class Pay extends AppCompatActivity {
         rvProduct = findViewById(R.id.rvProduct);
         tvTotalPrice = findViewById(R.id.tvTotalPrice);
         spnDelivery = findViewById(R.id.spnDelivery);
-        spnPay = findViewById(R.id.spnPay);
+//        spnPay = findViewById(R.id.spnPay);
         tvTen = findViewById(R.id.tvTen);
         tvSdt = findViewById(R.id.tvSdt);
         tvDiaChi = findViewById(R.id.tvDiaChi);
@@ -599,13 +601,12 @@ public class Pay extends AppCompatActivity {
         }
 
 
-
-
         // Trả về tổng tiền ban đầu nếu không tìm thấy mã khuyến mãi
         return totalPrice;
     }
+
     @Override
-    protected void onNewIntent (Intent intent){
+    protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         ZaloPaySDK.getInstance().onResult(intent);
     }

@@ -1,6 +1,11 @@
 package com.example.hancafe.Domain;
 
-public class OrderDetail {
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+public class OrderDetail implements Parcelable {
     String idOrder, imgProduct, nameProduct, idOrderDetail;
     int idSize, quantity, priceProduct;
 
@@ -13,6 +18,28 @@ public class OrderDetail {
         this.priceProduct = priceProduct;
         this.idOrderDetail = idOrderDetail;
     }
+
+    protected OrderDetail(Parcel in) {
+        idOrder = in.readString();
+        imgProduct = in.readString();
+        nameProduct = in.readString();
+        idOrderDetail = in.readString();
+        idSize = in.readInt();
+        quantity = in.readInt();
+        priceProduct = in.readInt();
+    }
+
+    public static final Creator<OrderDetail> CREATOR = new Creator<OrderDetail>() {
+        @Override
+        public OrderDetail createFromParcel(Parcel in) {
+            return new OrderDetail(in);
+        }
+
+        @Override
+        public OrderDetail[] newArray(int size) {
+            return new OrderDetail[size];
+        }
+    };
 
     public String getIdOrder() {
         return idOrder;
@@ -68,5 +95,21 @@ public class OrderDetail {
 
     public void setPriceProduct(int priceProduct) {
         this.priceProduct = priceProduct;
+    }
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeString(idOrder);
+        dest.writeString(imgProduct);
+        dest.writeString(nameProduct);
+        dest.writeString(idOrderDetail);
+        dest.writeInt(idSize);
+        dest.writeInt(quantity);
+        dest.writeInt(priceProduct);
     }
 }

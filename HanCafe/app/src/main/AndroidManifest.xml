@@ -86,6 +86,8 @@
             </intent-filter>
         </activity>
         <activity android:name=".Activity.User.Orders" />
+        <activity android:name=".Activity.User.Bill" />
+
         <activity android:name=".Activity.User.CategoryDetail" />
         <activity android:name=".Activity.User.ProductDetail" />
         <activity android:name=".Activity.User.Pay"
