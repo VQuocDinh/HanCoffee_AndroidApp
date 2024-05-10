@@ -110,7 +110,7 @@ public class ProductAdminFragment extends Fragment {
                 // Thiết lập thông tin của sản phẩm vào các thành phần tương ứng
 
                 tvName.setText(product.getName());
-                tvPrice.setText(product.getPrice());
+                tvPrice.setText(product.getPrice() + " đ");
                 tvDescribe.setText(product.getDescribe());
                 // Load ảnh sản phẩm (nếu có) vào ImageView sử dụng Glide hoặc thư viện tương tự
 

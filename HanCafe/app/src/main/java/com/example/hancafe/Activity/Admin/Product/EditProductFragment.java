@@ -53,7 +53,7 @@ public class EditProductFragment extends Fragment {
     FirebaseStorage storage;
     StorageReference storageReference;
     private String productId;
-    private int currentCategoryProduct;
+    private String categoryId;
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
@@ -93,12 +93,13 @@ public class EditProductFragment extends Fragment {
                 edtPrice.setText(String.valueOf(product.getPrice()));
                 edtDescribe.setText(product.getDescribe());
                 Glide.with(requireContext()).load(product.getPurl()).into(ivHinh);
+
                 // Set category của sản phẩm lên đầu tiên trong Spinner
-
-//                String itemCategory = String.valueOf(loadCategoriesFromFirebase(product));
-//                int categoryIndex = categoryList.indexOf(itemCategory);
-//                spCategory.setSelection(categoryIndex);
-
+                String categoryId = product.getIdCategory();
+                int categoryIndex = categoryList.indexOf(categoryId);
+                if (categoryIndex != -1) {
+                    spCategory.setSelection(categoryIndex);
+                }
 
                 DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Products");
                 productsRef.orderByChild("name").equalTo(product.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
@@ -191,9 +192,11 @@ public class EditProductFragment extends Fragment {
                                                             public void onSuccess(Void aVoid) {
                                                                 // Update image in the product list
                                                                 product.setPurl(imageUrl);
-                                                                // Notify the adapter about the change
-                                                                // Assuming you have access to the adapter instance
-                                                                // adapter.notifyDataSetChanged();
+
+                                                                Toast.makeText(requireContext(), "Chỉnh sửa sản phẩm thành công", Toast.LENGTH_SHORT).show();
+
+                                                                // Go back to previous fragment
+                                                                requireActivity().getSupportFragmentManager().popBackStack();
 
 
                                                             }
@@ -266,8 +269,14 @@ public class EditProductFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 categoryList.clear();
                 for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
+                    categoryId = snapshot.getKey(); // Lấy id của danh mục
                     String categoryName = snapshot.child("name").getValue(String.class);
                     categoryList.add(categoryName);
+
+                    // Nếu categoryId của sản phẩm trùng với categoryId hiện tại, đặt category đó lên đầu tiên trong Spinner
+                    if (product != null && product.getIdCategory().equals(categoryId)) {
+                        spCategory.setSelection(categoryList.size() - 1);
+                    }
 
                 }
                 spinnerAdapter.notifyDataSetChanged(); // Cập nhật Spinner sau khi danh sách được cập nhật
@@ -280,6 +289,5 @@ public class EditProductFragment extends Fragment {
                 Toast.makeText(requireContext(), "Error: " + databaseError.getMessage(), Toast.LENGTH_SHORT).show();
             }
         });
-
     }
 }
