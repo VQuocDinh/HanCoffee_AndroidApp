@@ -50,6 +50,9 @@
                 android:layout_height="wrap_content"
                 android:text="Xuất file"
                 android:id="@+id/btnExportPDF"
+                android:background="@drawable/custom_background_linear_container"
+                android:backgroundTint="@color/red"
+                android:textColor="@color/white"
                 />
         </LinearLayout>
         <LinearLayout
@@ -248,7 +251,7 @@
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_marginRight="20px"
-                        android:text="Tổng tiền: "
+                        android:text="Tổng tiền sau khuyến mãi: "
                         android:textSize="18sp"
                         android:textStyle="bold" />
 

@@ -1,5 +1,6 @@
 package com.example.hancafe.Activity.User;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
@@ -77,7 +78,9 @@ public class Orders extends AppCompatActivity {
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                finish();
+
+                Intent intent = new Intent(Orders.this, MainActivity.class);
+                startActivity(intent);
             }
         });
     }

@@ -242,6 +242,7 @@ public class Pay extends AppCompatActivity {
                         int day = calendar.get(Calendar.DAY_OF_MONTH);
                         String curentDay = day + "/" + month + "/" + year;
 
+//                        String promotion = String.valueOf(spnPromotionCode.getSelectedItemId());
                         DatabaseReference newRef = orderManagementRef.push();
                         String id = newRef.getKey();
                         Order_Management orderManagement = new Order_Management(1, totalPriceAfterDiscount, curentDay, id, idUser);
@@ -312,6 +313,8 @@ public class Pay extends AppCompatActivity {
                             @Override
                             public void onClick(DialogInterface dialog, int which) {
                                 dialog.cancel();
+                                Intent intent = new Intent(Pay.this, MainActivity.class);
+                                startActivity(intent);
                             }
                         });
                 AlertDialog alertDialog = builder.create();
@@ -523,6 +526,8 @@ public class Pay extends AppCompatActivity {
                     @Override
                     public void onClick(DialogInterface dialog, int which) {
                         dialog.cancel();
+                        Intent intent = new Intent(Pay.this, MainActivity.class);
+                        startActivity(intent);
                     }
                 });
         AlertDialog alertDialog = builder.create();

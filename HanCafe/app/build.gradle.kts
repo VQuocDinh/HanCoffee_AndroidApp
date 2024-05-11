@@ -69,7 +69,7 @@ dependencies {
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.activity:activity:1.8.0")
     implementation(fileTree(mapOf(
-        "dir" to "D:\\HanCoffee_AndroidApp\\HanCafe\\PAYMENT",
+        "dir" to "D:\\hk2-nam4\\lap-trinh-di-dong\\git\\HanCoffee_AndroidApp\\HanCafe\\PAYMENT",
         "include" to listOf("*.aar", "*.jar")
     )))
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")

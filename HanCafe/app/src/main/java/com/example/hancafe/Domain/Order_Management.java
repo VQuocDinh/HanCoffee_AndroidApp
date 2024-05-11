@@ -7,7 +7,7 @@ import java.util.List;
 
 public class Order_Management implements Parcelable {
     int idCategory, price;
-    String date, id, idUser;
+    String date, id, idUser, promotion;
     List<OrderDetail> orderDetails;
 
     public Order_Management() {

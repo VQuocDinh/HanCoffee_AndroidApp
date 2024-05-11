@@ -501,18 +501,18 @@ public class StatisticReportAdminFragment extends Fragment {
                 Document document = new Document(pdf);
 
                 // Thêm tiêu đề
-                document.add(new Paragraph("Thống kê doanh thu trong ngày: " + selectedDate));
+                document.add(new Paragraph("Report Static In Day: " + selectedDate));
 
                 // Thêm danh sách các sản phẩm và thông tin liên quan
                 for (CTHD cthd : listCTHD) {
-                    document.add(new Paragraph("Tên sản phẩm: " + cthd.getNameProduct()));
-                    document.add(new Paragraph("Số lượng: " + cthd.getQuantity()));
-                    document.add(new Paragraph("Tổng tiền: " + cthd.getPriceProduct()));
+                    document.add(new Paragraph("Product Name: " + cthd.getNameProduct()));
+                    document.add(new Paragraph("Quantity: " + cthd.getQuantity()));
+                    document.add(new Paragraph("Total: " + cthd.getPriceProduct()));
                     document.add(new Paragraph("--------------------------------------"));
                 }
 
                 // Thêm tổng doanh thu
-                document.add(new Paragraph("Tổng doanh thu: " + totalAmount));
+                document.add(new Paragraph("Total Amount after promotion: " + totalAmount));
 
                 // Đóng tài liệu
                 document.close();
