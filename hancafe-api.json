@@ -1,0 +1,575 @@
+{
+  "Cart": [
+    {
+      "cartId": 0,
+      "userId": 0
+    },
+    {
+      "cartId": 1,
+      "userId": 1
+    }
+  ],
+  "CartDetail": {
+    "-NwwXOKGMwvY5V9nmkZE": {
+      "idCart": "gZ1aWDQMGmO6u4CLG4zqOUwuwEE3",
+      "idCartItem": 2,
+      "idProduct": "-NwcKi5g_31VloFkEkfv",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NwxTY1lxY20NeDz0cWq": {
+      "idCart": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "idCartItem": 3,
+      "idProduct": "-NwxIVY9ZkU7TxqSI1Oj",
+      "idSize": 0,
+      "quantity": 4
+    },
+    "-Nx2Eey_7jw2rLS8xAgt": {
+      "idCart": "gZ1aWDQMGmO6u4CLG4zqOUwuwEE3",
+      "idCartItem": 4,
+      "idProduct": "-NwcKWPlkl-nyFN-rgHa",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NxH67H1l992pBa7Mwur": {
+      "idCart": "SrItWym27zVv8ciDjKFkPdACNfJ2",
+      "idCartItem": 5,
+      "idProduct": "-NxFzxNZqXOSl8-mXi1A",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NxHF8z7TXMUEi2PevH0": {
+      "idCart": "SrItWym27zVv8ciDjKFkPdACNfJ2",
+      "idCartItem": 7,
+      "idProduct": "-NxHEw3AyuCIhTx2hChZ",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NxLJ5-pYiHQqXsybO4R": {
+      "idCart": "SrItWym27zVv8ciDjKFkPdACNfJ2",
+      "idCartItem": 8,
+      "idProduct": "-NxHEwcNTj5gxZCCiOHY",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NxNtSoy8SUO-rgt1t1R": {
+      "idCart": "17evZAL9zmQhxuH7OWfa7mUqGVg1",
+      "idCartItem": 11,
+      "idProduct": "-NxNtL7G66GQz5ynuQLi",
+      "idSize": 0,
+      "quantity": 1
+    },
+    "-NxV4so2bI9PIEgQYFXP": {
+      "idCart": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "idCartItem": 13,
+      "idProduct": "-NxMTtbqCVBYvgrt4sTH",
+      "idSize": 1,
+      "quantity": 1
+    },
+    "-NxWP-fOsXtY1f85K0VD": {
+      "idCart": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "idCartItem": 14,
+      "idProduct": "-NxMU2QT_dKL--i6Zx0D",
+      "idSize": 0,
+      "quantity": 1
+    }
+  },
+  "Category_Order_Management": [
+    {
+      "idCategory": 1,
+      "nameCategory": "Chờ xác nhận"
+    },
+    {
+      "idCategory": 2,
+      "nameCategory": "Chờ giao hàng"
+    },
+    {
+      "idCategory": 3,
+      "nameCategory": "Đã giao"
+    },
+    {
+      "idCategory": 4,
+      "nameCategory": "Đã hủy"
+    }
+  ],
+  "Category_Products": {
+    "-NxFyxQwWwCKPM1CGpCW": {
+      "curl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesCategory%2F5de092fd-704c-44ea-befe-f8a22a2f5da4?alt=media&token=dcbcfca5-a932-4d81-96c0-82a214c4f8bf",
+      "id": "-NxFyxQwWwCKPM1CGpCW",
+      "name": "Cà phê",
+      "status": 0
+    },
+    "-NxFzYpetlCt4xyqTJ7P": {
+      "curl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesCategory%2Fce55ba91-d7f5-4f00-b334-b8e66380284f?alt=media&token=cf9e53df-d989-42d8-a3eb-e814450998a6",
+      "id": "-NxFzYpetlCt4xyqTJ7P",
+      "name": "Sinh tố",
+      "status": 0
+    },
+    "-NxFzcP3GxT3yf3y5TZ5": {
+      "curl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesCategory%2Fb19809df-f239-455d-a6db-2039542f9d69?alt=media&token=257b314e-4e3e-406b-9358-c841fcd39420",
+      "id": "-NxFzcP3GxT3yf3y5TZ5",
+      "name": "Trà sữa",
+      "status": 0
+    },
+    "-NxFziDbzkvB9ylfvC1v": {
+      "curl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesCategory%2F99862542-1b66-41e1-956c-603184fca4f9?alt=media&token=f8927bf5-78cd-4c9d-95de-3dea33cb3443",
+      "id": "-NxFziDbzkvB9ylfvC1v",
+      "name": "Nước ép hoa quả",
+      "status": 0
+    },
+    "-NxFzmHFLOppgdV4kY-F": {
+      "curl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesCategory%2F7a9594e5-d434-4d34-b88a-f033ea4be288?alt=media&token=76d05f68-0a05-41b1-94e3-98b15a89bdc0",
+      "id": "-NxFzmHFLOppgdV4kY-F",
+      "name": "Soda",
+      "status": 0
+    }
+  },
+  "OrderDetail": {
+    "-NxWI5RcZy0aBolnyaA4": {
+      "idOrder": "-NxWI5NKqJmADDPuhKyM",
+      "idOrderDetail": "-NxWI5RcZy0aBolnyaA4",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 60000,
+      "quantity": 2
+    },
+    "-NxWISVT75IRx8-ouLYn": {
+      "idOrder": "-NxWISR8fOx6S8IYkywt",
+      "idOrderDetail": "-NxWISVT75IRx8-ouLYn",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 60000,
+      "quantity": 2
+    },
+    "-NxWIbJrPC5wP0JgH208": {
+      "idOrder": "-NxWIbEy9K9HvcgeM_0h",
+      "idOrderDetail": "-NxWIbJrPC5wP0JgH208",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 60000,
+      "quantity": 2
+    },
+    "-NxWIe_LO4rF8cFOR-1B": {
+      "idOrder": "-NxWIeVIOvRO04eK0xXh",
+      "idOrderDetail": "-NxWIe_LO4rF8cFOR-1B",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 60000,
+      "quantity": 2
+    },
+    "-NxWJlrlaX0s9N2mz2Fj": {
+      "idOrder": "-NxWJli3xbMYM5GiiEY9",
+      "idOrderDetail": "-NxWJlrlaX0s9N2mz2Fj",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "nameProduct": "Nước ép cam",
+      "priceProduct": 18000,
+      "quantity": 1
+    },
+    "-NxWJlrty89B8wh_IWTe": {
+      "idOrder": "-NxWJli3xbMYM5GiiEY9",
+      "idOrderDetail": "-NxWJlrty89B8wh_IWTe",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F8b41c400-4612-4673-ac78-29af9196f683?alt=media&token=2da93244-fd12-4416-86c1-36ec892f6922",
+      "nameProduct": "Cà phê đen",
+      "priceProduct": 60000,
+      "quantity": 3
+    },
+    "-NxWJqFBst1Pney9Hrdm": {
+      "idOrder": "-NxWJqAb-3rspg8hlvE8",
+      "idOrderDetail": "-NxWJqFBst1Pney9Hrdm",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "nameProduct": "Nước ép cam",
+      "priceProduct": 18000,
+      "quantity": 1
+    },
+    "-NxWJqFD1qgvSO4pFNVL": {
+      "idOrder": "-NxWJqAb-3rspg8hlvE8",
+      "idOrderDetail": "-NxWJqFD1qgvSO4pFNVL",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F8b41c400-4612-4673-ac78-29af9196f683?alt=media&token=2da93244-fd12-4416-86c1-36ec892f6922",
+      "nameProduct": "Cà phê đen",
+      "priceProduct": 60000,
+      "quantity": 3
+    },
+    "-NxWJt9grkddofUJ6fTE": {
+      "idOrder": "-NxWJt2Y1k1aiFXtm8Ll",
+      "idOrderDetail": "-NxWJt9grkddofUJ6fTE",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "nameProduct": "Nước ép cam",
+      "priceProduct": 18000,
+      "quantity": 1
+    },
+    "-NxWJt9lkXtkeQEyhzAO": {
+      "idOrder": "-NxWJt2Y1k1aiFXtm8Ll",
+      "idOrderDetail": "-NxWJt9lkXtkeQEyhzAO",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F8b41c400-4612-4673-ac78-29af9196f683?alt=media&token=2da93244-fd12-4416-86c1-36ec892f6922",
+      "nameProduct": "Cà phê đen",
+      "priceProduct": 60000,
+      "quantity": 3
+    },
+    "-NxWKRgmUY8RheiRehPu": {
+      "idOrder": "-NxWKRcINC0YrXiWMpG1",
+      "idOrderDetail": "-NxWKRgmUY8RheiRehPu",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    },
+    "-NxWKRh2SY2OMyC_yQqt": {
+      "idOrder": "-NxWKRcINC0YrXiWMpG1",
+      "idOrderDetail": "-NxWKRh2SY2OMyC_yQqt",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    },
+    "-NxWNFHuka2VEKdeRza5": {
+      "idOrder": "-NxWNFA4wms7_ll8XrT5",
+      "idOrderDetail": "-NxWNFHuka2VEKdeRza5",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    },
+    "-NxWOwjaZc3_3IzwoHwK": {
+      "idOrder": "-NxWOwa-IW0fFdbhPvM1",
+      "idOrderDetail": "-NxWOwjaZc3_3IzwoHwK",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    },
+    "-NxWPN_mlftustZOYZeh": {
+      "idOrder": "-NxWPNR8D7qqgwgBJ2mP",
+      "idOrderDetail": "-NxWPN_mlftustZOYZeh",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "nameProduct": "Nước ép cam",
+      "priceProduct": 36000,
+      "quantity": 2
+    },
+    "-NxWPN_tfZFk8Eex4pWW": {
+      "idOrder": "-NxWPNR8D7qqgwgBJ2mP",
+      "idOrderDetail": "-NxWPN_tfZFk8Eex4pWW",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    },
+    "-NxWPhQFs6PHDwiaM915": {
+      "idOrder": "-NxWPhJhSe62AX12uUhs",
+      "idOrderDetail": "-NxWPhQFs6PHDwiaM915",
+      "idSize": 0,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "nameProduct": "Nước ép cam",
+      "priceProduct": 36000,
+      "quantity": 2
+    },
+    "-NxWPhQHW3xgxn1s_7eP": {
+      "idOrder": "-NxWPhJhSe62AX12uUhs",
+      "idOrderDetail": "-NxWPhQHW3xgxn1s_7eP",
+      "idSize": 1,
+      "imgProduct": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "nameProduct": "Capuchino",
+      "priceProduct": 30000,
+      "quantity": 1
+    }
+  },
+  "Order_Management": {
+    "-NxWI5NKqJmADDPuhKyM": {
+      "date": "10/5/2024",
+      "id": "-NxWI5NKqJmADDPuhKyM",
+      "idCategory": 4,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 60000
+    },
+    "-NxWISR8fOx6S8IYkywt": {
+      "date": "10/5/2024",
+      "id": "-NxWISR8fOx6S8IYkywt",
+      "idCategory": 2,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 60000
+    },
+    "-NxWIbEy9K9HvcgeM_0h": {
+      "date": "10/5/2024",
+      "id": "-NxWIbEy9K9HvcgeM_0h",
+      "idCategory": 3,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 48000
+    },
+    "-NxWIeVIOvRO04eK0xXh": {
+      "date": "10/5/2024",
+      "id": "-NxWIeVIOvRO04eK0xXh",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 48000
+    },
+    "-NxWJli3xbMYM5GiiEY9": {
+      "date": "10/5/2024",
+      "id": "-NxWJli3xbMYM5GiiEY9",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 78000
+    },
+    "-NxWJqAb-3rspg8hlvE8": {
+      "date": "10/5/2024",
+      "id": "-NxWJqAb-3rspg8hlvE8",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 78000
+    },
+    "-NxWJt2Y1k1aiFXtm8Ll": {
+      "date": "10/5/2024",
+      "id": "-NxWJt2Y1k1aiFXtm8Ll",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 78000
+    },
+    "-NxWKRcINC0YrXiWMpG1": {
+      "date": "10/5/2024",
+      "id": "-NxWKRcINC0YrXiWMpG1",
+      "idCategory": 4,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 60000
+    },
+    "-NxWNFA4wms7_ll8XrT5": {
+      "date": "10/5/2024",
+      "id": "-NxWNFA4wms7_ll8XrT5",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 20000
+    },
+    "-NxWOwa-IW0fFdbhPvM1": {
+      "date": "10/5/2024",
+      "id": "-NxWOwa-IW0fFdbhPvM1",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 15000
+    },
+    "-NxWPNR8D7qqgwgBJ2mP": {
+      "date": "10/5/2024",
+      "id": "-NxWPNR8D7qqgwgBJ2mP",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 66000
+    },
+    "-NxWPhJhSe62AX12uUhs": {
+      "date": "10/5/2024",
+      "id": "-NxWPhJhSe62AX12uUhs",
+      "idCategory": 1,
+      "idUser": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "price": 66000
+    }
+  },
+  "Products": {
+    "-NxLYydbOT2loWk_C1o_": {
+      "describe": "Ngon",
+      "id": "-NxLYydbOT2loWk_C1o_",
+      "idCategory": "-NxFyxQwWwCKPM1CGpCW",
+      "name": "Capuchino",
+      "price": 30000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F-NxLYydbOT2loWk_C1o_?alt=media&token=446bead2-72db-456f-ad7b-2bb9bf6e65ab",
+      "status": 0
+    },
+    "-NxMU2QT_dKL--i6Zx0D": {
+      "describe": "ngon",
+      "id": "-NxMU2QT_dKL--i6Zx0D",
+      "idCategory": "-NxFziDbzkvB9ylfvC1v",
+      "name": "Nước ép cam",
+      "price": 18000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcc483ce7-8782-4a5d-a90a-c368d4f4b3b7?alt=media&token=a9eea9ba-e363-42dc-b801-b8db8491fd95",
+      "status": 0
+    },
+    "-NxMUCcWoQhTz8Ys63DT": {
+      "describe": "mát",
+      "id": "-NxMUCcWoQhTz8Ys63DT",
+      "idCategory": "-NxFzmHFLOppgdV4kY-F",
+      "name": "Soda chanh",
+      "price": 23000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F94496748-4f1e-4e71-99fa-06d3a1ca50bc?alt=media&token=72bd495c-7621-46bf-a5c1-ee151f21a304",
+      "status": 0
+    },
+    "-NxMULYoIAxhqRw6ILaf": {
+      "describe": "béo ngon",
+      "id": "-NxMULYoIAxhqRw6ILaf",
+      "idCategory": "-NxFzcP3GxT3yf3y5TZ5",
+      "name": "Trà sữa khoai môn",
+      "price": 27000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F29566ed0-78dd-4b27-b419-b42bbc159d60?alt=media&token=514416e6-668a-4203-8a93-ac271f08d6d2",
+      "status": 0
+    },
+    "-NxMUxsRYAsaROPJ0Iqi": {
+      "describe": "đắng nhẹ",
+      "id": "-NxMUxsRYAsaROPJ0Iqi",
+      "idCategory": "-NxFyxQwWwCKPM1CGpCW",
+      "name": "Cà phê đen",
+      "price": 20000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F8b41c400-4612-4673-ac78-29af9196f683?alt=media&token=2da93244-fd12-4416-86c1-36ec892f6922",
+      "status": 0
+    },
+    "-NxMV6PK4fWePYycOriy": {
+      "describe": "ngon mát",
+      "id": "-NxMV6PK4fWePYycOriy",
+      "idCategory": "-NxFziDbzkvB9ylfvC1v",
+      "name": "Nước ép dưa hấu",
+      "price": 25000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F54821d41-aec0-4874-bc23-e2808f78c93a?alt=media&token=aeef577b-b32a-45e5-9d13-323031a7d7f3",
+      "status": 0
+    },
+    "-NxMVJL9SjtzjlNvEBs6": {
+      "describe": "ngon",
+      "id": "-NxMVJL9SjtzjlNvEBs6",
+      "idCategory": "-NxFzcP3GxT3yf3y5TZ5",
+      "name": "Trà sữa trân châu",
+      "price": 25000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fa0ceabc4-fb15-49f8-b4fd-164b4af8f264?alt=media&token=31b49ca4-cedc-4de4-a199-e6f93015f495",
+      "status": 0
+    },
+    "-NxMVUK66uIgpCE3RovO": {
+      "describe": "ngon quá",
+      "id": "-NxMVUK66uIgpCE3RovO",
+      "idCategory": "-NxFzYpetlCt4xyqTJ7P",
+      "name": "Sinh tố bơ",
+      "price": 28000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fa579aad7-ed87-47a9-98ce-24b6f1e84caf?alt=media&token=62c57d14-4054-40db-bab8-47e6cfd8c45c",
+      "status": 0
+    },
+    "-NxMWMX5h1xzAmmcmx9H": {
+      "describe": "mát",
+      "id": "-NxMWMX5h1xzAmmcmx9H",
+      "idCategory": "-NxFzmHFLOppgdV4kY-F",
+      "name": "Soda thanh long",
+      "price": 30000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2F675c896c-4d6a-4f4d-996b-952a9a3aa360?alt=media&token=319a73a4-71b3-4158-8362-537676d34a26",
+      "status": 0
+    },
+    "-NxVBHOwa86Gcj6pBXmC": {
+      "describe": "ngon",
+      "id": "-NxVBHOwa86Gcj6pBXmC",
+      "idCategory": "-NxFzYpetlCt4xyqTJ7P",
+      "name": "Sinh tố dâu",
+      "price": 25000,
+      "purl": "https://firebasestorage.googleapis.com/v0/b/hancafe-3b24f.appspot.com/o/imagesProduct%2Fcf72b388-4c87-4741-aba4-29690bf7b49f?alt=media&token=2f2a2515-e24d-4ec7-b042-fd994c787dd6",
+      "status": 0
+    }
+  },
+  "Promotion": {
+    "-NxNf79KRcDLr6EWplyb": {
+      "code": "-NxNf79KRcDLr6EWplyb",
+      "description": "Giảm 50% bill",
+      "discount": "50%",
+      "endTime": "24/08/2024",
+      "name": "Khuyến mãi 1",
+      "startTime": "23/06/2024"
+    },
+    "-NxNfr8JwTuRBlvQ-7T5": {
+      "code": "-NxNfr8JwTuRBlvQ-7T5",
+      "description": "Giảm giá 20% hóa đơn",
+      "discount": "20%",
+      "endTime": "23/06/20222",
+      "name": "Khuyến mãi 2",
+      "startTime": "24/06/2002"
+    },
+    "-NxNnEAfU7iP_FXQZ_KG": {
+      "code": "-NxNnEAfU7iP_FXQZ_KG",
+      "description": "Giảm 10k",
+      "discount": "10000đ",
+      "endTime": "24/06/2002",
+      "name": "Khuyến mãi 3",
+      "startTime": "23/06/2002"
+    }
+  },
+  "Size": [
+    {
+      "id": 0,
+      "name": "S"
+    },
+    {
+      "id": 1,
+      "name": "M"
+    },
+    {
+      "id": 2,
+      "name": "L"
+    }
+  ],
+  "Users": {
+    "17evZAL9zmQhxuH7OWfa7mUqGVg1": {
+      "date": "",
+      "email": "tk02.phuong@gmail.com",
+      "id": "17evZAL9zmQhxuH7OWfa7mUqGVg1",
+      "name": "",
+      "phone": "",
+      "role": 2
+    },
+    "SrItWym27zVv8ciDjKFkPdACNfJ2": {
+      "date": "",
+      "email": "thaidatit202@gmail.com",
+      "id": "SrItWym27zVv8ciDjKFkPdACNfJ2",
+      "name": "",
+      "phone": "",
+      "role": 2
+    },
+    "gZ1aWDQMGmO6u4CLG4zqOUwuwEE3": {
+      "date": "",
+      "email": "tk01.phuong@gmail.com",
+      "id": "gZ1aWDQMGmO6u4CLG4zqOUwuwEE3",
+      "name": "",
+      "phone": "",
+      "role": 0
+    },
+    "i3XBuqr4sMfCMzI9LoupPP93ldq2": {
+      "date": "",
+      "email": "tk03.phuong@gmail.com",
+      "id": "i3XBuqr4sMfCMzI9LoupPP93ldq2",
+      "name": "",
+      "phone": "",
+      "role": 2
+    },
+    "uekTL2POsbVqVAEqVjVmQFK7N6F3": {
+      "date": "",
+      "email": "vantintty2019@gmail.com",
+      "id": "uekTL2POsbVqVAEqVjVmQFK7N6F3",
+      "name": "",
+      "phone": "",
+      "role": 0
+    },
+    "uwApjdBN6HW8aBhrMKJVnDKJ6392": {
+      "date": "",
+      "email": "thaidatho2002@gmail.com",
+      "id": "uwApjdBN6HW8aBhrMKJVnDKJ6392",
+      "name": "",
+      "phone": "",
+      "role": 0
+    },
+    "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2": {
+      "date": "",
+      "email": "vqdinh2202@gmail.com",
+      "id": "vvYgHDD7y1NZ9qAVt23AE9uhNIZ2",
+      "name": "",
+      "phone": "",
+      "role": 2
+    },
+    "xjXfhf23aAaK3Dv4oU6Z1vBC3Oh1": {
+      "date": "",
+      "email": "lequanquocthinh95th@gmail.com",
+      "id": "xjXfhf23aAaK3Dv4oU6Z1vBC3Oh1",
+      "name": "",
+      "phone": "",
+      "role": 0
+    }
+  }
+}
