@@ -1,24 +1,32 @@
 package com.example.hancafe.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
 public class User {
     String id;
     String email;
     String name;
     String date;
     String phone;
+    String address;
     int role;
 
     public User() {
     }
 
-    public User(String id, String email, String name, String date, String phone, int role) {
+    public User(String id, String email, String name, String date, String phone, String address, int role) {
         this.id = id;
         this.email = email;
         this.name = name;
         this.date = date;
         this.phone = phone;
+        this.address = address;
         this.role = role;
     }
+
 
     public String getId() {
         return id;
@@ -60,6 +68,14 @@ public class User {
         this.phone = phone;
     }
 
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
+    }
+
     public int getRole() {
         return role;
     }
@@ -67,4 +83,5 @@ public class User {
     public void setRole(int role) {
         this.role = role;
     }
+
 }

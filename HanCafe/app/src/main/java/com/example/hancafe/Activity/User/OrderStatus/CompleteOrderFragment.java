@@ -11,8 +11,9 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
-import com.example.hancafe.Domain.OrderDetail;
-import com.example.hancafe.Domain.Order_Management;
+
+import com.example.hancafe.Model.OrderDetail;
+import com.example.hancafe.Model.OrderManagement;
 import com.example.hancafe.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -30,7 +31,7 @@ public class CompleteOrderFragment extends Fragment {
     RecyclerView rvProduct;
     OrderStatusAdapter orderStatusAdapter;
     List<OrderDetail> orderDetails;
-    List<Order_Management> orderManagements;
+    List<OrderManagement> orderManagements;
     private static final int complete = 3;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -63,7 +64,7 @@ public class CompleteOrderFragment extends Fragment {
                         String idOrder = dataSnapshot.child("id").getValue(String.class);
                         int totalPrice = dataSnapshot.child("price").getValue(Integer.class);
                         String idUser = dataSnapshot.child("idUser").getValue(String.class);
-                        Order_Management orderManagement = new Order_Management(status, totalPrice, date, idOrder, idUser);
+                        OrderManagement orderManagement = new OrderManagement(status, totalPrice, date, idOrder, idUser);
 
                         FirebaseDatabase database = FirebaseDatabase.getInstance();
                         DatabaseReference orderDetailRef = database.getReference("OrderDetail");
@@ -95,7 +96,7 @@ public class CompleteOrderFragment extends Fragment {
 
                     }
                 }
-                orderStatusAdapter = new OrderStatusAdapter(orderManagements,  getActivity().getApplicationContext());
+                orderStatusAdapter = new OrderStatusAdapter(orderManagements, getActivity().getApplicationContext());
                 rvProduct.setAdapter(orderStatusAdapter);
             }
             @Override

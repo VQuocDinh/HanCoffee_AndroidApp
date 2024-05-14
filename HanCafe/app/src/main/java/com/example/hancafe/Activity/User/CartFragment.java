@@ -10,7 +10,7 @@ import android.widget.Button;
 import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
-import android.widget.TextView;
+import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -22,7 +22,7 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hancafe.Activity.Adapter.CartItemAdapter;
 import com.example.hancafe.Activity.Adapter.ProductsAdapter;
-import com.example.hancafe.Domain.CartItem;
+import com.example.hancafe.Model.CartItem;
 import com.example.hancafe.R;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
@@ -42,6 +42,7 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
     private Button btnOrderProceed;
     private RecyclerView rvProduct;
     private CheckBox cbSelectAll;
+    LinearLayout lnCart, lnCartEmpty;
     List<CartItem> cartItems = new ArrayList<>();
     CartItemAdapter cartItemAdapter;
     int countItem = 0;
@@ -55,6 +56,12 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
         btnBack = view.findViewById(R.id.btnBack);
         rvProduct = view.findViewById(R.id.rvProduct);
         cbSelectAll = view.findViewById(R.id.cbSelectAll);
+
+        lnCart = view.findViewById(R.id.lnCart);
+        lnCartEmpty = view.findViewById(R.id.lnCartEmpty);
+
+        lnCartEmpty.setVisibility(View.GONE);
+
         initCartDetail();
         setEvent();
         return view;
@@ -81,6 +88,7 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
                     String jsonSelectedList = gson.toJson(selectedList);
                     Intent intent = new Intent(getActivity(), Pay.class);
                     intent.putExtra("selectedList", jsonSelectedList);
+                    intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK | Intent.FLAG_ACTIVITY_CLEAR_TASK);
                     startActivity(intent);
                 }
             }
@@ -117,56 +125,54 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
         LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(getContext(), LinearLayoutManager.VERTICAL, false);
         rvProduct.setLayoutManager(linearLayoutManagerProduct);
 
-        FirebaseDatabase database = FirebaseDatabase.getInstance();
-        DatabaseReference cartDetailRef = database.getReference("CartDetail");
         cartItems = new ArrayList<>();
 
+        cartItemAdapter = new CartItemAdapter(cartItems);
+        rvProduct.setAdapter(cartItemAdapter);
 
-        cartDetailRef.orderByChild("idCart").equalTo(idUser).addChildEventListener(new ChildEventListener() {
+        DatabaseReference cartDetailRef = FirebaseDatabase.getInstance().getReference("CartDetail");
+
+        cartDetailRef.orderByChild("idCart").equalTo(idUser).addListenerForSingleValueEvent(new ValueEventListener() {
             @Override
-            public void onChildAdded(@NonNull DataSnapshot cartItemSnapshot, @Nullable String previousChildName) {
+            public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
+                if (dataSnapshot.exists()) {
+                    // Giỏ hàng không trống
+                    lnCart.setVisibility(View.VISIBLE);
+                    lnCartEmpty.setVisibility(View.GONE);
+                    for (DataSnapshot cartItemSnapshot : dataSnapshot.getChildren()) {
+                        String idProduct = cartItemSnapshot.child("idProduct").getValue(String.class);
+                        int idSize = cartItemSnapshot.child("idSize").getValue(Integer.class);
+                        int quantity = cartItemSnapshot.child("quantity").getValue(Integer.class);
+                        int idCartItem = cartItemSnapshot.child("idCartItem").getValue(Integer.class);
 
-                String idProduct = cartItemSnapshot.child("idProduct").getValue(String.class);
-                int idSize = cartItemSnapshot.child("idSize").getValue(Integer.class);
-                int quantity = cartItemSnapshot.child("quantity").getValue(Integer.class);
-                int idCartItem = cartItemSnapshot.child("idCartItem").getValue(Integer.class);
+                        DatabaseReference productRef = FirebaseDatabase.getInstance().getReference("Products").child(idProduct);
+                        productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot productSnapshot) {
+                                if (productSnapshot.exists()) {
+                                    String productName = productSnapshot.child("name").getValue(String.class);
+                                    String productImg = productSnapshot.child("purl").getValue(String.class);
+                                    int productPrice = productSnapshot.child("price").getValue(Integer.class);
 
-                DatabaseReference productRef = database.getReference("Products").child(String.valueOf(idProduct));
-                productRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot productSnapshot) {
+                                    CartItem cartItem = new CartItem(idProduct, quantity, idSize, idCartItem, productPrice, productName, productImg);
+                                    cartItems.add(cartItem);
+                                    cartItemAdapter.notifyItemInserted(cartItems.size() - 1);
+                                    countItem++;
+                                }
+                            }
 
-                        if (productSnapshot.exists()) {
-                            String productName = productSnapshot.child("name").getValue(String.class);
-                            String productImg = productSnapshot.child("purl").getValue(String.class);
-                            int productPrice = productSnapshot.child("price").getValue(Integer.class);
-
-                            CartItem cartItem = new CartItem(idProduct, quantity, idSize, idCartItem, productPrice, productName, productImg);
-                            cartItems.add(cartItem);
-                            cartItemAdapter.notifyDataSetChanged();
-                            countItem++;
-                        }
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+                                Log.e("FirebaseData", "Lỗi khi truy cập dữ liệu từ Firebase: " + error.getMessage());
+                            }
+                        });
                     }
+                } else {
+                    // Giỏ hàng trống
+                    lnCart.setVisibility(View.GONE);
+                    lnCartEmpty.setVisibility(View.VISIBLE);
 
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-                        Log.e("FirebaseData", "Lỗi khi truy cập dữ liệu từ Firebase: " + error.getMessage());
-                    }
-                });
-                cartItemAdapter = new CartItemAdapter(cartItems);
-                rvProduct.setAdapter(cartItemAdapter);
-            }
-
-            @Override
-            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
-            }
-
-            @Override
-            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
-            }
-
-            @Override
-            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+                }
             }
 
             @Override
@@ -174,6 +180,75 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
                 Log.e("FirebaseData", "Lỗi khi truy cập dữ liệu từ Firebase: " + error.getMessage());
             }
         });
+        cartItemAdapter.notifyDataSetChanged();
+
+//        FirebaseDatabase database = FirebaseDatabase.getInstance();
+//        DatabaseReference cartDetailRef = database.getReference("CartDetail");
+//        cartItems = new ArrayList<>();
+//
+//
+//        cartDetailRef.orderByChild("idCart").equalTo(idUser).addChildEventListener(new ChildEventListener() {
+//            @Override
+//            public void onChildAdded(@NonNull DataSnapshot cartItemSnapshot, @Nullable String previousChildName) {
+//
+//                if(cartItemSnapshot.exists()){
+//                    lnCart.setVisibility(View.VISIBLE);
+//                    lnCartEmpty.setVisibility(View.GONE);
+//
+//                    String idProduct = cartItemSnapshot.child("idProduct").getValue(String.class);
+//                    int idSize = cartItemSnapshot.child("idSize").getValue(Integer.class);
+//                    int quantity = cartItemSnapshot.child("quantity").getValue(Integer.class);
+//                    int idCartItem = cartItemSnapshot.child("idCartItem").getValue(Integer.class);
+//
+//                    DatabaseReference productRef = database.getReference("Products").child(String.valueOf(idProduct));
+//                    productRef.addListenerForSingleValueEvent(new ValueEventListener() {
+//                        @Override
+//                        public void onDataChange(@NonNull DataSnapshot productSnapshot) {
+//
+//                            if (productSnapshot.exists()) {
+//                                String productName = productSnapshot.child("name").getValue(String.class);
+//                                String productImg = productSnapshot.child("purl").getValue(String.class);
+//                                int productPrice = productSnapshot.child("price").getValue(Integer.class);
+//
+//                                CartItem cartItem = new CartItem(idProduct, quantity, idSize, idCartItem, productPrice, productName, productImg);
+//                                cartItems.add(cartItem);
+//                                cartItemAdapter.notifyDataSetChanged();
+//                                countItem++;
+//                            }
+//                        }
+//
+//                        @Override
+//                        public void onCancelled(@NonNull DatabaseError error) {
+//                            Log.e("FirebaseData", "Lỗi khi truy cập dữ liệu từ Firebase: " + error.getMessage());
+//                        }
+//                    });
+//                    cartItemAdapter = new CartItemAdapter(cartItems);
+//                    rvProduct.setAdapter(cartItemAdapter);
+//                } else {
+//                    lnCart.setVisibility(View.GONE);
+//                    lnCartEmpty.setVisibility(View.VISIBLE);
+//                }
+//
+//
+//            }
+//
+//            @Override
+//            public void onChildChanged(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//            }
+//
+//            @Override
+//            public void onChildRemoved(@NonNull DataSnapshot snapshot) {
+//            }
+//
+//            @Override
+//            public void onChildMoved(@NonNull DataSnapshot snapshot, @Nullable String previousChildName) {
+//            }
+//
+//            @Override
+//            public void onCancelled(@NonNull DatabaseError error) {
+//                Log.e("FirebaseData", "Lỗi khi truy cập dữ liệu từ Firebase: " + error.getMessage());
+//            }
+//        });
     }
 
     @Override

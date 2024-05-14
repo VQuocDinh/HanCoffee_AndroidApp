@@ -1,4 +1,4 @@
-package com.example.hancafe.Domain;
+package com.example.hancafe.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;

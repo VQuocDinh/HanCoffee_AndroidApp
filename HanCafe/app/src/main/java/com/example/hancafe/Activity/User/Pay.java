@@ -23,10 +23,10 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
 import com.example.hancafe.Activity.Adapter.PayAdapter;
-import com.example.hancafe.Domain.CartItem;
-import com.example.hancafe.Domain.OrderDetail;
-import com.example.hancafe.Domain.Order_Management;
-import com.example.hancafe.Domain.Promotion;
+import com.example.hancafe.Model.CartItem;
+import com.example.hancafe.Model.Promotion;
+import com.example.hancafe.Model.OrderDetail;
+import com.example.hancafe.Model.OrderManagement;
 import com.example.hancafe.Payment.Zalo.Api.CreateOrder;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -93,17 +93,20 @@ public class Pay extends AppCompatActivity {
     }
 
     private void initData() {
+
         LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvProduct.setLayoutManager(linearLayoutManagerProduct);
 
         Intent intent = getIntent();
         if (intent != null && intent.hasExtra("selectedList")) {
+
             String jsonString = intent.getStringExtra("selectedList");
 
             Gson gson = new Gson();
             Type listType = new TypeToken<ArrayList<CartItem>>() {
             }.getType();
             receivedList = gson.fromJson(jsonString, listType);
+
             payAdapter = new PayAdapter(receivedList, promotions);
             rvProduct.setAdapter(payAdapter);
             receivedList.size();
@@ -196,7 +199,6 @@ public class Pay extends AppCompatActivity {
 //        };
 
         adapterShipMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
-//        adapterPayMethod.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
         spnDelivery.setAdapter(adapterShipMethod);
         spnPromotionCode.setAdapter(adapterShipMethod);
 //        spnPay.setAdapter(adapterPayMethod);
@@ -213,6 +215,9 @@ public class Pay extends AppCompatActivity {
             }
         });
 
+        getInformationUser();
+
+        btnUpdateAddress.setVisibility(View.GONE);
         btnUpdateAddress.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -223,104 +228,12 @@ public class Pay extends AppCompatActivity {
         btnOrder.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
-                FirebaseUser currentUser = firebaseAuth.getCurrentUser();
-
-                FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                DatabaseReference orderManagementRef = firebaseDatabase.getReference("Order_Management");
-
-                orderManagementRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                    @Override
-                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                        String idUser = "";
-                        if (currentUser != null) {
-                            idUser = currentUser.getUid();
-                        }
-                        Calendar calendar = Calendar.getInstance();
-                        int year = calendar.get(Calendar.YEAR);
-                        int month = calendar.get(Calendar.MONTH) + 1;
-                        int day = calendar.get(Calendar.DAY_OF_MONTH);
-                        String curentDay = day + "/" + month + "/" + year;
-
-//                        String promotion = String.valueOf(spnPromotionCode.getSelectedItemId());
-                        DatabaseReference newRef = orderManagementRef.push();
-                        String id = newRef.getKey();
-                        Order_Management orderManagement = new Order_Management(1, totalPriceAfterDiscount, curentDay, id, idUser);
-                        orderManagementRef.child(id).setValue(orderManagement);
-                        for (CartItem cartItem : receivedList) {
-                            FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
-                            DatabaseReference orderDetailRef = firebaseDatabase.getReference("OrderDetail");
-                            orderDetailRef.addListenerForSingleValueEvent(new ValueEventListener() {
-                                @Override
-                                public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                    int totalPriceProduct = cartItem.getProductPrice() * cartItem.getQuantity();
-                                    DatabaseReference newRef = orderDetailRef.push();
-                                    String idOrderDetail = newRef.getKey();
-                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail, id, cartItem.getProductImg(), cartItem.getProductName(), cartItem.getSizeId(), cartItem.getQuantity(), totalPriceProduct);
-                                    orderDetailRef.child(idOrderDetail).setValue(orderDetail);
-                                }
-
-                                @Override
-                                public void onCancelled(@NonNull DatabaseError error) {
-
-                                }
-                            });
-                        }
-                    }
-
-                    @Override
-                    public void onCancelled(@NonNull DatabaseError error) {
-
-                    }
-                });
-
-                for (CartItem cartItem : receivedList) {
-                    DatabaseReference cartDetailRef = FirebaseDatabase.getInstance().getReference("CartDetail");
-                    cartDetailRef.orderByChild("idCartItem").equalTo(cartItem.getIdCartItem()).addListenerForSingleValueEvent(new ValueEventListener() {
-                        @Override
-                        public void onDataChange(@NonNull DataSnapshot snapshot) {
-                            for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
-                                    @Override
-                                    public void onSuccess(Void unused) {
-                                    }
-                                }).addOnFailureListener(new OnFailureListener() {
-                                    @Override
-                                    public void onFailure(@NonNull Exception e) {
-
-                                    }
-                                });
-                            }
-                        }
-
-                        @Override
-                        public void onCancelled(@NonNull DatabaseError error) {
-
-                        }
-                    });
+                getInformationUser();
+                if(tvTen.getText().toString().isEmpty() || tvSdt.getText().toString().isEmpty() || tvDiaChi.getText().toString().isEmpty()){
+                    Toast.makeText(Pay.this, "Vui lòng cập nhật thông tin cá nhân để có thể đặt hàng", Toast.LENGTH_SHORT).show();
+                } else {
+                    orderSuccess(Pay.this);
                 }
-
-                AlertDialog.Builder builder = new android.app.AlertDialog.Builder(v.getContext());
-                builder.setMessage("Đặt hàng thành công")
-                        .setPositiveButton("Xem đơn hàng", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                Intent intent = new Intent(Pay.this, Orders.class);
-                                startActivity(intent);
-                            }
-                        })
-                        .setNegativeButton("Tiếp tục mua hàng", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                                Intent intent = new Intent(Pay.this, MainActivity.class);
-                                startActivity(intent);
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-
-//                Toast.makeText(Pay.this, "Đặt hàng thành công", Toast.LENGTH_SHORT).show();
 
             }
         });
@@ -328,37 +241,42 @@ public class Pay extends AppCompatActivity {
         btnOrderPaymentZalo.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                CreateOrder orderApi = new CreateOrder();
+                if(tvTen.getText().toString().isEmpty() || tvSdt.getText().toString().isEmpty() || tvDiaChi.getText().toString().isEmpty()){
+                    Toast.makeText(Pay.this, "Vui lòng cập nhật thông tin cá nhân để có thể đặt hàng", Toast.LENGTH_SHORT).show();
+                } else {
+                    CreateOrder orderApi = new CreateOrder();
 
-                try {
-                    JSONObject data = orderApi.createOrder(String.valueOf(totalPriceAfterDiscount));
-                    String code = data.getString("return_code");
+                    try {
+                        JSONObject data = orderApi.createOrder(String.valueOf(totalPriceAfterDiscount));
+                        String code = data.getString("return_code");
 
-                    if (code.equals("1")) {
+                        if (code.equals("1")) {
 
-                        String token = data.getString("zp_trans_token");
-                        ZaloPaySDK.getInstance().payOrder(Pay.this, token, "demozpdk://app", new PayOrderListener() {
-                            @Override
-                            public void onPaymentSucceeded(String s, String s1, String s2) {
-                                Toast.makeText(Pay.this, "Thanh toán thành công", Toast.LENGTH_SHORT);
-                                paymentSuccess(Pay.this);
-                            }
+                            String token = data.getString("zp_trans_token");
+                            ZaloPaySDK.getInstance().payOrder(Pay.this, token, "demozpdk://app", new PayOrderListener() {
+                                @Override
+                                public void onPaymentSucceeded(String s, String s1, String s2) {
+                                    Toast.makeText(Pay.this, "Thanh toán thành công", Toast.LENGTH_SHORT);
+                                    orderSuccess(Pay.this);
+                                }
 
-                            @Override
-                            public void onPaymentCanceled(String s, String s1) {
-                                Toast.makeText(Pay.this, "Thanh toán thất bại", Toast.LENGTH_SHORT);
-                            }
+                                @Override
+                                public void onPaymentCanceled(String s, String s1) {
+                                    Toast.makeText(Pay.this, "Thanh toán thất bại", Toast.LENGTH_SHORT);
+                                }
 
-                            @Override
-                            public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
-                                Toast.makeText(Pay.this, "Đã xảy ra sự cố trong quá trình thanh toán", Toast.LENGTH_SHORT);
-                            }
-                        });
+                                @Override
+                                public void onPaymentError(ZaloPayError zaloPayError, String s, String s1) {
+                                    Toast.makeText(Pay.this, "Đã xảy ra sự cố trong quá trình thanh toán", Toast.LENGTH_SHORT);
+                                }
+                            });
+                        }
+
+                    } catch (Exception e) {
+                        e.printStackTrace();
                     }
-
-                } catch (Exception e) {
-                    e.printStackTrace();
                 }
+
             }
         });
         spnPromotionCode.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
@@ -435,7 +353,7 @@ public class Pay extends AppCompatActivity {
     }
 
 
-    private void paymentSuccess(Context context) {
+    private void orderSuccess(Context context) {
         FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
         FirebaseUser currentUser = firebaseAuth.getCurrentUser();
 
@@ -457,7 +375,7 @@ public class Pay extends AppCompatActivity {
 
                 DatabaseReference newRef = orderManagementRef.push();
                 String id = newRef.getKey();
-                Order_Management orderManagement = new Order_Management(1, totalPriceAfterDiscount, curentDay, id, idUser);
+                OrderManagement orderManagement = new OrderManagement(1, totalPriceAfterDiscount, curentDay, id, idUser);
                 orderManagementRef.child(id).setValue(orderManagement);
                 for (CartItem cartItem : receivedList) {
                     FirebaseDatabase firebaseDatabase = FirebaseDatabase.getInstance();
@@ -532,6 +450,7 @@ public class Pay extends AppCompatActivity {
                 });
         AlertDialog alertDialog = builder.create();
         alertDialog.show();
+
     }
 
     private void showBottomSheetDialog() {
@@ -543,28 +462,70 @@ public class Pay extends AppCompatActivity {
         TextView tvSdtUpdate = bottomSheetDialog.findViewById(R.id.tvSdtUpdate);
         TextView tvDiaChiUpdate = bottomSheetDialog.findViewById(R.id.tvDiaChiUpdate);
 
-        btnUpdate.setBackgroundColor(getResources().getColor(R.color.mainColor));
-        tvTenUpdate.setText(tvTen.getText());
-        tvSdtUpdate.setText(tvSdt.getText());
-        tvDiaChiUpdate.setText(tvDiaChi.getText());
-
-        btnUpdate.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                if (tvTenUpdate.getText() == "" || tvSdtUpdate.getText() == "" || tvDiaChiUpdate.getText() == "") {
-                    Toast.makeText(Pay.this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
-
-                } else {
-                    tvTen.setText(tvTenUpdate.getText());
-                    tvSdt.setText(tvSdtUpdate.getText());
-                    tvDiaChi.setText(tvDiaChiUpdate.getText());
-                    bottomSheetDialog.cancel();
-                }
-            }
-        });
+//        btnUpdate.setBackgroundColor(getResources().getColor(R.color.mainColor));
+//
+//        tvTenUpdate.setText(tvTen.getText());
+//        tvSdtUpdate.setText(tvSdt.getText());
+//        tvDiaChiUpdate.setText(tvDiaChi.getText());
+//
+//
+//        btnUpdate.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                if (tvTenUpdate.getText() == null || tvSdtUpdate.getText() == null || tvDiaChiUpdate.getText() == null) {
+//                    Toast.makeText(Pay.this, "Vui lòng điền đầy đủ thông tin", Toast.LENGTH_SHORT).show();
+//
+//                } else {
+////                    tvTen.setText(tvTenUpdate.getText());
+////                    tvSdt.setText(tvSdtUpdate.getText());
+////                    tvDiaChi.setText(tvDiaChiUpdate.getText());
+//
+//
+//                    bottomSheetDialog.cancel();
+//                }
+//            }
+//        });
         bottomSheetDialog.show();
 //        orderStatusAdapter.notifyDataSetChanged();
 
+    }
+
+    private void getInformationUser(){
+        // Lấy thông tin về người dùng đang đăng nhập
+        FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
+        if (currentUser != null) {
+            // Lấy UID của người dùng đang đăng nhập
+            String uid = currentUser.getUid();
+
+            // Tìm kiếm thông tin người dùng trong cơ sở dữ liệu của bạn
+            DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
+            userRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                    // Kiểm tra xem dữ liệu có tồn tại không
+                    if (snapshot.exists()) {
+                        // Lấy tên của người dùng
+                        String userName = snapshot.child("name").getValue(String.class);
+                        String phone = snapshot.child("phone").getValue(String.class);
+                        String address = snapshot.child("address").getValue(String.class);
+                        // Hiển thị tên của người dùng
+                        tvTen.setText(userName);
+                        tvSdt.setText(phone);
+                        tvDiaChi.setText(address);
+                    } else {
+                        // Hiển thị thông báo nếu không tìm thấy thông tin người dùng
+                        Toast.makeText(Pay.this, "Không tìm thấy thông tin người dùng", Toast.LENGTH_SHORT).show();
+                    }
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Xử lý khi có lỗi xảy ra
+                    Toast.makeText(Pay.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT);
+                }
+            });
+        }
     }
 
     private void setControl() {

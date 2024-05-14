@@ -11,21 +11,21 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.hancafe.Domain.Category;
+import com.example.hancafe.Model.CategoryProduct;
 import com.example.hancafe.R;
 
 
 import java.util.List;
 
 public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHolder> {
-    private List<Category> catData;
+    private List<CategoryProduct> catData;
     private OnItemClickListener listener;
 
-    public CategoryMainAdapter(List<Category> catData) {
+    public CategoryMainAdapter(List<CategoryProduct> catData) {
         this.catData = catData;
     }
 
-    public List<Category> getCatData() {
+    public List<CategoryProduct> getCatData() {
         return catData;
     }
 
@@ -39,7 +39,7 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryAdapter.Vi
 
     @Override
     public void onBindViewHolder(@NonNull CategoryAdapter.ViewHolder holder, int position) {
-        Category category = catData.get(position);
+        CategoryProduct category = catData.get(position);
 
         holder.tvCategoryName.setText(category.getCatName());
         Glide.with(holder.itemView.getContext())
@@ -49,9 +49,13 @@ public class CategoryMainAdapter extends RecyclerView.Adapter<CategoryAdapter.Vi
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemCategoryClick(position);
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemCategoryClick(position); // Gọi phương thức onItemClick
                 }
+//                if (listener != null) {
+//                    listener.onItemCategoryClick(position);
+//                }
             }
         });
     }

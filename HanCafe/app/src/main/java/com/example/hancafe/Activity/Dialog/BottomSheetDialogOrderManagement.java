@@ -160,7 +160,7 @@ public class BottomSheetDialogOrderManagement extends BottomSheetDialogFragment 
 
 
 //        tvBtsCategoryItemId.setText(user.getEmail());
-        tvBtsCategoryItemName.setText(orderManagement.getName());
+//        tvBtsCategoryItemName.setText(orderManagement.getName());
         // Cập nhật định dạng tiền tệ
         int price = orderManagement.getPrice();
         DecimalFormat df = new DecimalFormat("###,###.##");
@@ -173,8 +173,8 @@ public class BottomSheetDialogOrderManagement extends BottomSheetDialogFragment 
         tvBtsCategoryItemDateTime.setText(orderManagement.getDate());
 
         //tải ảnh từ firebase
-        String urlImage = orderManagement.getPicure();
-        Glide.with(getContext()).load(urlImage).transform(new CircleCrop()).placeholder(R.drawable.milk_coffee).into(ivBtsCategoryItemImage);
+//        String urlImage = orderManagement.getPicure();
+//        Glide.with(getContext()).load(urlImage).transform(new CircleCrop()).placeholder(R.drawable.milk_coffee).into(ivBtsCategoryItemImage);
 
         // Lấy DatabaseReference cho Firebase
 //        databaseReference = FirebaseDatabase.getInstance().getReference("Order_Management");

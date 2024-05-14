@@ -61,17 +61,20 @@ dependencies {
     implementation("com.orhanobut:dialogplus:1.11@aar")
 
     implementation ("com.google.code.gson:gson:2.8.9")
-    implementation ("com.squareup.retrofit2:converter-gson:2.9.0")
-    implementation ("com.squareup.retrofit2:retrofit:2.9.0")
+    implementation ("com.squareup.retrofit2:converter-gson:2.11.0")
+    implementation ("com.squareup.retrofit2:retrofit:2.11.0")
     implementation("com.google.android.gms:play-services-maps:18.2.0")
     implementation("com.google.firebase:firebase-database:20.3.1")
     implementation("com.google.firebase:firebase-storage:20.3.0")
     implementation ("com.github.bumptech.glide:glide:4.11.0")
     implementation("androidx.activity:activity:1.8.0")
     implementation(fileTree(mapOf(
-        "dir" to "D:\\hk2-nam4\\lap-trinh-di-dong\\git\\HanCoffee_AndroidApp\\HanCafe\\PAYMENT",
+        "dir" to "C:\\Users\\Admin\\Desktop\\HanCoffee_AndroidApp\\HanCafe\\PAYMENT",
         "include" to listOf("*.aar", "*.jar")
     )))
+    implementation(libs.gson)
+    implementation(libs.retrofit)
+    implementation(libs.converter.gson)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")

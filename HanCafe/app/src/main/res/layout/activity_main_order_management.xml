@@ -5,7 +5,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/red"
-    tools:context=".Activity.User.Order.Management.MainOrderActivity">
+    tools:context=".Activity.Admin.OrderAdminFragment">
 
     <LinearLayout
         android:layout_width="match_parent"

@@ -8,6 +8,7 @@ import android.os.Parcelable;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
 import android.widget.TextView;
@@ -19,8 +20,9 @@ import androidx.recyclerview.widget.RecyclerView;
 import com.bumptech.glide.Glide;
 import com.example.hancafe.Activity.User.Bill;
 import com.example.hancafe.Activity.User.Pay;
-import com.example.hancafe.Domain.OrderDetail;
-import com.example.hancafe.Domain.Order_Management;
+
+import com.example.hancafe.Model.OrderManagement;
+import com.example.hancafe.Model.OrderDetail;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,11 +36,11 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.ViewHolder> {
-    private List<Order_Management> orderManagements;
+    private List<OrderManagement> orderManagements;
     private Context context;
 
 
-    public OrderStatusAdapter(List<Order_Management> orderManagements, Context context) {
+    public OrderStatusAdapter(List<OrderManagement> orderManagements, Context context) {
         this.orderManagements = orderManagements;
         this.context = context;
     }
@@ -52,7 +54,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
 
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
-        Order_Management orderManagement = orderManagements.get(position);
+        OrderManagement orderManagement = orderManagements.get(position);
         holder.tvTotalPrice.setText(String.valueOf(orderManagement.getPrice()));
         OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(orderManagement.getOrderDetails());
         holder.chillRecycleView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
@@ -114,7 +116,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             public void onClick(View v) {
                 Intent intent = new Intent(context, Bill.class);
                 intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
-                intent.putExtra("orderManagement",orderManagement);
+                intent.putExtra("orderManagement", (Parcelable) orderManagement);
                 intent.putParcelableArrayListExtra("orderDetails", (ArrayList<? extends Parcelable>) orderManagement.getOrderDetails());
                 context.startActivity(intent);
             }

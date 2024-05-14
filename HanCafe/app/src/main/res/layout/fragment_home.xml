@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="@drawable/bgr_home"
     android:orientation="vertical"
-    tools:context=".Activity.MainActivity">
+    tools:context=".Activity.User.HomeFragment">
 
 
     <LinearLayout
@@ -24,6 +24,7 @@
                 android:layout_width="wrap_content"
                 android:layout_height="match_parent"
                 android:text="Han Coffee"
+                android:textSize="24sp"
                 style="@style/h1_bold_white" />
         </androidx.appcompat.widget.Toolbar>
 
@@ -32,36 +33,9 @@
             android:layout_height="40dp"
             android:background="@drawable/gray_background"
             android:layout_margin="16dp"
+            app:iconifiedByDefault="false"
+            app:queryHint="Tìm kiếm..."
             android:id="@+id/svSearch"/>
-<!--        <LinearLayout-->
-<!--            android:layout_width="match_parent"-->
-<!--            android:layout_height="wrap_content"-->
-<!--            android:layout_marginLeft="16dp"-->
-<!--            android:layout_marginRight="16dp"-->
-<!--            android:background="@drawable/search_background"-->
-<!--            android:orientation="horizontal">-->
-
-
-<!--            <EditText-->
-<!--                android:id="@+id/edtSearch"-->
-<!--                android:layout_width="280dp"-->
-<!--                android:layout_height="match_parent"-->
-<!--                android:layout_marginLeft="8dp"-->
-<!--                android:layout_weight="1"-->
-<!--                android:backgroundTint="@color/white"-->
-<!--                android:ems="10"-->
-<!--                android:hint="Tìm sản phẩm"-->
-<!--                android:inputType="text"-->
-<!--                android:textColorHint="#88000000"-->
-<!--                android:textStyle="bold" />-->
-
-<!--            <Button-->
-<!--                android:id="@+id/btnSearch"-->
-<!--                android:layout_width="wrap_content"-->
-<!--                android:layout_height="wrap_content"-->
-<!--                android:background="@drawable/transparent_background"-->
-<!--                android:drawableEnd="@drawable/search_icon" />-->
-<!--        </LinearLayout>-->
 
         <ScrollView
             android:layout_width="match_parent"
@@ -73,30 +47,26 @@
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
                 android:orientation="vertical">
+                <TextView
+                    android:id="@+id/tvGoodMorning"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_marginTop="48dp"
+                    android:layout_marginLeft="16dp"
+                    android:layout_marginRight="16dp"
+                    android:text="HAVE A GOOD DAY"
+                    android:textColor="@color/white"
+                    android:textSize="34sp"
+                    android:textStyle="bold" />
 
-                <LinearLayout
+                <TextView
+                    android:id="@+id/textView3"
                     android:layout_width="match_parent"
                     android:layout_height="match_parent"
                     android:layout_margin="16dp"
-                    android:orientation="vertical">
+                    android:text="Enjoy the morning with a cup of coffee"
+                    style="@style/h3_bold_white" />
 
-                    <TextView
-                        android:id="@+id/tvGoodMorning"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:layout_marginTop="64dp"
-                        android:text="HAVE A GOOD DAY"
-                        android:textColor="@color/white"
-                        android:textSize="34sp"
-                        android:textStyle="bold" />
-
-                    <TextView
-                        android:id="@+id/textView3"
-                        android:layout_width="match_parent"
-                        android:layout_height="match_parent"
-                        android:text="Enjoy the morning with a cup of coffee"
-                        style="@style/h3_bold_white" />
-                </LinearLayout>
 
 
                 <androidx.recyclerview.widget.RecyclerView
@@ -125,8 +95,7 @@
                         android:id="@+id/rvProduct"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"
-                        android:nestedScrollingEnabled="false"
-                        android:paddingBottom="250dp">
+                        android:nestedScrollingEnabled="false">
 
                     </androidx.recyclerview.widget.RecyclerView>
                 </androidx.core.widget.NestedScrollView>

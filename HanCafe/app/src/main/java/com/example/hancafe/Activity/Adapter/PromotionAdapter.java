@@ -8,7 +8,7 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
-import com.example.hancafe.Domain.Promotion;
+import com.example.hancafe.Model.Promotion;
 import com.example.hancafe.R;
 
 import java.util.List;

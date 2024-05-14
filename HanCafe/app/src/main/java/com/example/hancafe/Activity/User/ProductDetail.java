@@ -16,8 +16,8 @@ import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
 
-import com.example.hancafe.Domain.CartDetail;
-import com.example.hancafe.Domain.Product;
+import com.example.hancafe.Model.CartDetail;
+import com.example.hancafe.Model.Product;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -30,10 +30,11 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
 public class ProductDetail extends AppCompatActivity {
-    private TextView tvQuantity, tvNameProduct, tvProductInfor;
+    private TextView tvQuantity, tvNameProduct, tvProductInfor, tvCartCount;
     private Button btn1, btn2, btn3, btnDecrease, btnIncrease, btnAddCart, btnSmallSize, btnMidSize, btnBigSize;
     private ImageView btnBack, btnCart, imgProduct;
     private int count = 1;
+    private int cartItemCount = 0;
     private Boolean btnSmallSizeIsActive, btnMidSizeIsActive, btnBigSizeIsActive;
     private int idSize = 0;
 
@@ -43,7 +44,35 @@ public class ProductDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_product_detail);
         setControl();
+        initCartCount();
         setEvent();
+    }
+
+    private void initCartCount() {
+        FirebaseAuth firebaseAuth = FirebaseAuth.getInstance();
+        FirebaseUser currentUser = firebaseAuth.getCurrentUser();
+
+        if (currentUser != null) {
+            DatabaseReference cartRef = FirebaseDatabase.getInstance().getReference("CartDetail");
+            cartRef.addValueEventListener(new ValueEventListener() {
+                @Override
+                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                    cartItemCount = 0;
+                    for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                        CartDetail cartDetail = dataSnapshot.getValue(CartDetail.class);
+                        if (cartDetail != null && cartDetail.getIdCart().equals(currentUser.getUid())) {
+                            cartItemCount += cartDetail.getQuantity();
+                        }
+                    }
+                    tvCartCount.setText(String.valueOf(cartItemCount));
+                }
+
+                @Override
+                public void onCancelled(@NonNull DatabaseError error) {
+                    // Handle possible errors.
+                }
+            });
+        }
     }
 
     private void setControl() {
@@ -62,6 +91,7 @@ public class ProductDetail extends AppCompatActivity {
         imgProduct = findViewById(R.id.imgProduct);
         tvNameProduct = findViewById(R.id.tvNameProduct);
         tvProductInfor = findViewById(R.id.tvProductInfor);
+        tvCartCount = findViewById(R.id.tvCartCount);
 
     }
 
@@ -69,10 +99,10 @@ public class ProductDetail extends AppCompatActivity {
         Intent intent = getIntent();
         Product product = (Product) intent.getSerializableExtra("product");
         Glide.with(this)
-                .load(product.getImage())
+                .load(product.getPurl())
                 .into(imgProduct);
         tvNameProduct.setText(product.getName());
-        tvProductInfor.setText(product.getDesc());
+        tvProductInfor.setText(product.getDescribe());
 
         btn1.setBackgroundColor(getResources().getColor(R.color.black));
         btn2.setBackgroundColor(getResources().getColor(R.color.mainColor));

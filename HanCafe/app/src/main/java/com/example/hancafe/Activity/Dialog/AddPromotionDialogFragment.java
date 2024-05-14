@@ -11,7 +11,7 @@ import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.DialogFragment;
 
-import com.example.hancafe.Domain.Promotion;
+import com.example.hancafe.Model.Promotion;
 import com.example.hancafe.R;
 
 import java.util.Random;

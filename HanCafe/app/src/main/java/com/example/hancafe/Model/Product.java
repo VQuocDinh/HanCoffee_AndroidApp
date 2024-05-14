@@ -2,24 +2,45 @@ package com.example.hancafe.Model;
 
 import android.os.Parcel;
 import android.os.Parcelable;
-import android.widget.EditText;
 
 import androidx.annotation.NonNull;
 
-public class Product implements Parcelable {
-    public Product(int status) {
-        this.status = status;
+import java.io.Serializable;
+
+public class Product implements Serializable, Parcelable {
+    private String purl, name, describe, id, idCategory;
+    private int status, price;
+
+    public Product() {
     }
 
+    public Product(String purl, String name, String describe, String id, int status, int price) {
+        this.purl = purl;
+        this.name = name;
+        this.describe = describe;
+        this.id = id;
+        this.status = status;
+        this.price = price;
+    }
+
+    public Product(String purl, String name, String describe, String id, int status, int price, String idCategory) {
+        this.purl = purl;
+        this.name = name;
+        this.describe = describe;
+        this.id = id;
+        this.status = status;
+        this.price = price;
+        this.idCategory = idCategory;
+    }
 
     protected Product(Parcel in) {
+        purl = in.readString();
+        name = in.readString();
+        describe = in.readString();
+        id = in.readString();
+        idCategory = in.readString();
         status = in.readInt();
         price = in.readInt();
-        name = in.readString();
-        purl = in.readString();
-        describe = in.readString();
-        productId = in.readString();
-        idCategory = in.readString();
     }
 
     public static final Creator<Product> CREATOR = new Creator<Product>() {
@@ -34,47 +55,12 @@ public class Product implements Parcelable {
         }
     };
 
-    public int getStatus() {
-        return status;
+    public String getPurl() {
+        return purl;
     }
 
-    public void setStatus(int status) {
-        this.status = status;
-    }
-
-    private int status;
-
-
-    public String getProductId() {
-        return productId;
-    }
-
-    public void setProductId(String productId) {
-        this.productId = productId;
-    }
-
-    String name,purl,describe,productId, idCategory;
-    int price;
-
-    public Product(EditText price, EditText name, EditText purl, EditText describe, String categoryId) {
-    }
-
-    public Product(String productId) {
-        this.productId = productId;
-    }
-
-    Product(){
-
-    }
-
-
-    public Product(int price, String name, String purl, String describe, String idCategory) {
-        this.price = price;
-        this.name = name;
+    public void setPurl(String purl) {
         this.purl = purl;
-        this.describe = describe;
-        this.idCategory = idCategory;
-
     }
 
     public String getName() {
@@ -85,28 +71,36 @@ public class Product implements Parcelable {
         this.name = name;
     }
 
-    public int getPrice() {
-        return price;
-    }
-
-    public void setPrice(int price) {
-        this.price = price;
-    }
-
-    public String getPurl() {
-        return purl;
-    }
-
-    public void setPurl(String purl) {
-        this.purl = purl;
-    }
-
     public String getDescribe() {
         return describe;
     }
 
     public void setDescribe(String describe) {
         this.describe = describe;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
+    }
+
+    public int getPrice() {
+        return price;
+    }
+
+    public void setPrice(int price) {
+        this.price = price;
     }
 
     public String getIdCategory() {
@@ -124,12 +118,12 @@ public class Product implements Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(productId);
-        dest.writeString(name);
-        dest.writeInt(price);
-        dest.writeString(describe);
         dest.writeString(purl);
+        dest.writeString(name);
+        dest.writeString(describe);
+        dest.writeString(id);
         dest.writeInt(status);
+        dest.writeInt(price);
         dest.writeString(idCategory);
     }
 }

@@ -96,7 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             DatabaseReference productRef = FirebaseDatabase.getInstance().getReference().child("Products");
-                            productRef.orderByChild("name").equalTo(model.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
+                            productRef.orderByChild("name").equalTo(model.getName()).addValueEventListener(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {
@@ -112,6 +112,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
                                                             productList.remove(position);
                                                             notifyItemRemoved(position);
                                                             notifyItemRangeChanged(position, productList.size());
+                                                            notifyDataSetChanged();
 
                                                             // Thông báo xóa sản phẩm thành công
                                                             Toast.makeText(mContext, "Đã xóa sản phẩm thành công", Toast.LENGTH_SHORT).show();
@@ -147,6 +148,15 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
                     builder.create().show();
             }
         });
+        holder.itemView.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && mListener != null) {
+                    mListener.onItemClick(productList.get(position)); // Gọi phương thức onItemClick
+                }
+            }
+        });
     }
 
     @Override
@@ -174,17 +184,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
             btnEdit = (Button) itemView.findViewById(R.id.btnEdit);
             btnDelete = (Button) itemView.findViewById(R.id.btnDelete);
 
-
-            // Xử lý sự kiện click trên item
-            itemView.setOnClickListener(new View.OnClickListener() {
-                @Override
-                public void onClick(View v) {
-                    int position = getAdapterPosition();
-                    if (position != RecyclerView.NO_POSITION && mListener != null) {
-                        mListener.onItemClick(productList.get(position)); // Gọi phương thức onItemClick
-                    }
-                }
-            });
 
         }
     }

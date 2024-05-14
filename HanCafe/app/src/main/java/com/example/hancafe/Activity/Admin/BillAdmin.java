@@ -1,8 +1,5 @@
-package com.example.hancafe.Activity.User;
+package com.example.hancafe.Activity.Admin;
 
-import static java.security.AccessController.getContext;
-
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
@@ -12,19 +9,24 @@ import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import androidx.activity.EdgeToEdge;
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.graphics.Insets;
+import androidx.core.view.ViewCompat;
+import androidx.core.view.WindowInsetsCompat;
 import androidx.fragment.app.FragmentTransaction;
 import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
+import com.example.hancafe.Activity.Adapter.OrderManagementAdminAdapter;
 import com.example.hancafe.Activity.Adapter.OrderStatusAdapter;
-
-
+import com.example.hancafe.Activity.Admin.Order.Management.ConfirmOrderFragment;
+import com.example.hancafe.Activity.User.Bill;
+import com.example.hancafe.Activity.User.Orders;
 import com.example.hancafe.Model.OrderDetail;
 import com.example.hancafe.Model.OrderManagement;
-import com.example.hancafe.Model.User;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -34,23 +36,26 @@ import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
-public class Bill extends AppCompatActivity {
+public class BillAdmin extends AppCompatActivity {
     private ImageView btnBack;
     private TextView tvIdOrder, tvStatus, tvDateOrder, tvTotalPrice, tvNameReceiver, tvSdtReceiver, tvAddressReceiver;
-    private Button btnCancel;
+    private Button btnConfirmOrderManagement, btnDeliveryOrderManagement, btnCompleteOrderManagement, btnCancelOrderManagement;
     private RecyclerView rvProduct;
-
+    OrderManagementAdminAdapter orderManagementAdminAdapter;
+    DatabaseReference databaseReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_bill);
+
+        setContentView(R.layout.activity_bill_admin);
         setControl();
         setEvent();
         initData();
@@ -59,9 +64,7 @@ public class Bill extends AppCompatActivity {
     private void initData() {
         Intent intent = getIntent();
         OrderManagement orderManagement = intent.getParcelableExtra("orderManagement");
-
-        List<OrderDetail> orderDetails = intent.getParcelableArrayListExtra("orderDetails");
-
+        ArrayList<OrderDetail> orderDetails = intent.getParcelableArrayListExtra("orderDetails");
         LinearLayoutManager linearLayoutManagerProduct = new LinearLayoutManager(this, LinearLayoutManager.VERTICAL, false);
         rvProduct.setLayoutManager(linearLayoutManagerProduct);
         OrderStatusAdapter.OrderDetailAdapter orderDetailAdapter = new OrderStatusAdapter.OrderDetailAdapter(orderDetails);
@@ -84,7 +87,7 @@ public class Bill extends AppCompatActivity {
         FirebaseUser currentUser = FirebaseAuth.getInstance().getCurrentUser();
         if (currentUser != null) {
             // Lấy UID của người dùng đang đăng nhập
-            String uid = currentUser.getUid();
+            String uid = orderManagement.getIdUser();
 
             // Tìm kiếm thông tin người dùng trong cơ sở dữ liệu của bạn
             DatabaseReference userRef = FirebaseDatabase.getInstance().getReference("Users").child(uid);
@@ -107,16 +110,13 @@ public class Bill extends AppCompatActivity {
                 @Override
                 public void onCancelled(@NonNull DatabaseError error) {
                     // Xử lý khi có lỗi xảy ra
-                    Toast.makeText(Bill.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT);
+                    Toast.makeText(BillAdmin.this, "Đã xảy ra lỗi", Toast.LENGTH_SHORT);
                 }
             });
         }
-
-
     }
 
     private void setEvent() {
-        OrderManagement orderManagement = getIntent().getParcelableExtra("orderManagement");
 
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -124,65 +124,90 @@ public class Bill extends AppCompatActivity {
                 finish();
             }
         });
-        if (orderManagement.getIdCategory() != 1){
-            btnCancel.setEnabled(false);
-        }
 
-        btnCancel.setOnClickListener(new View.OnClickListener() {
+        btnConfirmOrderManagement.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-                builder.setMessage("Xác nhận hủy đơn hàng!")
-                        .setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                String idOrder = orderManagement.getId();
-                                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
-                                orderRef.orderByChild("id").equalTo(idOrder).addListenerForSingleValueEvent(new ValueEventListener() {
-                                    @Override
-                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-                                            dataSnapshot.getRef().child("idCategory").setValue(4).addOnSuccessListener(new OnSuccessListener<Void>() {
-                                                @Override
-                                                public void onSuccess(Void unused) {
-
-                                                    Intent intent = new Intent(Bill.this,Orders.class);
-                                                    startActivity(intent);
-                                                }
-                                            }).addOnFailureListener(new OnFailureListener() {
-                                                @Override
-                                                public void onFailure(@NonNull Exception e) {
-
-                                                }
-                                            });
-                                        }
-                                    }
-
-                                    @Override
-                                    public void onCancelled(@NonNull DatabaseError error) {
-
-                                    }
-                                });
-                            }
-                        })
-                        .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
-                            @Override
-                            public void onClick(DialogInterface dialog, int which) {
-                                dialog.cancel();
-                            }
-                        });
-                AlertDialog alertDialog = builder.create();
-                alertDialog.show();
-//                notifyDataSetChanged();
-
+                handleOrderAction(1);
             }
         });
+        btnDeliveryOrderManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleOrderAction(2);
+            }
+        });
+        btnCompleteOrderManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleOrderAction(3);
+            }
+        });
+        btnCancelOrderManagement.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                handleOrderAction(4);
+            }
+        });
+    }
 
+    private void handleOrderAction(int newIdCategory) {
+        OrderManagement orderManagement = getIntent().getParcelableExtra("orderManagement");
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setMessage("Xác nhận chuyển trạng thái đơn hàng!")
+                .setPositiveButton("Đồng ý", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+
+//                        String idOrder = orderManagement.getId();
+//                        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management").child(idOrder);
+//
+//                        Map<String, Object> updateData = new HashMap<>();
+//                        updateData.put("idCategory", newIdCategory);
+//                        orderRef.updateChildren(updateData);
+//
+//                        finish();
+                        String idOrder = orderManagement.getId();
+                        DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
+                        orderRef.orderByChild("id").equalTo(idOrder).addListenerForSingleValueEvent(new ValueEventListener() {
+                            @Override
+                            public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
+                                    dataSnapshot.getRef().child("idCategory").setValue(newIdCategory).addOnSuccessListener(new OnSuccessListener<Void>() {
+                                        @Override
+                                        public void onSuccess(Void unused) {
+                                            Toast.makeText(BillAdmin.this, "Chuyển trạng thái đơn hàng thành công.", Toast.LENGTH_SHORT);
+                                            finish();
+                                        }
+                                    }).addOnFailureListener(new OnFailureListener() {
+                                        @Override
+                                        public void onFailure(@NonNull Exception e) {
+
+                                        }
+                                    });
+                                }
+                            }
+
+                            @Override
+                            public void onCancelled(@NonNull DatabaseError error) {
+
+                            }
+                        });
+                    }
+                })
+                .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.cancel();
+                    }
+                });
+        AlertDialog alertDialog = builder.create();
+        alertDialog.show();
     }
 
     private void setControl() {
         btnBack = findViewById(R.id.btnBack);
-        btnCancel = findViewById(R.id.btnCancel);
         rvProduct = findViewById(R.id.rvProduct);
         tvIdOrder = findViewById(R.id.tvIdOrder);
         tvStatus = findViewById(R.id.tvStatus);
@@ -191,7 +216,10 @@ public class Bill extends AppCompatActivity {
         tvNameReceiver = findViewById(R.id.tvNameReceiver);
         tvSdtReceiver = findViewById(R.id.tvSdtReceiver);
         tvAddressReceiver = findViewById(R.id.tvAddressReceiver);
+
+        btnConfirmOrderManagement = findViewById(R.id.btnConfirmOrderManagement);
+        btnDeliveryOrderManagement = findViewById(R.id.btnDeliveryOrderManagement);
+        btnCompleteOrderManagement = findViewById(R.id.btnCompleteOrderManagement);
+        btnCancelOrderManagement = findViewById(R.id.btnCancelOrderManagement);
     }
-
-
 }

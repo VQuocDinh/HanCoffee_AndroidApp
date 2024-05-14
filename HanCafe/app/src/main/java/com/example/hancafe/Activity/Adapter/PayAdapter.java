@@ -11,8 +11,8 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.hancafe.Domain.CartItem;
-import com.example.hancafe.Domain.Promotion;
+import com.example.hancafe.Model.CartItem;
+import com.example.hancafe.Model.Promotion;
 import com.example.hancafe.R;
 
 

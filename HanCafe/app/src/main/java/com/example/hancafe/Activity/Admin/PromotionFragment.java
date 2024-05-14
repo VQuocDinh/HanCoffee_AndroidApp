@@ -14,7 +14,7 @@ import android.widget.Button;
 
 import com.example.hancafe.Activity.Adapter.PromotionAdapter;
 import com.example.hancafe.Activity.Dialog.AddPromotionDialogFragment;
-import com.example.hancafe.Domain.Promotion;
+import com.example.hancafe.Model.Promotion;
 import com.example.hancafe.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;

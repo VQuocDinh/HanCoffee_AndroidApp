@@ -1,36 +1,45 @@
 package com.example.hancafe.Model;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
+import androidx.annotation.NonNull;
+
+
 import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 
 import java.io.Serializable;
+import java.util.List;
 
-public class OrderManagement implements Serializable {
+public class OrderManagement implements Parcelable, Serializable {
     FirebaseDatabase database = FirebaseDatabase.getInstance();
     DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
 
-    private String id;
-    private String name;
-    private int price;
-    private String date;
-    private String picure;
-    private String idUser;
-    private int idCategory;
+    int idCategory, price;
+    String date, id, idUser;
+    List<OrderDetail> orderDetails;
     private DatabaseReference categoryRef;
 
 
     public OrderManagement() {
     }
 
-    public OrderManagement(String id, String name, int price, String date, String picure, int idCategory, String idUser) {
-        this.id = id;
-        this.name = name;
+    public OrderManagement(int idCategory, int price, String date, String id, String idUser) {
+        this.idCategory = idCategory;
         this.price = price;
         this.date = date;
-        this.picure = picure;
-        this.idCategory = idCategory;
+        this.id = id;
         this.idUser = idUser;
         this.categoryRef = database.getReference("Category_Order_Management").child(String.valueOf(idCategory));
+    }
+    protected OrderManagement(Parcel in) {
+        idCategory = in.readInt();
+        price = in.readInt();
+        date = in.readString();
+        id = in.readString();
+        idUser = in.readString();
+        orderDetails = in.createTypedArrayList(OrderDetail.CREATOR);
     }
 
     public String getId() {
@@ -41,13 +50,6 @@ public class OrderManagement implements Serializable {
         this.id = id;
     }
 
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
 
     public int getPrice() {
         return price;
@@ -65,14 +67,6 @@ public class OrderManagement implements Serializable {
         this.date = dateTime;
     }
 
-    public String getPicure() {
-        return picure;
-    }
-
-    public void setPicure(String picture) {
-        this.picure = picure;
-    }
-
     public int getIdCategory() {
         return idCategory;
     }
@@ -88,4 +82,38 @@ public class OrderManagement implements Serializable {
     public void setIdUser(String idUser) {
         this.idUser = idUser;
     }
+    public List<OrderDetail> getOrderDetails() {
+        return orderDetails;
+    }
+
+    public void setOrderDetails(List<OrderDetail> orderDetails) {
+        this.orderDetails = orderDetails;
+    }
+
+
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(@NonNull Parcel dest, int flags) {
+        dest.writeInt(idCategory);
+        dest.writeInt(price);
+        dest.writeString(date);
+        dest.writeString(id);
+        dest.writeString(idUser);
+        dest.writeTypedList(orderDetails);
+    }
+    public static final Creator<OrderManagement> CREATOR = new Creator<OrderManagement>() {
+        @Override
+        public OrderManagement createFromParcel(Parcel in) {
+            return new OrderManagement(in);
+        }
+
+        @Override
+        public OrderManagement[] newArray(int size) {
+            return new OrderManagement[size];
+        }
+    };
 }

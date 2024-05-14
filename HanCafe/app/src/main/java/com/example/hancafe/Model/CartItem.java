@@ -1,4 +1,4 @@
-package com.example.hancafe.Domain;
+package com.example.hancafe.Model;
 
 import java.io.Serializable;
 

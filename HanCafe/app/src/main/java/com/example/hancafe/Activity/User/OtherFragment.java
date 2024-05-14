@@ -16,7 +16,7 @@ import android.widget.LinearLayout;
 import android.widget.Toast;
 
 import com.example.hancafe.Activity.Auth.Home;
-import com.example.hancafe.Activity.User.Order.Management.MainOrderActivity;
+
 import com.example.hancafe.Activity.User.PersonInformation.MainPersonInformationActivity;
 import com.example.hancafe.R;
 import com.google.firebase.auth.FirebaseAuth;

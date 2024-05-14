@@ -13,10 +13,8 @@
         android:id="@+id/cbProduct"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:buttonTint="@color/mainColor"
-        android:buttonTintMode="src_in"
-        app:buttonIconTint="@color/white"
-        app:buttonIconTintMode="src_in" />
+        app:buttonTint="@color/red"
+        app:buttonIconTint="@color/white" />
 
     <androidx.cardview.widget.CardView
         android:id="@+id/cardView"

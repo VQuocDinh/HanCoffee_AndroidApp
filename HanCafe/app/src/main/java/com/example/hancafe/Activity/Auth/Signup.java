@@ -116,6 +116,7 @@ public class Signup extends AppCompatActivity {
                                 userRef.child("role").setValue(2); // Mặc định quyền là 2 (khách hàng)
                                 userRef.child("name").setValue("");
                                 userRef.child("phone").setValue("");
+                                userRef.child("address").setValue("");
                                 userRef.child("date").setValue("");
                                 user.sendEmailVerification()
                                         .addOnCompleteListener(new OnCompleteListener<Void>() {

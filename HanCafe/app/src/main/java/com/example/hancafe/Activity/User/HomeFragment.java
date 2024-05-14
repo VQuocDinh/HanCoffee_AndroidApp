@@ -15,8 +15,8 @@ import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hancafe.Activity.Adapter.CategoryAdapter;
 import com.example.hancafe.Activity.Adapter.ProductsAdapter;
-import com.example.hancafe.Domain.Category;
-import com.example.hancafe.Domain.Product;
+import com.example.hancafe.Model.CategoryProduct;
+import com.example.hancafe.Model.Product;
 import com.example.hancafe.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -24,6 +24,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -32,9 +33,8 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
     ProductsAdapter productsAdapter;
     CategoryAdapter categoryAdapter;
     SearchView svSearch;
-    List<Product> productSearch = new ArrayList<>();
     List<Product> products = new ArrayList<>();
-    List<Category> categories = new ArrayList<>();
+    List<CategoryProduct> categories = new ArrayList<>();
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -56,29 +56,31 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
 
             @Override
             public boolean onQueryTextSubmit(String query) {
+                txtSearch(query);
                 return false;
             }
 
             @Override
-            public boolean onQueryTextChange(String newText) {
-                productSearch.clear();
-                productsAdapter = new ProductsAdapter(productSearch);
-                rvProduct.setAdapter(productsAdapter);
-
-                if (newText.equals("")){
-                    productSearch.addAll(products);
-                    productsAdapter.notifyDataSetChanged();
-                } else {
-                    for (Product product : products){
-                        if (product.getName().toLowerCase().contains(newText.toLowerCase())){
-                            productSearch.add(product);
-                        }
-                    }
-                }
-                productsAdapter.notifyDataSetChanged();
+            public boolean onQueryTextChange(String query) {
+                txtSearch(query);
                 return false;
             }
         });
+    }
+
+    private void txtSearch(String query) {
+//        products.clear();
+
+        List<Product> filteredProducts = new ArrayList<>();
+        for (Product product : products){
+            if (product.getName().toLowerCase().contains(query.toLowerCase())){
+                filteredProducts.add(product);
+            }
+        }
+        productsAdapter = new ProductsAdapter(filteredProducts);
+        rvProduct.setAdapter(productsAdapter);
+
+        productsAdapter.notifyDataSetChanged();
     }
 
     private void initCategory() {
@@ -94,7 +96,7 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
                     String catId = dataSnapshot.child("id").getValue(String.class);
                     String catName = dataSnapshot.child("name").getValue(String.class);
                     String catImg = dataSnapshot.child("curl").getValue(String.class);
-                    Category category = new Category(catId, catName, catImg);
+                    CategoryProduct category = new CategoryProduct(catId, catName, catImg);
                     categories.add(category);
                 }
                 categoryAdapter = new CategoryAdapter(categories);
@@ -149,10 +151,10 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
 
     @Override
     public void onItemCategoryClick(int position) {
-        List<Category> categoryList = categoryAdapter.getCatData();
-        Category category = categoryList.get(position);
+        List<CategoryProduct> categoryList = categoryAdapter.getCatData();
+        CategoryProduct category = categoryList.get(position);
         Intent intent = new Intent(getActivity(), CategoryDetail.class);
-        intent.putExtra("category", category);
+        intent.putExtra("category", (Serializable) category);
         startActivity(intent);
     }
 
@@ -161,7 +163,7 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
         List<Product> productList = productsAdapter.getData();
         Product product = productList.get(position);
         Intent intent = new Intent(getActivity(), ProductDetail.class);
-        intent.putExtra("product", product);
+        intent.putExtra("product", (Serializable) product);
         startActivity(intent);
     }
 }

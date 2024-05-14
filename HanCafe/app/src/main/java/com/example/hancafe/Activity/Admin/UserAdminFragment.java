@@ -62,19 +62,22 @@ public class UserAdminFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                 userList = new ArrayList<>();
                 for (DataSnapshot userSnapshot : dataSnapshot.getChildren()) {
+                    User user = userSnapshot.getValue(User.class);
 
-                    String id = userSnapshot.child("id").getValue(String.class);
-                    String email = userSnapshot.child("email").getValue(String.class);
-                    String name = userSnapshot.child("name").getValue(String.class);
-                    String date = userSnapshot.child("date").getValue(String.class);
-                    String phone = userSnapshot.child("phone").getValue(String.class);
-                    int role = userSnapshot.child("role").getValue(Integer.class);
-
-                    User user = new User(id, email, name, date, phone, role);
+//                    String id = userSnapshot.child("id").getValue(String.class);
+//                    String email = userSnapshot.child("email").getValue(String.class);
+//                    String name = userSnapshot.child("name").getValue(String.class);
+//                    String date = userSnapshot.child("date").getValue(String.class);
+//                    String phone = userSnapshot.child("phone").getValue(String.class);
+//                    String address = userSnapshot.child("address").getValue(String.class);
+//                    int role = userSnapshot.child("role").getValue(Integer.class);
+//
+//                    User user = new User(id, email, name, date, phone, address, role);
                     userList.add(user);
                 }
 
                 userAdapter = new UserAdapter(getContext(), userList, true);
+                userAdapter.notifyDataSetChanged();
                 rcvUser.setAdapter(userAdapter);
 
             }

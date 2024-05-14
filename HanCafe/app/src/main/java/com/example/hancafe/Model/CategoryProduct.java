@@ -13,19 +13,7 @@ public class CategoryProduct implements Serializable, Parcelable {
     private String catImg;
     int status;
 
-    public CategoryProduct(int status) {
-        this.status = status;
-    }
-
     public CategoryProduct() {
-    }
-
-    public int getStatus() {
-        return status;
-    }
-
-    public void setStatus(int status) {
-        this.status = status;
     }
 
     public CategoryProduct(String catId, String catName, String catImg) {
@@ -34,7 +22,12 @@ public class CategoryProduct implements Serializable, Parcelable {
         this.catImg = catImg;
     }
 
-    public CategoryProduct(String catName, String catImg) {
+    public int getStatus() {
+        return status;
+    }
+
+    public void setStatus(int status) {
+        this.status = status;
     }
 
     protected CategoryProduct(Parcel in) {

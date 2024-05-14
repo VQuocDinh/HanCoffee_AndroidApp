@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8B0305"
     android:orientation="vertical"
-    tools:context=".Activity.User.Bill">
+    tools:context=".Activity.Admin.BillAdmin">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -82,7 +82,6 @@
                     android:text="Chờ xác nhận"
                     android:layout_marginBottom="4dp" />
             </LinearLayout>
-
 
             <TextView
                 style="@style/h2"
@@ -211,69 +210,56 @@
 
             </LinearLayout>
 
-
-            <Button
-                android:id="@+id/btnCancel"
-                style="@style/h2_bold_white"
-                android:layout_width="wrap_content"
+            <LinearLayout
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_gravity="center"
-                android:text="Hủy đơn hàng" />
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnConfirmOrderManagement"
+                    style="@style/h2_bold_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:text="Chờ xác nhận" />
+                <Button
+                    android:id="@+id/btnDeliveryOrderManagement"
+                    style="@style/h2_bold_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Đang giao hàng" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/btnCompleteOrderManagement"
+                    style="@style/h2_bold_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:layout_marginRight="10dp"
+                    android:text="Đã giao" />
+                <Button
+                    android:id="@+id/btnCancelOrderManagement"
+                    style="@style/h2_bold_white"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_gravity="center"
+                    android:layout_weight="1"
+                    android:text="Đã hủy" />
+            </LinearLayout>
+
 
 
         </LinearLayout>
-        <!--        <ScrollView-->
-        <!--            android:layout_width="match_parent"-->
-        <!--            android:layout_height="0dp"-->
-        <!--            android:layout_margin="16dp"-->
-        <!--            android:layout_weight="2">-->
-
-        <!--            <LinearLayout-->
-        <!--                android:layout_width="match_parent"-->
-        <!--                android:layout_height="wrap_content"-->
-        <!--                android:orientation="vertical">-->
-
-        <!--                <LinearLayout-->
-        <!--                    android:layout_width="match_parent"-->
-        <!--                    android:layout_height="wrap_content"-->
-        <!--                    android:layout_marginBottom="8dp"-->
-        <!--                    android:orientation="horizontal">-->
-
-        <!--                    <LinearLayout-->
-        <!--                        android:layout_width="match_parent"-->
-        <!--                        android:layout_height="match_parent"-->
-        <!--                        android:layout_weight="1"-->
-        <!--                        android:orientation="vertical">-->
-
-        <!--                        <TextView-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:text="Cà phê sữa đá" />-->
-
-        <!--                        <TextView-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:text="Cà phê phin thế hệ mới" />-->
-
-        <!--                        <TextView-->
-        <!--                            android:layout_width="match_parent"-->
-        <!--                            android:layout_height="wrap_content"-->
-        <!--                            android:text="50.000đ" />-->
-
-        <!--                    </LinearLayout>-->
-
-        <!--                    <ImageView-->
-        <!--                        android:id="@+id/imageView"-->
-        <!--                        android:layout_width="70dp"-->
-        <!--                        android:layout_height="70dp"-->
-        <!--                        android:scaleType="centerCrop"-->
-        <!--                        android:src="@drawable/product1" />-->
-
-        <!--                </LinearLayout>-->
-
-        <!--            </LinearLayout>-->
-
-        <!--        </ScrollView>-->
 
 
     </LinearLayout>

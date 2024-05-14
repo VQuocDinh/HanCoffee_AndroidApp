@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8B0305"
     android:orientation="vertical"
-    tools:context=".Activity.Pay">
+    tools:context=".Activity.User.Pay">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -70,7 +70,7 @@
                     <TextView
                         android:id="@+id/tvTen"
                         android:layout_width="match_parent"
-                        android:text="Võ Quốc Dinh"
+                        android:text="Nguyễn Văn A"
                         style="@style/h3"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>
@@ -87,7 +87,7 @@
                         android:text="Số điện thoại: "/>
                     <TextView
                         android:id="@+id/tvSdt"
-                        android:text="0399967453"
+                        android:text="0123456789"
                         style="@style/h3"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
@@ -106,7 +106,7 @@
                     <TextView
                         android:id="@+id/tvDiaChi"
                         style="@style/h3"
-                        android:text="a8, hẻm 60, phường Tăng Nhơn Phú A, TP. Thủ Đức, TP. Hồ Chí Minh"
+                        android:text="123 đường ABC"
                         android:layout_width="match_parent"
                         android:layout_height="wrap_content"/>
                 </LinearLayout>

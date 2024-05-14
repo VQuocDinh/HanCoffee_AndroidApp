@@ -32,7 +32,7 @@ import java.util.Locale;
 
 public class MainPersonInformationActivity extends AppCompatActivity {
     ImageView imgAvt;
-    EditText edtName, edtPhone, edtDate;
+    EditText edtName, edtPhone, edtDate, edtAddress;
     TextView tvExit, tvEdit, tvEmail;
     ImageView ivDate;
 
@@ -56,10 +56,12 @@ public class MainPersonInformationActivity extends AppCompatActivity {
                         String name = dataSnapshot.child("name").getValue(String.class);
                         String phone = dataSnapshot.child("phone").getValue(String.class);
                         String date = dataSnapshot.child("date").getValue(String.class);
+                        String address = dataSnapshot.child("address").getValue(String.class);
 
                         edtName.setText(name);
                         edtPhone.setText(phone);
                         edtDate.setText(date);
+                        edtAddress.setText(address);
                     }
                 }
 
@@ -78,9 +80,10 @@ public class MainPersonInformationActivity extends AppCompatActivity {
                 String name = edtName.getText().toString().trim();
                 String phone = edtPhone.getText().toString().trim();
                 String date = edtDate.getText().toString().trim();
+                String address = edtAddress.getText().toString().trim();
 
                 // Kiểm tra xem người dùng đã nhập đủ thông tin hay chưa
-                if (name.isEmpty() || phone.isEmpty() || date.isEmpty()) {
+                if (name.isEmpty() || phone.isEmpty() || date.isEmpty() || address.isEmpty()) {
                     Toast.makeText(MainPersonInformationActivity.this, "Vui lòng nhập đầy đủ thông tin", Toast.LENGTH_SHORT).show();
                     return;
                 }
@@ -93,12 +96,14 @@ public class MainPersonInformationActivity extends AppCompatActivity {
                     userRef.child("name").setValue(name);
                     userRef.child("phone").setValue(phone);
                     userRef.child("date").setValue(date);
+                    userRef.child("address").setValue(address);
 
                     // Hiển thị thông báo hoàn thành
                     Toast.makeText(MainPersonInformationActivity.this, "Đã lưu thông tin", Toast.LENGTH_SHORT).show();
                     edtName.clearFocus();
                     edtPhone.clearFocus();
                     edtDate.clearFocus();
+                    edtAddress.clearFocus();
                 }
             }
         });
@@ -149,6 +154,7 @@ public class MainPersonInformationActivity extends AppCompatActivity {
         edtName = findViewById(R.id.edtName);
         edtPhone = findViewById(R.id.edtPhone);
         edtDate = findViewById(R.id.edtDate);
+        edtAddress = findViewById(R.id.edtAddress);
         tvEdit = findViewById(R.id.tvEdit);
         tvExit = findViewById(R.id.tvExit);
         ivDate = findViewById(R.id.ivDate);

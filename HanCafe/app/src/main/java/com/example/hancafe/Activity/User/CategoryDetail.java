@@ -12,8 +12,8 @@ import androidx.recyclerview.widget.LinearLayoutManager;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.example.hancafe.Activity.Adapter.ProductsAdapter;
-import com.example.hancafe.Domain.Category;
-import com.example.hancafe.Domain.Product;
+import com.example.hancafe.Model.CategoryProduct;
+import com.example.hancafe.Model.Product;
 import com.example.hancafe.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -22,6 +22,7 @@ import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.Serializable;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -44,7 +45,7 @@ public class CategoryDetail extends AppCompatActivity implements ProductsAdapter
         rvProduct.setLayoutManager(linearLayoutManagerProduct);
 
         Intent intent = getIntent();
-        Category category = (Category) intent.getSerializableExtra("category");
+        CategoryProduct category = (CategoryProduct) intent.getSerializableExtra("category");
         String categoryId = category.getCatId();
         tvCategoryName.setText(category.getCatName());
 
@@ -120,7 +121,7 @@ public class CategoryDetail extends AppCompatActivity implements ProductsAdapter
         List<Product> productList = productsAdapter.getData();
         Product product = productList.get(position);
         Intent intent = new Intent(this,ProductDetail.class);
-        intent.putExtra("product", product);
+        intent.putExtra("product", (Serializable) product);
         startActivity(intent);
     }
 }

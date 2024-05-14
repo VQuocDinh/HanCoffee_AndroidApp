@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8B0305"
     android:orientation="vertical"
-    tools:context=".Activity.CartDetail">
+    tools:context=".Activity.User.Orders">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"

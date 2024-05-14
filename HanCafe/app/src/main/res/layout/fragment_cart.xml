@@ -6,7 +6,7 @@
     android:layout_height="match_parent"
     android:background="#8B0305"
     android:orientation="vertical"
-    tools:context=".Fragment.CartFragment">
+    tools:context=".Activity.User.CartFragment">
 
     <androidx.appcompat.widget.Toolbar
         android:layout_width="match_parent"
@@ -30,6 +30,7 @@
     </androidx.appcompat.widget.Toolbar>
 
     <LinearLayout
+        android:id="@+id/lnCart"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         android:layout_weight="1"
@@ -73,7 +74,8 @@
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
                 android:layout_weight="1"
-                android:buttonTint="@color/mainColor"
+                app:buttonTint="@color/red"
+                app:buttonIconTint="@color/white"
                 android:text="Tất cả"
                 android:textSize="16dp" />
 
@@ -96,6 +98,32 @@
                 android:textSize="16dp" />
 
         </LinearLayout>
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:gravity="center"
+        android:id="@+id/lnCartEmpty"
+        android:background="@drawable/custom_background_linear_main"
+        android:orientation="vertical">
+
+        <ImageView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_margin="20dp"
+            android:src="@drawable/bg_cart_empty"/>
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginRight="20dp"
+            android:layout_marginLeft="20dp"
+            android:text="Chưa có sản phẩm nào được thêm vào giỏ hàng"
+            android:textSize="16sp"
+            android:textColor="@color/black"
+            android:textStyle="bold"
+            android:gravity="center"/>
 
     </LinearLayout>
 

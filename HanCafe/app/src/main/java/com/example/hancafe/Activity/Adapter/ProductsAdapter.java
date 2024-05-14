@@ -10,7 +10,7 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.hancafe.Domain.Product;
+import com.example.hancafe.Model.Product;
 import com.example.hancafe.R;
 
 
@@ -42,7 +42,7 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         Product product = data.get(position);
         Glide.with(holder.itemView.getContext())
-                .load(product.getImage())
+                .load(product.getPurl())
                 .into(holder.imgProduct);
 
         holder.tvNameProduct.setText(product.getName());
@@ -51,9 +51,13 @@ public class ProductsAdapter extends RecyclerView.Adapter<ProductsAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemProductClick(position);
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemProductClick(position); // Gọi phương thức onItemClick
                 }
+//                if (listener != null) {
+//                    listener.onItemProductClick(position);
+//                }
             }
         });
     }

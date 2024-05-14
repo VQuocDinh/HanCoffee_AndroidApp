@@ -23,12 +23,10 @@ import com.example.hancafe.Activity.Adapter.ProductAdapter;
 import com.example.hancafe.Activity.Admin.Product.AddProductFragment;
 import com.example.hancafe.Model.Product;
 import com.example.hancafe.R;
-import com.firebase.ui.database.FirebaseRecyclerOptions;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
 import com.google.firebase.database.FirebaseDatabase;
-import com.google.firebase.database.Query;
 import com.google.firebase.database.ValueEventListener;
 
 import java.util.ArrayList;

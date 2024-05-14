@@ -29,7 +29,7 @@ public class OrderManagementUserAdapter extends RecyclerView.Adapter<OrderManage
     @NonNull
     @Override
     public OrderManagementViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
-        View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.layout_category_item_order_management, parent, false);
+        View view = LayoutInflater.from(context).inflate(R.layout.layout_category_item_order_management, parent, false);
         return new OrderManagementViewHolder(view);
     }
 
@@ -40,7 +40,7 @@ public class OrderManagementUserAdapter extends RecyclerView.Adapter<OrderManage
             return;
         }
 
-        holder.tvCategoryItemName.setText(orderManagement.getName());
+//        holder.tvCategoryItemName.setText(orderManagement.getName());
 
         // Cập nhật định dạng tiền tệ
         int price = orderManagement.getPrice();
@@ -53,8 +53,8 @@ public class OrderManagementUserAdapter extends RecyclerView.Adapter<OrderManage
         holder.tvCategoryItemDateTime.setText(formattedDateTime);
 
         //tải ảnh từ firebase
-        String urlImage = orderManagement.getPicure();
-        Glide.with(holder.itemView.getContext()).load(urlImage).into(holder.ivCategoryItemImage);
+//        String urlImage = orderManagement.getPicure();
+//        Glide.with(holder.itemView.getContext()).load(urlImage).into(holder.ivCategoryItemImage);
 
 
     }

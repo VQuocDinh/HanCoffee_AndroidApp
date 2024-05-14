@@ -9,13 +9,14 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import com.bumptech.glide.Glide;
-import com.example.hancafe.Domain.CartItem;
+import com.example.hancafe.Model.CartItem;
 import com.example.hancafe.R;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
@@ -88,7 +89,10 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
                                             dataSnapshot.getRef().removeValue().addOnSuccessListener(new OnSuccessListener<Void>() {
                                                 @Override
                                                 public void onSuccess(Void unused) {
-                                                    data.remove(position);
+                                                    int position = holder.getAdapterPosition();
+                                                    if (position != RecyclerView.NO_POSITION) {
+                                                        data.remove(position);
+                                                    }
                                                     notifyDataSetChanged();
                                                 }
                                             }).addOnFailureListener(new OnFailureListener() {
@@ -122,9 +126,13 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         holder.itemView.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                if (listener != null) {
-                    listener.onItemProductClick(position);
+                int position = holder.getAdapterPosition();
+                if (position != RecyclerView.NO_POSITION && listener != null) {
+                    listener.onItemProductClick(position); // Gọi phương thức onItemClick
                 }
+//                if (listener != null) {
+//                    listener.onItemProductClick(position);
+//                }
             }
         });
         holder.cbProduct.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -169,6 +177,7 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
         private ImageButton btnDelFromCart;
         private TextView tvNameProduct, tvPriceProduct, tvQuantity, tvSize;
         private CheckBox cbProduct;
+//        private LinearLayout lnCart, lnCartEmpty;
 
 
         public ViewHolder(@NonNull View itemView) {
@@ -181,6 +190,8 @@ public class CartItemAdapter extends RecyclerView.Adapter<CartItemAdapter.ViewHo
             tvSize = itemView.findViewById(R.id.tvSize);
             cbProduct = itemView.findViewById(R.id.cbProduct);
             btnDelFromCart = itemView.findViewById(R.id.btnDelFromCart);
+//            lnCart = itemView.findViewById(R.id.lnCart);
+//            lnCartEmpty = itemView.findViewById(R.id.lnCartEmpty);
         }
     }
 
