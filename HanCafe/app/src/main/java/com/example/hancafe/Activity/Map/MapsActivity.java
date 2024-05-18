@@ -35,19 +35,11 @@ import com.example.hancafe.databinding.ActivityMapsBinding;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.libraries.places.api.Places;
-import com.google.android.libraries.places.api.model.AutocompletePrediction;
-import com.google.android.libraries.places.api.model.AutocompleteSessionToken;
 import com.google.android.libraries.places.api.model.Place;
-import com.google.android.libraries.places.api.net.FetchPlaceRequest;
-import com.google.android.libraries.places.api.net.FindAutocompletePredictionsRequest;
 import com.google.android.libraries.places.api.net.PlacesClient;
-import com.google.android.libraries.places.widget.Autocomplete;
 import com.google.android.libraries.places.widget.AutocompleteSupportFragment;
 import com.google.android.libraries.places.widget.listener.PlaceSelectionListener;
-import com.google.android.libraries.places.widget.model.AutocompleteActivityMode;
-import android.net.Uri;
-import android.widget.SearchView;
-import android.widget.Toast;
+
 
 
 import java.io.IOException;
@@ -68,8 +60,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
     private Marker centerMarker;
     private static final String PREF_LATITUDE = "latitude";
     private static final String PREF_LONGITUDE = "longitude";
-    private static final String SEARCH_HISTORY_PREF = "SearchHistoryPrefs";
-    private static final String SEARCH_HISTORY_KEY = "SearchHistory";
     private static final int PERMISSION_REQUEST_CODE = 1001;
     private static final int MAP_REQUEST_CODE = 100;
 
@@ -283,39 +273,6 @@ public class MapsActivity extends FragmentActivity implements OnMapReadyCallback
             // Assuming placesClient has a shutdown or similar method (example purpose)
             // placesClient.shutdown();
         }
-    }
-
-    // Lưu truy vấn tìm kiếm vào SharedPreferences
-    private void saveSearchQuery(String query) {
-        SharedPreferences preferences = getSharedPreferences(SEARCH_HISTORY_PREF, MODE_PRIVATE);
-        Set<String> searchHistory = preferences.getStringSet(SEARCH_HISTORY_KEY, new HashSet<>());
-        searchHistory.add(query);
-        SharedPreferences.Editor editor = preferences.edit();
-        editor.putStringSet(SEARCH_HISTORY_KEY, searchHistory);
-        editor.apply();
-    }
-
-    // Lấy lịch sử tìm kiếm từ SharedPreferences
-    private Set<String> getSearchHistory() {
-        SharedPreferences preferences = getSharedPreferences(SEARCH_HISTORY_PREF, MODE_PRIVATE);
-        return preferences.getStringSet(SEARCH_HISTORY_KEY, new HashSet<>());
-    }
-    private void performSearch(String query) {
-        // Thực hiện tìm kiếm với Google Places API và cập nhật bản đồ
-        FindAutocompletePredictionsRequest request = FindAutocompletePredictionsRequest.builder()
-                .setQuery(query)
-                .build();
-
-        placesClient.findAutocompletePredictions(request).addOnSuccessListener(response -> {
-            for (AutocompletePrediction prediction : response.getAutocompletePredictions()) {
-                Log.i("Places", prediction.getPlaceId() + " - " + prediction.getPrimaryText(null));
-            }
-        }).addOnFailureListener((exception) -> {
-            if (exception instanceof ApiException) {
-                ApiException apiException = (ApiException) exception;
-                Log.e("Places", "Place not found: " + apiException.getStatusCode());
-            }
-        });
     }
 
     // Lấy vị trị hiện tại của mình thông qua gps
