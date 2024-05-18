@@ -46,8 +46,8 @@ public class CategoryDetail extends AppCompatActivity implements ProductsAdapter
 
         Intent intent = getIntent();
         CategoryProduct category = (CategoryProduct) intent.getSerializableExtra("category");
-        String categoryId = category.getCatId();
-        tvCategoryName.setText(category.getCatName());
+        String categoryId = category.getId();
+        tvCategoryName.setText(category.getName());
 
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference myRef = database.getReference("Products");

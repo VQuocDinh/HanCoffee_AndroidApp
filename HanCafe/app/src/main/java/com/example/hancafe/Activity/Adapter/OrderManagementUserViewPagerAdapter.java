@@ -13,7 +13,6 @@ import com.example.hancafe.Activity.User.OrderStatus.DeliveryOrderFragment;
 
 public class OrderManagementUserViewPagerAdapter extends FragmentStateAdapter {
 
-
     public OrderManagementUserViewPagerAdapter(@NonNull FragmentActivity fragmentActivity) {
         super(fragmentActivity);
     }

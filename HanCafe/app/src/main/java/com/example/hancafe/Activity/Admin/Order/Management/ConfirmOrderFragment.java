@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -32,6 +34,8 @@ import java.util.List;
 
 public class ConfirmOrderFragment extends Fragment {
     RecyclerView rcvCategoryOrderManagement;
+    LinearLayout lnEmpty;
+    TextView tvEmpty;
     private static final int STATUS_CONFIRM = 1;
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
@@ -41,7 +45,15 @@ public class ConfirmOrderFragment extends Fragment {
 
         rcvCategoryOrderManagement = view.findViewById(R.id.rcvOrderManagementCategory);
 
-        HelperOrderManagement.loadDataOrderManagement(getActivity(), rcvCategoryOrderManagement, STATUS_CONFIRM);
+        rcvCategoryOrderManagement = view.findViewById(R.id.rcvOrderManagementCategory);
+
+        lnEmpty = view.findViewById(R.id.lnEmpty);
+
+        tvEmpty = view.findViewById(R.id.tvEmpty);
+        String title = getResources().getString(R.string.title_order_status_confirm_empty);
+        tvEmpty.setText(title);
+
+        HelperOrderManagement.loadDataOrderManagement(getActivity(), rcvCategoryOrderManagement, lnEmpty, STATUS_CONFIRM);
 
         return view;
     }

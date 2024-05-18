@@ -70,15 +70,23 @@ public class CategoryProductAdminFragment extends Fragment {
             public void onDataChange(@NonNull DataSnapshot snapshot) {
                 categories.clear();
                 for (DataSnapshot dataSnapshot : snapshot.getChildren()){
-                    String catId = dataSnapshot.child("id").getValue(String.class);
-                    String catName = dataSnapshot.child("name").getValue(String.class);
-                    String catImg = dataSnapshot.child("curl").getValue(String.class);
 
-                    CategoryProduct categoryProduct = new CategoryProduct(catId, catName, catImg);
-                    categories.add(categoryProduct);
+                    CategoryProduct categoryProduct = dataSnapshot.getValue(CategoryProduct.class);
+//                    String catId = dataSnapshot.child("id").getValue(String.class);
+//                    String catName = dataSnapshot.child("name").getValue(String.class);
+//                    String catImg = dataSnapshot.child("curl").getValue(String.class);
+//                    int status = dataSnapshot.child("status").getValue(Integer.class);
+//
+//                    CategoryProduct categoryProduct = new CategoryProduct(catId, catName, catImg, status);
+
+                    if(categoryProduct != null && categoryProduct.getStatus() != 1){
+                        categories.add(categoryProduct);
+                    }
+
                 }
-                categoryProductAdapter = new CategoryProductAdapter(getContext(),categories);
+                categoryProductAdapter = new CategoryProductAdapter(getContext(), categories);
                 recyclerView.setAdapter(categoryProductAdapter);
+                categoryProductAdapter.notifyDataSetChanged();
             }
 
             @Override

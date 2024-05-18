@@ -1,6 +1,8 @@
 package com.example.hancafe.Activity.Admin.Order.Management;
 
 import android.content.Context;
+import android.view.View;
+import android.widget.LinearLayout;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -20,7 +22,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class HelperOrderManagement {
-    public static void loadDataOrderManagement(Context context, RecyclerView rcvCategoryOrderManagement, int statusCategory){
+    public static void loadDataOrderManagement(Context context, RecyclerView rcvCategoryOrderManagement, LinearLayout lnEmpty, int statusCategory){
         FirebaseDatabase database = FirebaseDatabase.getInstance();
         DatabaseReference orderManagementRef = database.getReference("Order_Management");
 
@@ -39,41 +41,49 @@ public class HelperOrderManagement {
                         String idUser = dataSnapshot.child("idUser").getValue(String.class);
                         OrderManagement orderManagement = new OrderManagement(status, totalPrice, date, idOrder, idUser);
 
-                        FirebaseDatabase database = FirebaseDatabase.getInstance();
-                        DatabaseReference orderDetailRef = database.getReference("OrderDetail");
-                        Query query = orderDetailRef.orderByChild("idOrder").equalTo(idOrder);
-                        query.addValueEventListener(new ValueEventListener() {
-                            @Override
-                            public void onDataChange(@NonNull DataSnapshot snapshot) {
-                                List<OrderDetail> orderDetailList = new ArrayList<>();
-                                orderDetailList.clear();
+                        if(!orderManagement.getId().isEmpty()){
+                            lnEmpty.setVisibility(View.GONE);
+                            rcvCategoryOrderManagement.setVisibility(View.VISIBLE);
 
-                                for (DataSnapshot orderDetailSnaphot: snapshot.getChildren()){
-                                    int size = orderDetailSnaphot.child("idSize").getValue(Integer.class);
-                                    int priceProduct = orderDetailSnaphot.child("priceProduct").getValue(Integer.class);
-                                    int quantity = orderDetailSnaphot.child("quantity").getValue(Integer.class);
+                            FirebaseDatabase database = FirebaseDatabase.getInstance();
+                            DatabaseReference orderDetailRef = database.getReference("OrderDetail");
+                            Query query = orderDetailRef.orderByChild("idOrder").equalTo(idOrder);
+                            query.addValueEventListener(new ValueEventListener() {
+                                @Override
+                                public void onDataChange(@NonNull DataSnapshot snapshot) {
+                                    List<OrderDetail> orderDetailList = new ArrayList<>();
+                                    orderDetailList.clear();
 
-                                    String idOrder = orderDetailSnaphot.child("idOrder").getValue(String.class);
-                                    String imgProduct = orderDetailSnaphot.child("imgProduct").getValue(String.class);
-                                    String nameProduct = orderDetailSnaphot.child("nameProduct").getValue(String.class);
-                                    String idOrderDetail = orderDetailSnaphot.child("idOrderDetail").getValue(String.class);
-                                    OrderDetail orderDetail = new OrderDetail(idOrderDetail,idOrder,imgProduct,nameProduct,size,quantity,priceProduct);
-                                    orderDetailList.add(orderDetail);
+                                    for (DataSnapshot orderDetailSnaphot: snapshot.getChildren()){
+                                        int size = orderDetailSnaphot.child("idSize").getValue(Integer.class);
+                                        int priceProduct = orderDetailSnaphot.child("priceProduct").getValue(Integer.class);
+                                        int quantity = orderDetailSnaphot.child("quantity").getValue(Integer.class);
+
+                                        String idOrder = orderDetailSnaphot.child("idOrder").getValue(String.class);
+                                        String imgProduct = orderDetailSnaphot.child("imgProduct").getValue(String.class);
+                                        String nameProduct = orderDetailSnaphot.child("nameProduct").getValue(String.class);
+                                        String idOrderDetail = orderDetailSnaphot.child("idOrderDetail").getValue(String.class);
+                                        OrderDetail orderDetail = new OrderDetail(idOrderDetail,idOrder,imgProduct,nameProduct,size,quantity,priceProduct);
+                                        orderDetailList.add(orderDetail);
+                                    }
+                                    orderManagement.setOrderDetails(orderDetailList);
+                                    orderManagementList.add(orderManagement);
+
+                                    OrderManagementAdminAdapter orderManagementAdapter = new OrderManagementAdminAdapter(context, orderManagementList);
+
+                                    rcvCategoryOrderManagement.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
+                                    rcvCategoryOrderManagement.setAdapter(orderManagementAdapter);
+                                    orderManagementAdapter.notifyDataSetChanged();
+
                                 }
-                                orderManagement.setOrderDetails(orderDetailList);
-                                orderManagementList.add(orderManagement);
-
-                                OrderManagementAdminAdapter orderManagementAdapter = new OrderManagementAdminAdapter(context, orderManagementList);
-
-                                rcvCategoryOrderManagement.setLayoutManager(new LinearLayoutManager(context, LinearLayoutManager.VERTICAL, false));
-                                rcvCategoryOrderManagement.setAdapter(orderManagementAdapter);
-                                orderManagementAdapter.notifyDataSetChanged();
-
-                            }
-                            @Override
-                            public void onCancelled(@NonNull DatabaseError error) {
-                            }
-                        });
+                                @Override
+                                public void onCancelled(@NonNull DatabaseError error) {
+                                }
+                            });
+                        } else {
+                            lnEmpty.setVisibility(View.VISIBLE);
+                            rcvCategoryOrderManagement.setVisibility(View.GONE);
+                        }
 
                     }
                 }

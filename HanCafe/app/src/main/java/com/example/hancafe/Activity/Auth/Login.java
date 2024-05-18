@@ -36,6 +36,7 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 
 
@@ -60,6 +61,8 @@ public class Login extends AppCompatActivity {
         setControl();
         setEvent();
         mAuth = FirebaseAuth.getInstance();
+        mAuth.setLanguageCode(Locale.getDefault().getLanguage());
+
         sharedPreferences = getSharedPreferences(PREF_NAME, Context.MODE_PRIVATE);
 
         if (sharedPreferences.getBoolean(KEY_REMEMBER, false)) {

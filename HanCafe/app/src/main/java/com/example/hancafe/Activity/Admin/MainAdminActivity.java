@@ -1,7 +1,5 @@
 package com.example.hancafe.Activity.Admin;
 
-
-
 import android.content.Intent;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -15,16 +13,22 @@ import androidx.appcompat.app.AppCompatActivity;
 import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.example.hancafe.Activity.Auth.Home;
+import com.example.hancafe.Model.User;
 import com.example.hancafe.R;
 import com.google.android.material.navigation.NavigationView;
 import com.google.firebase.auth.FirebaseAuth;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class MainAdminActivity extends AppCompatActivity {
     private FirebaseAuth mAuth;
     DrawerLayout drawerLayout;
     ImageButton imageButton;
     NavigationView navigationView;
-    TextView textView;
+    TextView textView, tvNameLogin;
     UserAdminFragment userAdminFragment = new UserAdminFragment();
     StaffAdminFragment staffAdminFragment = new StaffAdminFragment();
     ProductAdminFragment productAdminFragment = new ProductAdminFragment();
@@ -50,11 +54,38 @@ public class MainAdminActivity extends AppCompatActivity {
         imageButton = findViewById(R.id.imgBtnDrawerToggle);
         navigationView = findViewById(R.id.navigationView);
         textView = findViewById(R.id.txtToolBarChangeName);
+
+        View headerView = navigationView.getHeaderView(0);
+        tvNameLogin = headerView.findViewById(R.id.tvNameLogin);
     }
 
     private void setEvent(){
-        getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, userAdminFragment).commit();
-        textView.setText("Khách hàng");
+        String uid = mAuth.getCurrentUser().getUid();
+        DatabaseReference databaseReference = FirebaseDatabase.getInstance().getReference().child("Users").child(uid);
+        databaseReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(@NonNull DataSnapshot snapshot) {
+
+                User user = snapshot.getValue(User.class);
+                if(user.getName().isEmpty()){
+                    tvNameLogin.setText("Welcome, Admin");
+                    Toast.makeText(MainAdminActivity.this, "Welcome you to Dasboard Admin", Toast.LENGTH_SHORT).show();
+                } else {
+                    tvNameLogin.setText("Welcome, " + user.getName());
+                    Toast.makeText(MainAdminActivity.this, "Welcome " + user.getName() + " to Dasboard Admin", Toast.LENGTH_SHORT).show();
+                }
+
+            }
+
+            @Override
+            public void onCancelled(@NonNull DatabaseError error) {
+                // Xử lý lỗi khi không thể lấy dữ liệu từ Firebase
+                Toast.makeText(MainAdminActivity.this, "Không thể lấy dữ liệu người dùng", Toast.LENGTH_SHORT).show();
+            }
+        });
+
+        getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, informationPersonAdminFragment).commit();
+        textView.setText("Thông tin cá nhân");
 
         imageButton.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -67,7 +98,10 @@ public class MainAdminActivity extends AppCompatActivity {
             @Override
             public boolean onNavigationItemSelected(@NonNull MenuItem item) {
                 int itemId = item.getItemId();
-                if(itemId == R.id.nav_user){
+                if(itemId == R.id.nav_information_person){
+                    getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, informationPersonAdminFragment).commit();
+                    textView.setText("Thông tin cá nhân");
+                } else if (itemId == R.id.nav_user) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, userAdminFragment).commit();
                     textView.setText("Khách hàng");
                 } else if (itemId == R.id.nav_staff) {
@@ -82,20 +116,17 @@ public class MainAdminActivity extends AppCompatActivity {
                 } else if (itemId == R.id.nav_order) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, orderAdminFragment).commit();
                     textView.setText("Đặt hàng");
-                } else if (itemId == R.id.nav_information_person) {
-                    getSupportFragmentManager().beginTransaction().replace(R.id.container_admin, informationPersonAdminFragment).commit();
-                    textView.setText("Thông tin cá nhân");
                 } else if (itemId == R.id.nav_statistic_report) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin,  statisticReportAdminFragment).commit();
                     textView.setText("Báo cáo thống kê");
                 } else if (itemId == R.id.nav_promotion_management) {
                     getSupportFragmentManager().beginTransaction().replace(R.id.container_admin,  promotionFragment).commit();
                     textView.setText("Quản lý khuyến mãi");
-                }else if (itemId == R.id.nav_logout) {
+                } else if (itemId == R.id.nav_logout) {
                     mAuth.signOut();
                     Intent intent = new Intent(MainAdminActivity.this, Home.class);
                     startActivity(intent);
-                    Toast.makeText(MainAdminActivity.this, "Đăng xuất thành công", Toast.LENGTH_LONG).show();
+                    Toast.makeText(MainAdminActivity.this, "Đăng xuất thành công", Toast.LENGTH_SHORT).show();
                 }
                 drawerLayout.close();
                 return false;

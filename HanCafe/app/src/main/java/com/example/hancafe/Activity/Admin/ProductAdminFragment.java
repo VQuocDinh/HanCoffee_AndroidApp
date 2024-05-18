@@ -39,7 +39,7 @@ public class ProductAdminFragment extends Fragment {
     ProductAdapter productAdapter;
     SearchView searchView;
     FloatingActionButton floatingActionButton;
-    List<Product> productList = new ArrayList<>();
+    List<Product> productList = new ArrayList<>();;
 
 
     @SuppressLint("MissingInflatedId")
@@ -58,7 +58,7 @@ public class ProductAdminFragment extends Fragment {
 
         // Lấy dữ liệu sản phẩm từ Firebase và thêm vào danh sách productList
         FirebaseDatabase.getInstance().getReference().child("Products")
-                .addValueEventListener(new ValueEventListener() {
+                .addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         productList.clear();
@@ -66,11 +66,26 @@ public class ProductAdminFragment extends Fragment {
                         for (DataSnapshot snapshot : dataSnapshot.getChildren()) {
                             // Lấy dữ liệu của mỗi sản phẩm
                             Product product = snapshot.getValue(Product.class);
+//                            String purl = snapshot.child("purl").getValue(String.class);
+//                            String name = snapshot.child("name").getValue(String.class);
+//                            String describe = snapshot.child("describe").getValue(String.class);
+//                            String id = snapshot.child("id").getValue(String.class);
+//                            int status = dataSnapshot.child("status").getValue(Integer.class);
+//                            int price = snapshot.child("price").getValue(Integer.class);
+//                            String idCategory = snapshot.child("idCategory").getValue(String.class);
+//
+//                            Product product = new Product(purl, name, describe, id, status, price, idCategory);
                             // Thêm sản phẩm vào danh sách productList
-                            productList.add(product);
+                            if(product != null && product.getStatus() != 1){
+                                productList.add(product);
+                            }
+
                         }
+//                        productAdapter = new ProductAdapter(getContext(), productList);
+//                        recyclerView.setAdapter(productAdapter);
                         // Sau khi đã thêm hết sản phẩm vào danh sách, cập nhật adapter
                         productAdapter.notifyDataSetChanged();
+
                     }
 
                     @Override

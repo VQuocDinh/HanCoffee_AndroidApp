@@ -1,12 +1,14 @@
 plugins {
     id("com.android.application")
     id("com.google.gms.google-services")
+    alias(libs.plugins.googleAndroidLibrariesMapsplatformSecretsGradlePlugin)
 }
 
 android {
     signingConfigs {
         create("config") {
-            storeFile = file("\\SHA-1\\keystore.jks")
+            storeFile =
+                file("C:\\Users\\Admin\\Desktop\\HanCoffee_AndroidApp\\HanCafe\\SHA-1\\keystore.jks")
             storePassword = "123456"
             keyPassword = "123456"
             keyAlias = "keystore"
@@ -23,6 +25,7 @@ android {
         versionName = "1.0"
 
         testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+        signingConfig = signingConfigs.getByName("config")
     }
 
     buildTypes {
@@ -75,6 +78,8 @@ dependencies {
     implementation(libs.gson)
     implementation(libs.retrofit)
     implementation(libs.converter.gson)
+    implementation(libs.places)
+    implementation(libs.play.services.places)
     annotationProcessor ("com.github.bumptech.glide:compiler:4.11.0")
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.5")
@@ -86,5 +91,6 @@ dependencies {
     implementation("com.github.blackfizz:eazegraph:1.2.5l@aar")
     implementation("com.nineoldandroids:library:2.4.0")
     implementation("com.itextpdf:itext7-core:7.1.15")
+    implementation("com.google.firebase:firebase-appcheck-safetynet:16.0.1")
 
 }

@@ -11,6 +11,7 @@ import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
@@ -42,6 +43,7 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
     private Button btnOrderProceed;
     private RecyclerView rvProduct;
     private CheckBox cbSelectAll;
+    private TextView tvEmpty;
     LinearLayout lnCart, lnCartEmpty;
     List<CartItem> cartItems = new ArrayList<>();
     CartItemAdapter cartItemAdapter;
@@ -58,9 +60,11 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
         cbSelectAll = view.findViewById(R.id.cbSelectAll);
 
         lnCart = view.findViewById(R.id.lnCart);
-        lnCartEmpty = view.findViewById(R.id.lnCartEmpty);
+        lnCartEmpty = view.findViewById(R.id.lnEmpty);
 
         lnCartEmpty.setVisibility(View.GONE);
+
+        tvEmpty = view.findViewById(R.id.tvEmpty);
 
         initCartDetail();
         setEvent();
@@ -139,6 +143,7 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
                     // Giỏ hàng không trống
                     lnCart.setVisibility(View.VISIBLE);
                     lnCartEmpty.setVisibility(View.GONE);
+
                     for (DataSnapshot cartItemSnapshot : dataSnapshot.getChildren()) {
                         String idProduct = cartItemSnapshot.child("idProduct").getValue(String.class);
                         int idSize = cartItemSnapshot.child("idSize").getValue(Integer.class);
@@ -172,6 +177,8 @@ public class CartFragment extends Fragment implements ProductsAdapter.OnItemClic
                     lnCart.setVisibility(View.GONE);
                     lnCartEmpty.setVisibility(View.VISIBLE);
 
+                    String setTitle = getResources().getString(R.string.title_order_status_product_empty);
+                    tvEmpty.setText(setTitle);
                 }
             }
 

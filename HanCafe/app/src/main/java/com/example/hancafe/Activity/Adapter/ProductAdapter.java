@@ -96,7 +96,7 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.myViewHo
                         @Override
                         public void onClick(DialogInterface dialog, int which) {
                             DatabaseReference productRef = FirebaseDatabase.getInstance().getReference().child("Products");
-                            productRef.orderByChild("name").equalTo(model.getName()).addValueEventListener(new ValueEventListener() {
+                            productRef.orderByChild("id").equalTo(model.getId()).addListenerForSingleValueEvent(new ValueEventListener() {
                                 @Override
                                 public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                                     if (dataSnapshot.exists()) {

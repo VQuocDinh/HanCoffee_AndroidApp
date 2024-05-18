@@ -96,8 +96,12 @@ public class HomeFragment extends Fragment implements CategoryAdapter.OnItemClic
                     String catId = dataSnapshot.child("id").getValue(String.class);
                     String catName = dataSnapshot.child("name").getValue(String.class);
                     String catImg = dataSnapshot.child("curl").getValue(String.class);
-                    CategoryProduct category = new CategoryProduct(catId, catName, catImg);
-                    categories.add(category);
+                    int status = dataSnapshot.child("status").getValue(Integer.class);
+                    CategoryProduct category = new CategoryProduct(catId, catName, catImg, status);
+
+                    if(category != null && category.getStatus() != 1){
+                        categories.add(category);
+                    }
                 }
                 categoryAdapter = new CategoryAdapter(categories);
                 rvCategory.setAdapter(categoryAdapter);

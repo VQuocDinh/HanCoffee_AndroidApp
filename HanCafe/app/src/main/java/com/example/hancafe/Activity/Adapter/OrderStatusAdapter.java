@@ -55,62 +55,12 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         OrderManagement orderManagement = orderManagements.get(position);
+        
         holder.tvTotalPrice.setText(String.valueOf(orderManagement.getPrice()));
         OrderDetailAdapter orderDetailAdapter = new OrderDetailAdapter(orderManagement.getOrderDetails());
         holder.chillRecycleView.setLayoutManager(new LinearLayoutManager(holder.itemView.getContext()));
         holder.chillRecycleView.setAdapter(orderDetailAdapter);
-//        holder.orderLayout.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View v) {
-////                Pay.showBottomSheetDialog();
-////                Intent intent = new Intent(context, Bill.class);
-////                context.startActivity(intent);
-//                AlertDialog.Builder builder = new AlertDialog.Builder(v.getContext());
-//                builder.setMessage("Xác nhận hủy đơn hàng!")
-//                        .setPositiveButton("Hủy", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//
-//                                String idOrder = orderManagement.getId();
-//                                DatabaseReference orderRef = FirebaseDatabase.getInstance().getReference("Order_Management");
-//                                orderRef.orderByChild("id").equalTo(idOrder).addListenerForSingleValueEvent(new ValueEventListener() {
-//                                    @Override
-//                                    public void onDataChange(@NonNull DataSnapshot snapshot) {
-//                                        for (DataSnapshot dataSnapshot : snapshot.getChildren()) {
-//                                            dataSnapshot.getRef().child("idCategory").setValue(4).addOnSuccessListener(new OnSuccessListener<Void>() {
-//                                                @Override
-//                                                public void onSuccess(Void unused) {
-//                                                    orderManagements.remove(position);
-//                                                    notifyDataSetChanged();
-//                                                }
-//                                            }).addOnFailureListener(new OnFailureListener() {
-//                                                @Override
-//                                                public void onFailure(@NonNull Exception e) {
-//
-//                                                }
-//                                            });
-//                                        }
-//                                    }
-//
-//                                    @Override
-//                                    public void onCancelled(@NonNull DatabaseError error) {
-//
-//                                    }
-//                                });
-//                            }
-//                        })
-//                        .setNegativeButton("Thoát", new DialogInterface.OnClickListener() {
-//                            @Override
-//                            public void onClick(DialogInterface dialog, int which) {
-//                                dialog.cancel();
-//                            }
-//                        });
-//                AlertDialog alertDialog = builder.create();
-//                alertDialog.show();
-//                notifyDataSetChanged();
-//
-//            }
-//        });
+
         holder.tvDetail.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -132,6 +82,7 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
         TextView tvTotalPrice, tvDetail;
         RecyclerView chillRecycleView;
         LinearLayout orderLayout;
+        LinearLayout lnEmpty;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
@@ -139,6 +90,8 @@ public class OrderStatusAdapter extends RecyclerView.Adapter<OrderStatusAdapter.
             chillRecycleView = itemView.findViewById(R.id.chillRecycleView);
             orderLayout = itemView.findViewById(R.id.orderLayout);
             tvDetail = itemView.findViewById(R.id.tvDetail);
+
+            lnEmpty = itemView.findViewById(R.id.lnEmpty);
         }
     }
 

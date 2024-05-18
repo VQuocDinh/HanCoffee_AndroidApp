@@ -63,11 +63,11 @@ public class EditCategoryFragment extends Fragment {
         if (bundle != null && bundle.containsKey("category")) {
             categoryProduct = bundle.getParcelable("category");
             if (categoryProduct != null) {
-                edtName.setText(categoryProduct.getCatName());
-                Glide.with(requireContext()).load(categoryProduct.getCatImg()).into(ivHinh);
+                edtName.setText(categoryProduct.getName());
+                Glide.with(requireContext()).load(categoryProduct.getCurl()).into(ivHinh);
 
                 DatabaseReference productsRef = FirebaseDatabase.getInstance().getReference().child("Category_Products");
-                productsRef.orderByChild("name").equalTo(categoryProduct.getCatName()).addListenerForSingleValueEvent(new ValueEventListener() {
+                productsRef.orderByChild("name").equalTo(categoryProduct.getName()).addListenerForSingleValueEvent(new ValueEventListener() {
                     @Override
                     public void onDataChange(@NonNull DataSnapshot dataSnapshot) {
                         if (dataSnapshot.exists()) {
@@ -127,7 +127,7 @@ public class EditCategoryFragment extends Fragment {
                                                             @Override
                                                             public void onSuccess(Void aVoid) {
                                                                 // Update image in the product list
-                                                                categoryProduct.setCatImg(imageUrl);
+                                                                categoryProduct.setCurl(imageUrl);
 
                                                                 Toast.makeText(requireContext(), "Chỉnh sửa danh mục thành công", Toast.LENGTH_SHORT).show();
 

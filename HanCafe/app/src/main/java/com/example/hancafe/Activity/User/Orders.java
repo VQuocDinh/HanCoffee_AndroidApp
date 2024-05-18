@@ -4,27 +4,24 @@ import android.content.Intent;
 import android.os.Bundle;
 import android.view.View;
 import android.widget.ImageView;
-import android.widget.TextView;
+
 
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.viewpager2.widget.ViewPager2;
 
-import com.example.hancafe.Activity.User.OrderStatus.CancelOrderFragment;
-import com.example.hancafe.Activity.User.OrderStatus.CompleteOrderFragment;
-import com.example.hancafe.Activity.User.OrderStatus.ConfirmOrderFragment;
-import com.example.hancafe.Activity.User.OrderStatus.DeliveryOrderFragment;
+import com.google.android.material.tabs.TabLayout;
+
+import com.example.hancafe.Activity.Adapter.OrderManagementUserViewPagerAdapter;
 import com.example.hancafe.R;
 
 
 public class Orders extends AppCompatActivity {
-    private TextView confirm, delivering, canceled, received;
 
     private ImageView btnBack;
-    ConfirmOrderFragment confirmOrderFragment = new ConfirmOrderFragment();
-    CancelOrderFragment cancelOrderFragment = new CancelOrderFragment();
-    DeliveryOrderFragment deliveryOrderFragment = new DeliveryOrderFragment();
-    CompleteOrderFragment completeOrderFragment = new CompleteOrderFragment();
+    TabLayout tabLayout;
+    ViewPager2 viewPager2;
+    OrderManagementUserViewPagerAdapter orderManagementViewPagerAdapter;
 
-    private Boolean confirmIsActive, deliveringIsActive, canceledIsActive, receivedIsActive;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -34,47 +31,6 @@ public class Orders extends AppCompatActivity {
     }
 
     private void setEvent() {
-        getSupportFragmentManager().beginTransaction().replace(R.id.container, confirmOrderFragment).commit();
-        confirm.setTextColor(getResources().getColor(R.color.mainColor));
-        delivering.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, deliveryOrderFragment).commit();
-//                delivering.setTextColor(getResources().getColor(R.color.mainColor));
-                updateButtonState(delivering);
-
-            }
-        });
-
-        received.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, completeOrderFragment).commit();
-//                received.setTextColor(getResources().getColor(R.color.mainColor));
-                updateButtonState(received);
-
-            }
-        });
-
-        confirm.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, confirmOrderFragment).commit();
-//                confirm.setTextColor(getResources().getColor(R.color.mainColor));
-                updateButtonState(confirm);
-
-            }
-        });
-        canceled.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                getSupportFragmentManager().beginTransaction().replace(R.id.container, cancelOrderFragment).commit();
-//                canceled.setTextColor(getResources().getColor(R.color.mainColor));
-                updateButtonState(canceled);
-
-            }
-        });
-
         btnBack.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -83,29 +39,45 @@ public class Orders extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
+            @Override
+            public void onTabSelected(TabLayout.Tab tab) {
+                viewPager2.setCurrentItem(tab.getPosition());
+            }
+
+            @Override
+            public void onTabUnselected(TabLayout.Tab tab) {
+
+            }
+
+            @Override
+            public void onTabReselected(TabLayout.Tab tab) {
+
+            }
+        });
+
+        viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
+            @Override
+            public void onPageSelected(int position) {
+                super.onPageSelected(position);
+                tabLayout.getTabAt(position).select();
+            }
+        });
     }
 
-    private void updateButtonState(TextView click) {
-        confirmIsActive = click == confirm;
-        canceledIsActive = click == canceled;
-        deliveringIsActive = click == delivering;
-        receivedIsActive = click == received;
 
-        confirm.setTextColor(confirmIsActive ? getResources().getColor(R.color.mainColor) : getResources().getColor(R.color.black));
-        delivering.setTextColor(deliveringIsActive ? getResources().getColor(R.color.mainColor) : getResources().getColor(R.color.black));
-        canceled.setTextColor(canceledIsActive ? getResources().getColor(R.color.mainColor) : getResources().getColor(R.color.black));
-        received.setTextColor(receivedIsActive ? getResources().getColor(R.color.mainColor) : getResources().getColor(R.color.black));
-    }
 
 
     private void setControl() {
 
         btnBack = findViewById(R.id.btnBack);
-        confirm = findViewById(R.id.confirm);
-        canceled = findViewById(R.id.canceled);
-        delivering = findViewById(R.id.delivering);
-        received = findViewById(R.id.received);
 
+        //Chuyển đổi giữa các tabItem
+        tabLayout = findViewById(R.id.tlOrder);
+        viewPager2 = findViewById(R.id.vpOrder);
+        orderManagementViewPagerAdapter = new OrderManagementUserViewPagerAdapter(Orders.this);
+        viewPager2.setAdapter(orderManagementViewPagerAdapter);
     }
 
 

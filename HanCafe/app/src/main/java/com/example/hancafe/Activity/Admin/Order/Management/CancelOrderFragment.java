@@ -6,6 +6,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
+import android.widget.TextView;
 
 import androidx.annotation.NonNull;
 import androidx.fragment.app.Fragment;
@@ -30,6 +32,8 @@ import java.util.List;
 
 public class CancelOrderFragment extends Fragment {
     RecyclerView rcvCategoryOrderManagement;
+    LinearLayout lnEmpty;
+    TextView tvEmpty;
     private static final int STATUS_CANCEL = 4;
 
     @Override
@@ -40,7 +44,13 @@ public class CancelOrderFragment extends Fragment {
 
         rcvCategoryOrderManagement = view.findViewById(R.id.rcvOrderManagementCategory);
 
-        HelperOrderManagement.loadDataOrderManagement(getContext(), rcvCategoryOrderManagement, STATUS_CANCEL);
+        lnEmpty = view.findViewById(R.id.lnEmpty);
+
+        tvEmpty = view.findViewById(R.id.tvEmpty);
+        String title = getResources().getString(R.string.title_order_status_cancel_empty);
+        tvEmpty.setText(title);
+
+        HelperOrderManagement.loadDataOrderManagement(getContext(), rcvCategoryOrderManagement, lnEmpty, STATUS_CANCEL);
 
         return view;
     }

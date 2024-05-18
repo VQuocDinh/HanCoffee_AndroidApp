@@ -125,7 +125,7 @@ public class Bill extends AppCompatActivity {
             }
         });
         if (orderManagement.getIdCategory() != 1){
-            btnCancel.setEnabled(false);
+            btnCancel.setVisibility(View.GONE);
         }
 
         btnCancel.setOnClickListener(new View.OnClickListener() {

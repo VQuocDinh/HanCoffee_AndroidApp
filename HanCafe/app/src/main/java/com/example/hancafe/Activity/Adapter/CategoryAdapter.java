@@ -40,9 +40,9 @@ public class CategoryAdapter extends RecyclerView.Adapter<CategoryAdapter.ViewHo
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         CategoryProduct category = catData.get(position);
 
-        holder.tvCategoryName.setText(category.getCatName());
+        holder.tvCategoryName.setText(category.getName());
         Glide.with(holder.itemView.getContext())
-                .load(category.getCatImg())
+                .load(category.getCurl())
                 .into(holder.catImg);
 
         holder.itemView.setOnClickListener(new View.OnClickListener() {

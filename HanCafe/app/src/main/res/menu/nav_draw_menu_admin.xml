@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
 <menu xmlns:android="http://schemas.android.com/apk/res/android">
     <group android:checkableBehavior="single">
+        <item android:id="@+id/nav_information_person"
+            android:icon="@drawable/baseline_person_outline_24"
+            android:title="@string/title_nav_information_person"/>
         <item android:id="@+id/nav_user"
             android:icon="@drawable/baseline_star_outline_24"
             android:title="@string/title_nav_user"/>
@@ -16,9 +19,6 @@
         <item android:id="@+id/nav_order"
             android:icon="@drawable/baseline_shopping_cart_24"
             android:title="@string/title_nav_order"/>
-        <item android:id="@+id/nav_information_person"
-            android:icon="@drawable/baseline_person_outline_24"
-            android:title="@string/title_nav_information_person"/>
         <item android:id="@+id/nav_statistic_report"
             android:icon="@drawable/baseline_equalizer_24"
             android:title="@string/title_nav_statistic_report"/>

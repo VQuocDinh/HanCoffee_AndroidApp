@@ -8,18 +8,43 @@ import androidx.annotation.NonNull;
 import java.io.Serializable;
 
 public class CategoryProduct implements Serializable, Parcelable {
-    private String catName;
-    private String catId;
-    private String catImg;
+    private String id;
+    private String name;
+    private String curl;
     int status;
 
     public CategoryProduct() {
     }
 
-    public CategoryProduct(String catId, String catName, String catImg) {
-        this.catName = catName;
-        this.catId = catId;
-        this.catImg = catImg;
+    public CategoryProduct(String id, String name, String curl, int status) {
+        this.id = id;
+        this.name = name;
+        this.curl = curl;
+        this.status = status;
+    }
+
+    public String getName() {
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getId() {
+        return id;
+    }
+
+    public void setId(String id) {
+        this.id = id;
+    }
+
+    public String getCurl() {
+        return curl;
+    }
+
+    public void setCurl(String curl) {
+        this.curl = curl;
     }
 
     public int getStatus() {
@@ -31,9 +56,9 @@ public class CategoryProduct implements Serializable, Parcelable {
     }
 
     protected CategoryProduct(Parcel in) {
-        catName = in.readString();
-        catId = in.readString();
-        catImg = in.readString();
+        name = in.readString();
+        id = in.readString();
+        curl = in.readString();
         status = in.readInt();
     }
 
@@ -49,29 +74,6 @@ public class CategoryProduct implements Serializable, Parcelable {
         }
     };
 
-    public String getCatImg() {
-        return catImg;
-    }
-
-    public void setCatImg(String catImg) {
-        this.catImg = catImg;
-    }
-
-    public String getCatName() {
-        return catName;
-    }
-
-    public void setCatName(String catName) {
-        this.catName = catName;
-    }
-
-    public String getCatId() {
-        return catId;
-    }
-
-    public void setCatId(String catId) {
-        this.catId = catId;
-    }
 
     @Override
     public int describeContents() {
@@ -80,9 +82,9 @@ public class CategoryProduct implements Serializable, Parcelable {
 
     @Override
     public void writeToParcel(@NonNull Parcel dest, int flags) {
-        dest.writeString(catName);
-        dest.writeString(catId);
-        dest.writeString(catImg);
+        dest.writeString(name);
+        dest.writeString(id);
+        dest.writeString(curl);
         dest.writeInt(status);
     }
 }

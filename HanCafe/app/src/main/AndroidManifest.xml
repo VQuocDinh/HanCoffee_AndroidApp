@@ -22,6 +22,30 @@
         android:usesCleartextTraffic="true"
         tools:replace="android:theme"
         tools:targetApi="31">
+
+        <!--
+             TODO: Before you run your application, you need a Google Maps API key.
+
+             To get one, follow the directions here:
+
+                https://developers.google.com/maps/documentation/android-sdk/get-api-key
+
+             Once you have your API key (it starts with "AIza"), define a new property in your
+             project's local.properties file (e.g. MAPS_API_KEY=Aiza...), and replace the
+             "YOUR_API_KEY" string in this file with "${MAPS_API_KEY}".
+        -->
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY_PLACE"-->
+<!--            android:value="AIzaSyDnt-vQlRjyEbrQF-KmfddZE3pkw6WQAPE" />-->
+
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyCpHpXxdhv7kP2vnkNE0tHH95d5CuxZekE" />
+
+        <activity
+            android:name=".Activity.Map.MapsActivity"
+            android:exported="false"
+            android:label="@string/title_activity_maps" />
         <activity
             android:name=".Activity.Admin.BillAdmin"
             android:exported="false" />
@@ -65,9 +89,9 @@
             </intent-filter>
         </activity>
 
-        <meta-data
-            android:name="com.google.android.geo.API_KEY"
-            android:value="AIzaSyCSDlVNQ5ZF6AQ7oFhDnDODOMm3K7REwnY" />
+<!--        <meta-data-->
+<!--            android:name="com.google.android.geo.API_KEY_MAP"-->
+<!--            android:value="AIzaSyAoYDdZNhBW_tcyBi8mTYUSfNXKkU5SH-w" />-->
 
         <activity
             android:name=".Activity.Admin.MainAdminActivity"
@@ -78,7 +102,6 @@
             android:name=".Activity.User.MainActivity"
             android:exported="true"
             android:windowSoftInputMode="adjustPan">
-            >
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

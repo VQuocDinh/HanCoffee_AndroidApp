@@ -2,10 +2,13 @@ package com.example.hancafe.Activity.User.PersonInformation;
 
 import android.app.DatePickerDialog;
 import android.content.Intent;
+import android.location.Address;
+import android.location.Geocoder;
 import android.net.Uri;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
+import android.widget.Button;
 import android.widget.DatePicker;
 import android.widget.EditText;
 import android.widget.ImageView;
@@ -13,9 +16,11 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import androidx.annotation.NonNull;
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AppCompatActivity;
 
 import com.bumptech.glide.Glide;
+import com.example.hancafe.Activity.Map.MapsActivity;
 import com.example.hancafe.Activity.User.MainActivity;
 import com.example.hancafe.R;
 import com.google.firebase.auth.FirebaseAuth;
@@ -26,15 +31,21 @@ import com.google.firebase.database.DatabaseReference;
 import com.google.firebase.database.FirebaseDatabase;
 import com.google.firebase.database.ValueEventListener;
 
+import java.io.IOException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
+import java.util.List;
 import java.util.Locale;
 
 public class MainPersonInformationActivity extends AppCompatActivity {
     ImageView imgAvt;
     EditText edtName, edtPhone, edtDate, edtAddress;
     TextView tvExit, tvEdit, tvEmail;
-    ImageView ivDate;
+    Button btnSave;
+    ImageView ivDate, imgMap;
+    private static final int MAP_REQUEST_CODE = 100;
+    private static final String PREF_LATITUDE = "latitude";
+    private static final String PREF_LONGITUDE = "longitude";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -123,6 +134,73 @@ public class MainPersonInformationActivity extends AppCompatActivity {
 
             }
         });
+        imgMap.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                openGGMap();
+            }
+        });
+    }
+
+    private void openGGMap() {
+        String address = edtAddress.getText().toString().trim();
+        if (!address.isEmpty()) {
+            Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+            try {
+                List<Address> addresses = geocoder.getFromLocationName(address, 1);
+                if (addresses != null && !addresses.isEmpty()) {
+                    Address location = addresses.get(0);
+                    double latitude = location.getLatitude();
+                    double longitude = location.getLongitude();
+
+                    Intent intent = new Intent(this, MapsActivity.class);
+                    intent.putExtra(PREF_LATITUDE, latitude);
+                    intent.putExtra(PREF_LONGITUDE, longitude);
+                    startActivityForResult(intent, MAP_REQUEST_CODE);
+                } else {
+                    Toast.makeText(this, "Không tìm thấy địa chỉ", Toast.LENGTH_SHORT).show();
+                }
+            } catch (IOException e) {
+                e.printStackTrace();
+                Toast.makeText(this, "Có lỗi xảy ra khi tìm kiếm địa chỉ", Toast.LENGTH_SHORT).show();
+            }
+        } else {
+            Toast.makeText(this, "Vui lòng nhập địa chỉ", Toast.LENGTH_SHORT).show();
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if (requestCode == MAP_REQUEST_CODE && resultCode == RESULT_OK && data != null) {
+            double latitude = data.getDoubleExtra(PREF_LATITUDE, 0);
+            double longitude = data.getDoubleExtra(PREF_LONGITUDE, 0);
+
+            String address = getAddressFromLatLng(latitude, longitude);
+
+            edtAddress.setText(address);
+        }
+    }
+
+    private String getAddressFromLatLng(double latitude, double longitude) {
+        Geocoder geocoder = new Geocoder(this, Locale.getDefault());
+        String address = "";
+
+        try {
+            List<Address> addresses = geocoder.getFromLocation(latitude, longitude, 1);
+            if (addresses != null && addresses.size() > 0) {
+                Address returnedAddress = addresses.get(0);
+                StringBuilder sb = new StringBuilder();
+                for (int i = 0; i <= returnedAddress.getMaxAddressLineIndex(); i++) {
+                    sb.append(returnedAddress.getAddressLine(i)).append("\n");
+                }
+                address = sb.toString();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return address;
     }
 
     private void showDatePickerDialog() {
@@ -158,6 +236,9 @@ public class MainPersonInformationActivity extends AppCompatActivity {
         tvEdit = findViewById(R.id.tvEdit);
         tvExit = findViewById(R.id.tvExit);
         ivDate = findViewById(R.id.ivDate);
+        btnSave = findViewById(R.id.btnSave);
+        btnSave.setVisibility(View.GONE);
+        imgMap = findViewById(R.id.imgMap);
     }
 
     private void setEvent() {
